@@ -632,9 +632,850 @@ int execute_command(char **argv, char *shell_name)
 
 ---
 
-## 4. Architecture du Shell -- Vue d'Ensemble
+## 4. Exercices Preparatoires -- Les Briques du Shell
 
-### 4.1 La Boucle Principale
+Avant de plonger dans l'architecture complete du shell, il est essentiel de maitriser individuellement les "briques" qui le composent. Chaque sous-section ci-dessous isole une competence precise que tu retrouveras dans le projet final. Comprends-les une par une, et l'assemblage sera naturel.
+
+### 4.1 Manipuler l'environnement manuellement
+
+L'environnement est au coeur du shell : c'est lui qui contient le `PATH`, le `HOME`, et toutes les variables que les programmes utilisent. La libc fournit `getenv()`, `setenv()` et `unsetenv()`, mais dans le projet Simple Shell, on doit souvent les reimplementer soi-meme (ou du moins comprendre comment elles fonctionnent en interne). Voici comment.
+
+#### `_getenv()` -- Chercher une variable dans l'environnement
+
+Le principe est simple : `environ` est un tableau de chaines de la forme `"CLE=VALEUR"`. Pour trouver une variable, on parcourt le tableau et on compare le debut de chaque chaine avec le nom cherche.
+
+```c
+#include <string.h>
+#include <stddef.h>
+
+extern char **environ;
+
+/**
+ * _getenv - recupere la valeur d'une variable d'environnement
+ * @name: nom de la variable (ex: "PATH")
+ *
+ * Description: parcourt environ[] et compare chaque entree
+ * avec @name suivi de '='. Si on trouve une correspondance,
+ * on retourne un pointeur vers la partie VALEUR (apres le '=').
+ *
+ * Return: pointeur vers la valeur, ou NULL si non trouvee
+ */
+char *_getenv(const char *name)
+{
+    int i;
+    size_t len;
+
+    if (name == NULL || name[0] == '\0')
+        return (NULL);
+
+    len = strlen(name);
+
+    for (i = 0; environ[i] != NULL; i++)
+    {
+        /*
+         * strncmp compare les 'len' premiers caracteres.
+         * On verifie ensuite que le caractere suivant est '='
+         * pour eviter les faux positifs :
+         *   name = "PATH"
+         *   environ[i] = "PATH=/usr/bin"  --> match (len=4, char 4 = '=')
+         *   environ[i] = "PATH_EXT=.COM"  --> PAS match (char 4 = '_')
+         */
+        if (strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
+        {
+            return (environ[i] + len + 1);  /* pointe apres le '=' */
+        }
+    }
+
+    return (NULL);  /* variable non trouvee */
+}
+```
+
+**Points cles :**
+- On utilise `strncmp` et non `strcmp` car la chaine dans `environ` contient `CLE=VALEUR`, pas juste `CLE`.
+- On verifie que le caractere apres la comparaison est bien `=`. Sans cette verification, chercher `"PATH"` pourrait correspondre a `"PATH_EXTRA=foo"`.
+- Le pointeur retourne pointe **directement dans** le tableau `environ`. Ce n'est pas une copie. Si tu modifies cette chaine, tu modifies l'environnement.
+
+#### `_setenv()` -- Modifier ou ajouter une variable
+
+La strategie :
+1. Chercher si la variable existe deja dans `environ`
+2. Si oui : remplacer l'entree existante par une nouvelle chaine `CLE=VALEUR`
+3. Si non : agrandir le tableau `environ` (realloc) et ajouter la nouvelle entree a la fin
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern char **environ;
+
+/**
+ * count_environ - compte le nombre d'entrees dans environ
+ *
+ * Return: nombre d'entrees (sans le NULL final)
+ */
+static int count_environ(void)
+{
+    int count = 0;
+
+    while (environ[count] != NULL)
+        count++;
+    return (count);
+}
+
+/**
+ * build_env_entry - construit une chaine "name=value"
+ * @name: nom de la variable
+ * @value: valeur de la variable
+ *
+ * Return: chaine allouee "name=value", ou NULL si erreur
+ */
+static char *build_env_entry(const char *name, const char *value)
+{
+    char *entry;
+    size_t name_len, value_len;
+
+    name_len = strlen(name);
+    value_len = strlen(value);
+
+    entry = malloc(name_len + 1 + value_len + 1);  /* name + '=' + value + '\0' */
+    if (entry == NULL)
+        return (NULL);
+
+    strcpy(entry, name);
+    entry[name_len] = '=';
+    strcpy(entry + name_len + 1, value);
+
+    return (entry);
+}
+
+/**
+ * _setenv - modifie ou ajoute une variable d'environnement
+ * @name: nom de la variable
+ * @value: nouvelle valeur
+ * @overwrite: si 1, remplace une variable existante ; si 0, ne remplace pas
+ *
+ * Return: 0 en cas de succes, -1 en cas d'erreur
+ */
+int _setenv(const char *name, const char *value, int overwrite)
+{
+    int i, count;
+    size_t len;
+    char *new_entry;
+    char **new_environ;
+
+    if (name == NULL || name[0] == '\0' || strchr(name, '=') != NULL)
+        return (-1);
+
+    len = strlen(name);
+    new_entry = build_env_entry(name, value);
+    if (new_entry == NULL)
+        return (-1);
+
+    /* Chercher si la variable existe deja */
+    for (i = 0; environ[i] != NULL; i++)
+    {
+        if (strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
+        {
+            if (!overwrite)
+            {
+                free(new_entry);
+                return (0);  /* ne pas remplacer */
+            }
+            /* Remplacer l'entree existante */
+            /* Note : on ne free pas l'ancienne entree car elle peut   */
+            /* provenir du segment initial d'environnement (pas malloc) */
+            environ[i] = new_entry;
+            return (0);
+        }
+    }
+
+    /* Variable non trouvee : agrandir environ */
+    count = count_environ();
+    new_environ = malloc(sizeof(char *) * (count + 2));  /* +1 nouvelle, +1 NULL */
+    if (new_environ == NULL)
+    {
+        free(new_entry);
+        return (-1);
+    }
+
+    /* Copier les pointeurs existants */
+    for (i = 0; i < count; i++)
+        new_environ[i] = environ[i];
+
+    new_environ[count] = new_entry;      /* ajouter la nouvelle entree */
+    new_environ[count + 1] = NULL;       /* terminateur */
+
+    environ = new_environ;
+    return (0);
+}
+```
+
+> [!warning] Memoire et environ
+> Le tableau `environ` initial est alloue par le systeme au demarrage du programme. Quand on le remplace par un tableau `malloc`-e, il faut etre prudent : on ne peut pas `free` l'ancien tableau `environ` s'il n'a pas ete alloue par `malloc`. Une strategie courante est de garder un flag indiquant si `environ` a ete alloue par nous ou non.
+
+#### `_unsetenv()` -- Supprimer une variable
+
+La strategie : trouver l'entree, puis decaler toutes les entrees suivantes d'un cran vers le haut pour "combler le trou".
+
+```c
+/**
+ * _unsetenv - supprime une variable d'environnement
+ * @name: nom de la variable a supprimer
+ *
+ * Return: 0 en cas de succes, -1 en cas d'erreur
+ */
+int _unsetenv(const char *name)
+{
+    int i, j;
+    size_t len;
+
+    if (name == NULL || name[0] == '\0' || strchr(name, '=') != NULL)
+        return (-1);
+
+    len = strlen(name);
+
+    for (i = 0; environ[i] != NULL; i++)
+    {
+        if (strncmp(environ[i], name, len) == 0 && environ[i][len] == '=')
+        {
+            /*
+             * Trouvee ! Decaler toutes les entrees suivantes
+             * d'un cran vers le haut.
+             * Avant : [A, B, C, D, NULL]  (on supprime B, i=1)
+             * Apres : [A, C, D, NULL]
+             */
+            for (j = i; environ[j] != NULL; j++)
+                environ[j] = environ[j + 1];
+
+            /* Ne pas incrementer i : la nouvelle entree a la position i
+             * pourrait aussi matcher (cas de doublons) */
+            i--;
+        }
+    }
+
+    return (0);
+}
+```
+
+**Pourquoi le `i--` ?** Apres le decalage, la position `i` contient maintenant ce qui etait a `i+1`. Si on ne decremente pas `i`, la boucle `for` va incrementer `i` et sauter cette entree. Avec `i--`, on re-examine la meme position au prochain tour, ce qui gere correctement le cas (rare) ou la meme variable apparait plusieurs fois dans `environ`.
+
+#### La relation entre `env` (3eme parametre de main) et `environ`
+
+Le `main` en C peut recevoir un troisieme parametre : le tableau d'environnement. Mais quel est le lien avec la variable globale `environ` ?
+
+```c
+#include <stdio.h>
+
+extern char **environ;
+
+int main(int argc, char *argv[], char *env[])
+{
+    (void)argc;
+    (void)argv;
+
+    printf("env:     %p\n", (void *)env);
+    printf("environ: %p\n", (void *)environ);
+
+    if (env == environ)
+        printf("Identiques au demarrage !\n");
+    else
+        printf("Differents au demarrage.\n");
+
+    return (0);
+}
+```
+
+```
+Sortie typique :
+env:     0x7ffc12345678
+environ: 0x7ffc12345678
+Identiques au demarrage !
+```
+
+Au demarrage, `env` et `environ` pointent vers **le meme tableau**. Mais attention :
+
+- Si tu modifies `environ` (par exemple en appelant `_setenv` qui remplace le pointeur `environ` par un nouveau tableau), alors `env` pointe toujours vers l'ancien tableau. Les deux divergent.
+- Si tu passes `environ` a `execve`, tu passes l'environnement potentiellement modifie. Si tu passes `env`, tu passes l'environnement original.
+
+> [!tip] Regle pratique
+> Utilise toujours `environ` (la variable globale) dans ton shell, jamais `env` (le 3eme parametre de main). Ainsi, les modifications faites par `setenv` / `_setenv` seront visibles partout et transmises aux processus fils via `execve`.
+
+---
+
+### 4.2 Construire le PATH en linked list
+
+Dans l'implementation de base du shell (section suivante), on tokenise le `PATH` avec `strtok` a chaque recherche de commande. C'est fonctionnel mais inefficace : si l'utilisateur tape 100 commandes, on decoupe le `PATH` 100 fois. Une meilleure approche est de construire une **liste chainee** des repertoires du `PATH` au demarrage, et de la mettre a jour uniquement quand `PATH` change.
+
+#### Pourquoi une liste chainee ?
+
+- **Dynamique** : le nombre de repertoires dans `PATH` varie (5, 10, 20...). Un tableau statique gaspille de la memoire ou est trop petit.
+- **Facile a iterer** : on parcourt noeud par noeud, ce qui correspond exactement a "essayer chaque repertoire".
+- **Facile a modifier** : si `PATH` change, on detruit l'ancienne liste et on en construit une nouvelle.
+
+#### La structure `path_t`
+
+```c
+/**
+ * struct path_s - noeud d'une liste chainee de repertoires PATH
+ * @dir: chaine contenant le repertoire (ex: "/usr/bin")
+ * @next: pointeur vers le noeud suivant, ou NULL
+ */
+typedef struct path_s
+{
+    char *dir;
+    struct path_s *next;
+} path_t;
+```
+
+#### `build_path_list()` -- Construire la liste depuis PATH
+
+```c
+#include <stdlib.h>
+#include <string.h>
+
+extern char **environ;
+
+/* Prototype de _getenv vu precedemment */
+char *_getenv(const char *name);
+
+/**
+ * build_path_list - construit une liste chainee des repertoires du PATH
+ *
+ * Description:
+ * 1. Recupere la valeur de PATH depuis environ
+ * 2. Duplique la chaine (strdup) car strtok va la modifier
+ * 3. Tokenise avec ":" comme delimiteur
+ * 4. Cree un noeud pour chaque repertoire
+ * 5. Retourne la tete de la liste
+ *
+ * Return: pointeur vers le premier noeud, ou NULL si PATH vide/absent
+ */
+path_t *build_path_list(void)
+{
+    char *path_value;
+    char *path_copy;
+    char *token;
+    path_t *head = NULL;
+    path_t *tail = NULL;
+    path_t *new_node;
+
+    path_value = _getenv("PATH");
+    if (path_value == NULL || path_value[0] == '\0')
+        return (NULL);
+
+    /* Dupliquer : strtok modifie la chaine en place */
+    path_copy = strdup(path_value);
+    if (path_copy == NULL)
+        return (NULL);
+
+    token = strtok(path_copy, ":");
+
+    while (token != NULL)
+    {
+        /* Creer un nouveau noeud */
+        new_node = malloc(sizeof(path_t));
+        if (new_node == NULL)
+        {
+            free(path_copy);
+            /* Idealement, liberer aussi les noeuds deja crees */
+            return (head);  /* retourne ce qu'on a pu construire */
+        }
+
+        /*
+         * strdup le token : on ne peut pas garder un pointeur
+         * dans path_copy car on va le free juste apres la boucle.
+         */
+        new_node->dir = strdup(token);
+        new_node->next = NULL;
+
+        if (new_node->dir == NULL)
+        {
+            free(new_node);
+            free(path_copy);
+            return (head);
+        }
+
+        /* Ajouter en queue de liste (pour garder l'ordre du PATH) */
+        if (head == NULL)
+        {
+            head = new_node;
+            tail = new_node;
+        }
+        else
+        {
+            tail->next = new_node;
+            tail = new_node;
+        }
+
+        token = strtok(NULL, ":");
+    }
+
+    free(path_copy);
+    return (head);
+}
+```
+
+> [!info] Pourquoi strdup le token ?
+> Apres `free(path_copy)`, tous les pointeurs retournes par `strtok` deviennent invalides (ils pointent dans la memoire liberee). On doit donc copier chaque token avec `strdup` pour avoir des chaines independantes.
+
+#### `find_in_path()` -- Chercher un executable dans la liste
+
+```c
+#include <sys/stat.h>
+
+/**
+ * find_in_path_list - cherche un executable dans la liste chainee PATH
+ * @head: tete de la liste chainee des repertoires
+ * @command: nom de la commande (ex: "ls")
+ *
+ * Description: pour chaque repertoire de la liste, construit le chemin
+ * complet "dir/command" et verifie s'il existe avec stat().
+ *
+ * Return: chemin complet alloue (a free par l'appelant), ou NULL
+ */
+char *find_in_path_list(path_t *head, const char *command)
+{
+    path_t *current;
+    char *full_path;
+    struct stat st;
+    size_t dir_len, cmd_len;
+
+    current = head;
+
+    while (current != NULL)
+    {
+        dir_len = strlen(current->dir);
+        cmd_len = strlen(command);
+
+        /* Construire "dir/command" */
+        full_path = malloc(dir_len + 1 + cmd_len + 1);
+        if (full_path == NULL)
+            return (NULL);
+
+        strcpy(full_path, current->dir);
+        full_path[dir_len] = '/';
+        strcpy(full_path + dir_len + 1, command);
+
+        /* Verifier si le fichier existe */
+        if (stat(full_path, &st) == 0)
+            return (full_path);  /* TROUVE ! */
+
+        free(full_path);
+        current = current->next;
+    }
+
+    return (NULL);  /* pas trouve dans aucun repertoire */
+}
+```
+
+#### `free_path_list()` -- Liberer toute la liste
+
+```c
+/**
+ * free_path_list - libere tous les noeuds d'une liste chainee path_t
+ * @head: tete de la liste
+ *
+ * Description: parcourt la liste et libere chaque noeud
+ * ainsi que la chaine dir contenue dans chaque noeud.
+ */
+void free_path_list(path_t *head)
+{
+    path_t *current;
+    path_t *next;
+
+    current = head;
+
+    while (current != NULL)
+    {
+        next = current->next;   /* sauvegarder le suivant AVANT de free */
+        free(current->dir);     /* liberer la chaine du repertoire */
+        free(current);          /* liberer le noeud lui-meme */
+        current = next;
+    }
+}
+```
+
+> [!warning] Toujours sauvegarder `next` avant `free`
+> C'est l'erreur classique des listes chainees. Apres `free(current)`, on ne peut plus acceder a `current->next`. Il faut donc stocker `current->next` dans une variable temporaire **avant** de liberer le noeud.
+
+**Utilisation complete :**
+
+```c
+int main(void)
+{
+    path_t *path_list;
+    char *found;
+
+    /* Au demarrage du shell */
+    path_list = build_path_list();
+
+    /* A chaque commande */
+    found = find_in_path_list(path_list, "ls");
+    if (found != NULL)
+    {
+        printf("Trouve : %s\n", found);  /* /usr/bin/ls ou /bin/ls */
+        free(found);
+    }
+
+    /* A la fin du shell (ou quand PATH change) */
+    free_path_list(path_list);
+
+    return (0);
+}
+```
+
+---
+
+### 4.3 Le `_which` -- Trouver un executable
+
+Le programme `which` est un outil classique UNIX : donne-lui un nom de commande et il te dit ou se trouve l'executable. Implementer notre propre `_which` est un excellent exercice car c'est exactement la logique que le shell utilise pour resoudre les commandes.
+
+#### Cas a gerer
+
+1. **La commande contient deja un `/`** : c'est un chemin absolu ou relatif (`/bin/ls`, `./monprog`). On ne cherche pas dans le PATH, on verifie directement si le fichier existe et est executable.
+2. **PATH n'est pas defini ou est vide** : on ne peut chercher nulle part, on retourne "not found".
+3. **La commande n'est pas trouvee** dans aucun repertoire du PATH.
+4. **Cas normal** : on cherche dans chaque repertoire du PATH, dans l'ordre.
+
+#### Implementation complete
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+extern char **environ;
+
+/**
+ * _which - trouve le chemin complet d'un executable
+ * @command: nom de la commande (ex: "ls")
+ *
+ * Description:
+ * - Si @command contient un '/', on verifie directement son existence.
+ * - Sinon, on parcourt chaque repertoire du PATH et on cherche
+ *   un fichier "dir/command" qui existe et est executable.
+ *
+ * Return: chemin complet alloue (a free), ou NULL si pas trouve
+ */
+char *_which(const char *command)
+{
+    char *path_value, *path_copy, *dir, *full_path;
+    struct stat st;
+    size_t dir_len, cmd_len;
+
+    if (command == NULL || command[0] == '\0')
+        return (NULL);
+
+    /* Cas 1 : la commande contient un '/' (chemin absolu ou relatif) */
+    if (strchr(command, '/') != NULL)
+    {
+        if (stat(command, &st) == 0 && access(command, X_OK) == 0)
+            return (strdup(command));
+        return (NULL);
+    }
+
+    /* Cas 2 : chercher dans le PATH */
+    path_value = getenv("PATH");
+    if (path_value == NULL || path_value[0] == '\0')
+        return (NULL);
+
+    path_copy = strdup(path_value);
+    if (path_copy == NULL)
+        return (NULL);
+
+    dir = strtok(path_copy, ":");
+
+    while (dir != NULL)
+    {
+        dir_len = strlen(dir);
+        cmd_len = strlen(command);
+
+        full_path = malloc(dir_len + 1 + cmd_len + 1);
+        if (full_path == NULL)
+        {
+            free(path_copy);
+            return (NULL);
+        }
+
+        /* Construire dir/command */
+        strcpy(full_path, dir);
+        full_path[dir_len] = '/';
+        strcpy(full_path + dir_len + 1, command);
+
+        /* Verifier existence ET permission d'execution */
+        if (stat(full_path, &st) == 0 && access(full_path, X_OK) == 0)
+        {
+            free(path_copy);
+            return (full_path);
+        }
+
+        free(full_path);
+        dir = strtok(NULL, ":");
+    }
+
+    free(path_copy);
+    return (NULL);
+}
+
+/**
+ * main - programme principal de notre which maison
+ * @argc: nombre d'arguments
+ * @argv: tableau d'arguments
+ *
+ * Return: 0 si trouve, 1 sinon
+ */
+int main(int argc, char *argv[])
+{
+    char *path;
+    int i, status = 0;
+
+    if (argc < 2)
+    {
+        fprintf(stderr, "Usage: %s command [...]\n", argv[0]);
+        return (1);
+    }
+
+    for (i = 1; i < argc; i++)
+    {
+        path = _which(argv[i]);
+        if (path != NULL)
+        {
+            printf("%s\n", path);
+            free(path);
+        }
+        else
+        {
+            fprintf(stderr, "%s: %s not found\n", argv[0], argv[i]);
+            status = 1;
+        }
+    }
+
+    return (status);
+}
+```
+
+```
+Compilation et test :
+$ gcc -Wall -Werror -Wextra -pedantic _which.c -o _which
+$ ./_which ls
+/usr/bin/ls
+$ ./_which ls cat echo
+/usr/bin/ls
+/usr/bin/cat
+/usr/bin/echo
+$ ./_which nonexistent
+./_which: nonexistent not found
+$ ./_which /bin/ls
+/bin/ls
+$ ./_which ./monprog
+./_which: ./monprog not found    (si ./monprog n'existe pas)
+```
+
+> [!tip] Lien avec le shell
+> La fonction `_which` est fondamentalement la meme que `find_in_path()` dans le shell. La seule difference est que `_which` affiche le resultat, tandis que le shell utilise le chemin pour appeler `execve`. Maitrise `_which` et tu maitrises la resolution du PATH dans le shell.
+
+---
+
+### 4.4 fork + execve + wait -- Le pattern fondamental
+
+On a deja vu ce pattern dans la section 3 (Les Appels Systeme Cles). Ici, on va aller plus loin avec un exercice concret : creer **5 processus fils sequentiels**, chacun executant `ls -l`.
+
+#### Le code complet : 5 enfants sequentiels
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+extern char **environ;
+
+#define NB_CHILDREN 5
+
+/**
+ * main - cree 5 processus fils sequentiellement
+ *
+ * Chaque fils execute "ls -l /tmp".
+ * Le parent attend que chaque fils termine AVANT de creer le suivant.
+ *
+ * Return: 0
+ */
+int main(void)
+{
+    pid_t pid;
+    int status;
+    int i;
+    char *argv[] = {"ls", "-l", "/tmp", NULL};
+
+    for (i = 0; i < NB_CHILDREN; i++)
+    {
+        printf("--- Parent (PID %d) : creation du fils #%d ---\n",
+               getpid(), i + 1);
+
+        pid = fork();
+
+        if (pid == -1)
+        {
+            perror("fork");
+            return (1);
+        }
+
+        if (pid == 0)
+        {
+            /*
+             * FILS : executer la commande
+             * Apres execve, ce code est remplace par ls.
+             * Si execve echoue, on affiche l'erreur et on quitte.
+             */
+            printf("[Fils #%d, PID %d] Execute ls -l /tmp\n",
+                   i + 1, getpid());
+            execve("/bin/ls", argv, environ);
+
+            /* Si on arrive ici, execve a echoue */
+            perror("execve");
+            _exit(127);  /* _exit dans le fils, pas exit */
+        }
+        else
+        {
+            /*
+             * PARENT : attendre ce fils AVANT de creer le suivant.
+             * waitpid bloque jusqu'a ce que le fils specifie termine.
+             */
+            waitpid(pid, &status, 0);
+
+            if (WIFEXITED(status))
+                printf("--- Fils #%d (PID %d) termine, code = %d ---\n\n",
+                       i + 1, pid, WEXITSTATUS(status));
+            else if (WIFSIGNALED(status))
+                printf("--- Fils #%d (PID %d) tue par signal %d ---\n\n",
+                       i + 1, pid, WTERMSIG(status));
+        }
+    }
+
+    printf("Tous les %d fils ont termine. Parent (PID %d) quitte.\n",
+           NB_CHILDREN, getpid());
+
+    return (0);
+}
+```
+
+```
+Sortie typique :
+--- Parent (PID 1000) : creation du fils #1 ---
+[Fils #1, PID 1001] Execute ls -l /tmp
+total 4
+-rw-r--r-- 1 user user 0 Apr 14 10:00 fichier.tmp
+--- Fils #1 (PID 1001) termine, code = 0 ---
+
+--- Parent (PID 1000) : creation du fils #2 ---
+[Fils #2, PID 1002] Execute ls -l /tmp
+total 4
+-rw-r--r-- 1 user user 0 Apr 14 10:00 fichier.tmp
+--- Fils #2 (PID 1002) termine, code = 0 ---
+
+... (3 autres fils identiques) ...
+
+Tous les 5 fils ont termine. Parent (PID 1000) quitte.
+```
+
+> [!danger] Pourquoi `_exit()` et non `exit()` dans le fils ?
+> Apres un `fork`, si `execve` echoue dans le fils, on doit utiliser `_exit()` (appel systeme direct) plutot que `exit()` (fonction de la libc). La raison : `exit()` appelle les handlers enregistres avec `atexit()` et vide les buffers stdio. Or, ces buffers et handlers appartiennent au **parent** (le fils en a une copie). Les vider dans le fils pourrait corrompre la sortie du parent ou executer du code de nettoyage qui ne devrait pas s'executer deux fois.
+
+#### Que se passe-t-il si on NE fait PAS `wait` ? -- Demo zombies
+
+Voici ce qui arrive quand le parent cree des fils sans attendre leur terminaison :
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+extern char **environ;
+
+/**
+ * main - demo de processus zombies
+ *
+ * Le parent cree 5 fils mais n'appelle JAMAIS wait().
+ * Les fils terminent, deviennent des zombies.
+ * On peut les observer avec "ps aux | grep Z".
+ */
+int main(void)
+{
+    pid_t pid;
+    int i;
+
+    for (i = 0; i < 5; i++)
+    {
+        pid = fork();
+
+        if (pid == -1)
+        {
+            perror("fork");
+            return (1);
+        }
+
+        if (pid == 0)
+        {
+            /* Fils : affiche un message et termine immediatement */
+            printf("Fils #%d (PID %d) : je termine tout de suite.\n",
+                   i + 1, getpid());
+            _exit(0);
+        }
+
+        /* Parent : PAS de wait ! On continue la boucle. */
+        printf("Parent : fils #%d cree (PID %d), PAS de wait.\n",
+               i + 1, pid);
+    }
+
+    printf("\nParent : tous les fils sont crees. Je dors 30 secondes.\n");
+    printf("Ouvre un autre terminal et tape : ps aux | grep Z\n");
+    printf("Tu verras les processus zombies (etat Z+ ou Z).\n\n");
+
+    sleep(30);  /* pendant ce temps, les fils sont des zombies */
+
+    printf("Parent termine (les zombies sont adoptes par init et nettoyes).\n");
+
+    return (0);
+}
+```
+
+```
+Execution :
+$ ./zombie_demo
+Parent : fils #1 cree (PID 2001), PAS de wait.
+Fils #1 (PID 2001) : je termine tout de suite.
+Parent : fils #2 cree (PID 2002), PAS de wait.
+Fils #2 (PID 2002) : je termine tout de suite.
+...
+
+Parent : tous les fils sont crees. Je dors 30 secondes.
+Ouvre un autre terminal et tape : ps aux | grep Z
+Tu verras les processus zombies (etat Z+ ou Z).
+
+Dans l'autre terminal :
+$ ps aux | grep Z
+user  2001  0.0  0.0  0  0  pts/0  Z+  10:00  0:00 [zombie_demo] <defunct>
+user  2002  0.0  0.0  0  0  pts/0  Z+  10:00  0:00 [zombie_demo] <defunct>
+user  2003  0.0  0.0  0  0  pts/0  Z+  10:00  0:00 [zombie_demo] <defunct>
+user  2004  0.0  0.0  0  0  pts/0  Z+  10:00  0:00 [zombie_demo] <defunct>
+user  2005  0.0  0.0  0  0  pts/0  Z+  10:00  0:00 [zombie_demo] <defunct>
+```
+
+Un **zombie** (etat `Z`) est un processus qui a termine son execution mais dont le parent n'a pas encore lu son code de sortie avec `wait()`. Le kernel garde une entree dans la table des processus pour stocker ce code de sortie. Cette entree consomme peu de ressources, mais la table des processus a une taille limitee. Accumule trop de zombies et le systeme ne pourra plus creer de nouveaux processus.
+
+> [!tip] Regle d'or
+> **Chaque `fork()` doit etre suivi d'un `wait()` ou `waitpid()`** dans le parent. Dans un shell, le pattern est clair : on `fork`, le fils execute la commande, le parent attend avec `waitpid`. Pas d'exception.
+
+---
+
+## 5. Architecture du Shell -- Vue d'Ensemble
+
+### 5.1 La Boucle Principale
 
 Notre shell suit cette logique globale :
 
@@ -701,7 +1542,7 @@ Notre shell suit cette logique globale :
 +===================================================================+
 ```
 
-### 4.2 Structure des Donnees
+### 5.2 Structure des Donnees
 
 Pour notre shell simple, on n'a pas besoin de structures complexes. Voici ce qu'on manipule principalement :
 
@@ -732,7 +1573,7 @@ Pour notre shell simple, on n'a pas besoin de structures complexes. Voici ce qu'
 
 ---
 
-## 5. Implementation Etape par Etape
+## 6. Implementation Etape par Etape
 
 ### Etape 0 : Le Header (shell.h)
 
@@ -1520,12 +2361,12 @@ int builtin_env(void)
 
 ---
 
-## 6. Gestion de la Memoire
+## 7. Gestion de la Memoire
 
 > [!danger] Les fuites memoire sont un probleme majeur
 > Le shell tourne en boucle infinie. Si tu as une fuite a chaque iteration, la memoire consommee augmente sans cesse. C'est inacceptable. Valgrind est ton meilleur ami.
 
-### 6.1 Quoi liberer ?
+### 7.1 Quoi liberer ?
 
 ```
 +-------------------------------------------------------------------+
@@ -1545,7 +2386,7 @@ int builtin_env(void)
 > [!info] Cycle de vie de line
 > `line` est alloue par `getline` au premier appel. A chaque appel suivant, `getline` reutilise (et potentiellement realloue) le meme buffer. Il ne faut donc PAS liberer `line` a chaque iteration -- seulement a la sortie du shell.
 
-### 6.2 Strategie de Liberation
+### 7.2 Strategie de Liberation
 
 ```c
 /*
@@ -1572,7 +2413,7 @@ while (1)
 }
 ```
 
-### 6.3 Utiliser Valgrind
+### 7.3 Utiliser Valgrind
 
 ```bash
 # Verifier les fuites memoire
@@ -1596,7 +2437,7 @@ echo -e "ls\nenv\nexit" | valgrind --leak-check=full ./hsh
 > ==12345== ERROR SUMMARY: 0 errors from 0 contexts
 > ```
 
-### 6.4 Erreurs Frequentes de Memoire
+### 7.4 Erreurs Frequentes de Memoire
 
 ```
 +-------------------------------------------------------------------+
@@ -1641,9 +2482,9 @@ echo -e "ls\nenv\nexit" | valgrind --leak-check=full ./hsh
 
 ---
 
-## 7. Mode Non-Interactif
+## 8. Mode Non-Interactif
 
-### 7.1 Detection
+### 8.1 Detection
 
 ```c
 int interactive = isatty(STDIN_FILENO);
@@ -1677,7 +2518,7 @@ int interactive = isatty(STDIN_FILENO);
 +-------------------------------------------------------------------+
 ```
 
-### 7.2 Comportement Attendu
+### 8.2 Comportement Attendu
 
 En mode non-interactif :
 1. **Pas de prompt** affiché
@@ -1708,9 +2549,9 @@ echo "/bin/ls" | /bin/sh
 
 ---
 
-## 8. Gestion des Erreurs -- Format Exact
+## 9. Gestion des Erreurs -- Format Exact
 
-### 8.1 Format des Messages d'Erreur
+### 9.1 Format des Messages d'Erreur
 
 Le format attendu est **strictement** celui de `/bin/sh`. Les checkers comparent la sortie caractere par caractere.
 
@@ -1737,7 +2578,7 @@ Exemples :
 > # (sauf le nom du shell qui sera different)
 > ```
 
-### 8.2 Code de Sortie (Exit Status)
+### 9.2 Code de Sortie (Exit Status)
 
 Le shell doit retourner le code de sortie de la derniere commande executee.
 
@@ -1757,7 +2598,7 @@ if (WIFEXITED(status))
     last_status = WEXITSTATUS(status);
 ```
 
-### 8.3 Ecrire sur stderr
+### 9.3 Ecrire sur stderr
 
 Les messages d'erreur doivent aller sur **stderr** (fd 2), pas sur stdout (fd 1). Cela permet de separer la sortie normale des erreurs.
 
@@ -1779,7 +2620,7 @@ write(STDERR_FILENO, ": ", 2);
 
 ---
 
-## 9. Structure du Projet Recommandee
+## 10. Structure du Projet Recommandee
 
 ```
 simple_shell/
@@ -1833,9 +2674,9 @@ simple_shell/
 
 ---
 
-## 10. Tests
+## 11. Tests
 
-### 10.1 Tests Interactifs
+### 11.1 Tests Interactifs
 
 Lance le shell et teste manuellement :
 
@@ -1860,7 +2701,7 @@ $ exit
 $
 ```
 
-### 10.2 Tests Non-Interactifs
+### 11.2 Tests Non-Interactifs
 
 ```bash
 # Commande simple
@@ -1881,7 +2722,7 @@ echo "ls" | /bin/sh > out_sh 2>&1
 diff out_hsh out_sh
 ```
 
-### 10.3 Tests de Cas Limites
+### 11.3 Tests de Cas Limites
 
 ```bash
 # Ligne vide (juste Enter)
@@ -1904,7 +2745,7 @@ env -i ./hsh
 echo "./hsh" | ./hsh
 ```
 
-### 10.4 Tests Valgrind
+### 11.4 Tests Valgrind
 
 ```bash
 # Test basique
@@ -1959,9 +2800,9 @@ echo "ls" | env -i valgrind --leak-check=full ./hsh
 
 ---
 
-## 11. Erreurs Classiques
+## 12. Erreurs Classiques
 
-### 11.1 Liste des Pieges
+### 12.1 Liste des Pieges
 
 ```
 +===================================================================+
@@ -2050,7 +2891,7 @@ echo "ls" | env -i valgrind --leak-check=full ./hsh
 +===================================================================+
 ```
 
-### 11.2 Debugging Pratique
+### 12.2 Debugging Pratique
 
 ```bash
 # Compiler avec symboles de debug
@@ -2077,7 +2918,7 @@ strace -e trace=process ./hsh
 
 ---
 
-## 12. Fonctions Autorisees -- Rappel
+## 13. Fonctions Autorisees -- Rappel
 
 Voici la liste **complete** des fonctions autorisees dans le projet :
 
@@ -2127,7 +2968,7 @@ Voici la liste **complete** des fonctions autorisees dans le projet :
 
 ---
 
-## 13. Code Complet Recapitulatif
+## 14. Code Complet Recapitulatif
 
 > [!info] Vue d'ensemble
 > Voici un recapitulatif organise de tous les fichiers du projet, pour avoir une vision globale. Chaque fichier respecte la regle Betty des 5 fonctions maximum.
@@ -2500,7 +3341,7 @@ int builtin_env(void)
 
 ---
 
-## 14. Resume du Flux d'Execution
+## 15. Resume du Flux d'Execution
 
 ```
 +===================================================================+

@@ -3,7 +3,7 @@
 > [!info] Guide complet
 > Ce coffre contient des cours complets pour apprendre la programmation depuis zéro. Chaque note est conçue pour qu'un novice puisse, après lecture, écrire et mettre en pratique toutes les connaissances abordées.
 > 
-> **83 notes** | **~80 000 lignes** | Tout en français
+> **85 notes** | **~87 000 lignes** | Tout en français
 
 ---
 
@@ -81,6 +81,7 @@
 | 8 | [[08 - APIs REST avec Flask]] | HTTP, routes, CRUD API, blueprints |
 | 9 | [[09 - APIs REST avec FastAPI]] | Pydantic, Swagger, async, comparaison Flask |
 | 10 | [[10 - Python et Bases de Donnees]] | SQLAlchemy ORM, models, Alembic migrations |
+| 11 | [[11 - Projet HBnB]] | **Projet T2** : clone AirBnB, architecture, API, auth, frontend |
 
 ### SQL
 
@@ -181,6 +182,7 @@
 | # | Cours | Description |
 |---|-------|-------------|
 | 1 | [[07 - DevSecOps]] | Shift-left, SAST/DAST, secrets management |
+| 2 | [[08 - Projet Capstone DevOps]] | **Projet T3** : app complète, CI/CD, cloud, monitoring |
 
 ---
 
