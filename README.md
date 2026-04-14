@@ -1,6 +1,6 @@
 # Programming Sheet for Obsidian
 
-**85 cours de programmation complets, en francais, au format Obsidian.**
+**86 cours de programmation complets, en francais, au format Obsidian.**
 
 > Un coffre Obsidian couvrant 3 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, SQL, Rust, et DevOps.
 
@@ -10,8 +10,8 @@
 
 | | |
 |---|---|
-| **Notes** | 85 fichiers Markdown |
-| **Lignes** | ~89 000 lignes de contenu |
+| **Notes** | 86 fichiers Markdown |
+| **Lignes** | ~91 500 lignes de contenu |
 | **Langages** | C, Python, JavaScript, SQL, Rust, HTML/CSS, Bash, HCL, YAML |
 | **Langue** | Francais (termes techniques en anglais) |
 | **Format** | Obsidian Markdown avec `[[wikilinks]]`, callouts, diagrammes ASCII |
