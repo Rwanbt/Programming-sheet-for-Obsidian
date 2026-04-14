@@ -3,7 +3,7 @@
 > [!info] Guide complet
 > Ce coffre contient des cours complets pour apprendre la programmation depuis zéro. Chaque note est conçue pour qu'un novice puisse, après lecture, écrire et mettre en pratique toutes les connaissances abordées.
 > 
-> **82 notes** | **~70 000 lignes** | Tout en français
+> **83 notes** | **~80 000 lignes** | Tout en français
 
 ---
 
@@ -27,6 +27,7 @@
 | 9 | [[09 - File IO et Appels Systeme]] | open, close, read, write, file descriptors |
 | 10 | [[10 - Projet Printf]] | Architecture _printf, dispatch table, specifiers |
 | 11 | [[11 - Makefiles]] | Make, compilation incrémentale, variables, règles |
+| 12 | [[12 - Projet Simple Shell]] | fork/execve/wait, PATH, builtins, REPL complet |
 
 ### Structures de Données & Algorithmes
 
