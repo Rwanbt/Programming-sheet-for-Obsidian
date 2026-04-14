@@ -1,12 +1,18 @@
 # 09 - IA Locale avec Ollama
 
+> [!info] Mis à jour avril 2026
+> Ce document reflète l'état de l'écosystème Ollama et des meilleurs modèles locaux en avril 2026.
+
+> [!warning] Évolution rapide
+> Les modèles locaux évoluent très vite, vérifier [ollama.com/library](https://ollama.com/library) pour les dernières versions disponibles.
+
 L'IA générative accessible via des APIs cloud (OpenAI, Anthropic, Google) a transformé le développement logiciel — mais elle soulève des questions légitimes : confidentialité des données, coût récurrent, dépendance à Internet. **Ollama** répond à ces problèmes en rendant les LLMs puissants exécutables directement sur ta machine, gratuitement, sans envoyer la moindre ligne de code à l'extérieur.
 
 ---
 
 ## 1. Introduction : Pourquoi l'IA locale ?
 
-Avant de plonger dans l'outil, il faut comprendre pourquoi exécuter un LLM en local est une option sérieuse en 2025-2026 — et pas seulement un gadget pour passionnés.
+Avant de plonger dans l'outil, il faut comprendre pourquoi exécuter un LLM en local est une option sérieuse en 2026 — et pas seulement un gadget pour passionnés.
 
 ### 1.1 Confidentialité : ton code reste chez toi
 
@@ -179,42 +185,42 @@ curl http://localhost:11434
 ```bash
 # Télécharger un modèle depuis le hub Ollama
 # (catalogue complet sur https://ollama.com/library)
-ollama pull qwen2.5-coder:14b
+ollama pull qwen3-coder-next
 
 # La progression est affichée :
 # pulling manifest
-# pulling 9a3b5a... 100% ████████ 9.0 GB
+# pulling 9a3b5a... 100% ████████ 8.0 GB
 
 # Lister les modèles installés localement
 ollama list
 # NAME                    ID              SIZE    MODIFIED
-# qwen2.5-coder:14b       a1b2c3d4e5f6   9.0 GB  2 hours ago
-# mistral:7b              f6e5d4c3b2a1   4.1 GB  1 day ago
+# qwen3-coder-next        a1b2c3d4e5f6   8.0 GB  2 hours ago
+# gemma4:e4b              f6e5d4c3b2a1   4.5 GB  1 day ago
 
 # Supprimer un modèle (libère l'espace disque)
-ollama rm mistral:7b
+ollama rm gemma4:e4b
 
 # Informations détaillées sur un modèle
-ollama show qwen2.5-coder:14b
+ollama show qwen3-coder-next
 # Model details: architecture, parameters, context length...
 
 # Voir les modèles actuellement chargés en mémoire
 ollama ps
 # NAME                    ID      SIZE    PROCESSOR  UNTIL
-# qwen2.5-coder:14b       a1b2c3  9.0 GB  GPU 100%   4 minutes from now
+# qwen3-coder-next        a1b2c3  8.0 GB  GPU 100%   4 minutes from now
 ```
 
 ### 4.2 Interaction directe
 
 ```bash
 # Lancer une conversation interactive dans le terminal
-ollama run qwen2.5-coder:14b
+ollama run qwen3-coder-next
 
 # Prompt unique (non-interactif, utile pour scripts)
-ollama run qwen2.5-coder:14b "Explique la différence entre async et await en Python"
+ollama run qwen3-coder-next "Explique la différence entre async et await en Python"
 
 # Passer du contexte depuis stdin
-cat mon_fichier.py | ollama run qwen2.5-coder:14b "Que fait ce code ?"
+cat mon_fichier.py | ollama run qwen3-coder-next "Que fait ce code ?"
 
 # Quitter le mode interactif
 # /bye ou Ctrl+D
@@ -235,7 +241,7 @@ cat mon_fichier.py | ollama run qwen2.5-coder:14b "Que fait ce code ?"
 > Session de débogage rapide en ligne de commande :
 >
 > ```bash
-> ollama run qwen2.5-coder:14b
+> ollama run qwen3-coder-next
 > >>> Voici une erreur Python que je ne comprends pas :
 > ... TypeError: 'NoneType' object is not subscriptable
 > ... Elle apparaît à la ligne 42 de mon code.
@@ -244,63 +250,86 @@ cat mon_fichier.py | ollama run qwen2.5-coder:14b "Que fait ce code ?"
 
 ---
 
-## 5. Les meilleurs modèles pour le code (2025-2026)
+## 5. Les meilleurs modèles pour le code (avril 2026)
 
-Le choix du modèle est crucial. Voici une sélection des meilleurs modèles disponibles sur Ollama pour le développement logiciel.
+Le choix du modèle est crucial. Voici une sélection des meilleurs modèles disponibles sur Ollama pour le développement logiciel, mis à jour en avril 2026.
 
-### 5.1 Qwen2.5-Coder (Alibaba) — RECOMMANDÉ
+> [!info] Architecture MoE — "80B total" ≠ "80B en RAM"
+> Certains modèles utilisent l'architecture **Mixture of Experts (MoE)** : le modèle contient des dizaines de milliards de paramètres au total, mais à chaque inférence, seule une fraction d'entre eux (les "experts" activés) est chargée et utilisée. Exemple : Qwen3-Coder-Next annonce 80B paramètres totaux, mais seulement ~3B sont actifs simultanément. Résultat : performances proches d'un modèle 20-30B, mais avec la mémoire d'un modèle 3B. **Le chiffre qui compte pour ta RAM, c'est les paramètres actifs, pas le total.**
 
-Le meilleur rapport qualité/taille pour le code en 2025-2026. Développé par Alibaba Cloud, spécialisé dans la génération et la compréhension de code.
+### 5.1 Qwen3-Coder-Next — NOUVEAU CHAMPION pour le code
+
+Le meilleur rapport qualité/ressources pour le code en 2026. Architecture MoE révolutionnaire qui tient en 8GB malgré 80B paramètres totaux.
 
 ```bash
-ollama pull qwen2.5-coder:7b    # ~4GB  - Pour machines 8GB RAM
-ollama pull qwen2.5-coder:14b   # ~9GB  - OPTIMAL (16GB RAM)
-ollama pull qwen2.5-coder:32b   # ~20GB - Pour GPU puissant
+ollama pull qwen3-coder-next    # 80B total, ~3B actifs (MoE), ~8GB RAM
 ```
 
 Points forts :
+- Architecture MoE : seulement **3B paramètres actifs** → très rapide
+- Performances comparables à des modèles 20-30x plus grands
+- Tient en **8GB RAM** malgré 80B paramètres totaux
 - Excellent en Python, JavaScript, TypeScript, SQL, Go, Rust, C++
-- Fenêtre de contexte : **128k tokens** (peut lire des fichiers entiers)
-- Benchmark : surpasse GPT-3.5 sur la plupart des tâches de code
-- Le 7B fonctionne confortablement sur 8GB RAM
-- Le 14B est le meilleur équilibre performance/vitesse sur 16GB RAM
+- Meilleur rapport qualité/ressources pour le code en 2026
 
-### 5.2 DeepSeek-Coder-V2
+### 5.2 Gemma 4 (Google) — Nouveau MEILLEUR open source général
+
+```bash
+ollama pull gemma4:e4b     # 4B effectifs (E4B), ultra-léger, ~8GB RAM
+ollama pull gemma4:27b     # 26B-A4B, équilibre, ~16GB RAM
+ollama pull gemma4:31b     # 31B dense, meilleure qualité, ~20GB RAM
+```
+
+- Licence **Apache 2.0** (complètement libre, usage commercial inclus)
+- Fenêtre de contexte : **256K tokens**
+- Gemma 4 31B : **84.3% GPQA Diamond**, **80.0% LiveCodeBench v6**
+- Gemma 4 E4B : remarquablement fort pour seulement 4B paramètres actifs
+- Excellent pour tout : code, raisonnement, rédaction
+
+### 5.3 Llama 4 Scout (Meta) — Contexte massif
+
+```bash
+ollama pull llama4:scout    # 109B total, 17B actifs, 16 experts
+```
+
+- **10M tokens de contexte** — analyse de projets entiers, codebases complètes
+- Architecture MoE : 109B total mais seulement **17B actifs** (~20GB RAM)
+- Open-weight, multimodal natif (images + texte)
+- Idéal pour les tâches nécessitant un contexte très long
+
+### 5.4 Llama 4 Maverick (Meta) — Puissance brute locale
+
+```bash
+ollama pull llama4:maverick  # 17B actifs, 128 experts
+```
+
+- Bat **GPT-4o et Gemini 2.0 Flash** sur les benchmarks
+- Open-weight, multimodal
+- Architecture MoE avec 128 experts spécialisés
+- Pour les machines avec 32GB+ RAM
+
+### 5.5 DeepSeek Coder V2 16B — Option budget toujours valide
 
 ```bash
 ollama pull deepseek-coder-v2:16b   # ~10GB
 ```
 
-- Architecture Mixture of Experts (MoE) : 16B actifs sur 236B total
-- Performances comparables à GPT-3.5 Turbo sur le code
-- Excellente compréhension de code existant et de complétion
+- Excellent pour le code, rapport qualité/coût imbattable
+- Architecture MoE : 16B actifs sur 236B total
 - Très fort en refactoring et explication de code
+- Toujours recommandé pour les machines 16GB RAM
 
-### 5.3 Llama 3.3 70B (Meta)
-
-```bash
-ollama pull llama3.3:70b                      # ~40GB
-ollama pull llama3.3:70b-instruct-q4_K_M      # ~22GB (version quantisée)
-```
-
-- Modèle généraliste de très haute qualité
-- Code solide, mais moins spécialisé que Qwen ou DeepSeek
-- Excellent pour les tâches combinant code + rédaction + analyse
-- Nécessite ≥48GB RAM (full precision) ou ≥24GB (quantisé Q4)
-
-### 5.4 Mistral 7B
+### 5.6 Mistral Small 4 — Couteau suisse local
 
 ```bash
-ollama pull mistral:7b             # ~4GB
-ollama pull mistral:7b-instruct    # Version instruction-tuned
+ollama pull mistral-small4  # open-weight
 ```
 
-- Rapide et très léger — idéal pour complétion temps réel
-- Bon pour questions rapides, explications simples
-- Moins performant que Qwen pour génération de code complexe
-- Parfait comme modèle de complétion inline (tab autocomplete)
+- Raisonnement + code + multimodal en un seul modèle
+- Alternative à Qwen pour ceux qui préfèrent l'écosystème Mistral
+- Bon équilibre performance/taille
 
-### 5.5 Phi-4 (Microsoft)
+### 5.7 Phi-4 (Microsoft) — Option légère toujours valide
 
 ```bash
 ollama pull phi4    # ~9GB (14B paramètres)
@@ -309,37 +338,35 @@ ollama pull phi4    # ~9GB (14B paramètres)
 - 14B paramètres avec des performances remarquables pour sa taille
 - Microsoft a optimisé la qualité des données d'entraînement
 - Bon en code et en raisonnement logique
-- Alternative intéressante à Qwen 14B si RAM limitée
+- Alternative légère si RAM contrainte
 
-### 5.6 CodeLlama (Meta)
+### 5.8 Anciens modèles — Toujours fonctionnels mais remplacés
 
-```bash
-ollama pull codellama:7b     # ~4GB
-ollama pull codellama:13b    # ~8GB
-ollama pull codellama:34b    # ~19GB
-```
+| Ancien modèle | Remplacé par | Raison |
+|---|---|---|
+| `qwen2.5-coder` | `qwen3-coder-next` | Nouvelle génération MoE |
+| `llama3.3` | `llama4:scout` ou `llama4:maverick` | Llama 4 disponible |
+| `codellama` | `gemma4:e4b` ou `qwen3-coder-next` | Très ancien (2023) |
+| `mistral:7b` | `mistral-small4` | Nouvelle génération |
 
-- Fine-tuning de Llama 2 sur du code (Python, C, C++, Java, etc.)
-- Plus ancien (2023) mais stable et bien supporté
-- Bon support pour le code de remplissage (fill-in-the-middle)
-- Dépassé par Qwen sur les benchmarks récents, mais fiable
-
-### 5.7 Tableau de sélection par RAM disponible
+### 5.9 Tableau de sélection par RAM disponible (avril 2026)
 
 ```
 +------------------+-----------------------------------------------+
-|  RAM disponible  |  Modèle recommandé                            |
+|  RAM disponible  |  Modèle recommandé (avril 2026)               |
 +------------------+-----------------------------------------------+
-|  8 GB            |  qwen2.5-coder:7b   (ou mistral:7b)           |
-|  16 GB           |  qwen2.5-coder:14b  ← OPTIMAL                 |
-|  24 GB           |  qwen2.5-coder:32b  (ou deepseek-coder-v2)    |
-|  32 GB           |  llama3.3:70b-q4    (ou qwen2.5-coder:32b)    |
-|  64 GB+          |  llama3.3:70b (full) ou modèles 70B+ en Q8    |
+|  8 GB            |  qwen3-coder-next  (MoE ~3B actifs)           |
+|                  |  ou gemma4:e4b     (4B effectifs)             |
+|  16 GB           |  gemma4:27b        ← OPTIMAL                  |
+|                  |  ou deepseek-coder-v2:16b                     |
+|  20 GB+          |  gemma4:31b        (31B dense, qualité max)   |
+|                  |  ou llama4:scout   (10M contexte)             |
+|  32 GB+          |  llama4:maverick + llama4:scout               |
 +------------------+-----------------------------------------------+
 
 Note GPU : si tu as un GPU dédié avec VRAM suffisante,
 la VRAM compte plus que la RAM système.
-Ex: RTX 3090 (24GB VRAM) → qwen2.5-coder:32b en Q4
+Ex: RTX 3090 (24GB VRAM) → gemma4:31b ou llama4:scout
 ```
 
 > [!info]
@@ -362,7 +389,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="qwen2.5-coder:14b",
+    model="qwen3-coder-next",
     messages=[
         {
             "role": "system",
@@ -392,7 +419,7 @@ client = OpenAI(
 
 # stream=True pour afficher les tokens au fur et à mesure
 stream = client.chat.completions.create(
-    model="qwen2.5-coder:14b",
+    model="qwen3-coder-next",
     messages=[{"role": "user", "content": "Explique les decorators Python"}],
     stream=True
 )
@@ -409,7 +436,7 @@ for chunk in stream:
 curl http://localhost:11434/api/chat \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen2.5-coder:14b",
+    "model": "qwen3-coder-next",
     "messages": [
       {"role": "user", "content": "Crée une classe Python pour une pile (stack)"}
     ],
@@ -419,7 +446,7 @@ curl http://localhost:11434/api/chat \
 # Génération simple (completion)
 curl http://localhost:11434/api/generate \
   -d '{
-    "model": "qwen2.5-coder:14b",
+    "model": "qwen3-coder-next",
     "prompt": "def fibonacci(n):",
     "stream": false
   }'
@@ -438,7 +465,7 @@ from langchain.chains import LLMChain
 
 # Connexion au modèle Ollama
 llm = Ollama(
-    model="qwen2.5-coder:14b",
+    model="qwen3-coder-next",
     temperature=0.1,
     num_ctx=32768   # Fenêtre de contexte
 )
@@ -480,21 +507,21 @@ code --install-extension Continue.continue
 {
   "models": [
     {
-      "title": "Qwen Coder 14B (Local)",
+      "title": "Qwen3 Coder Next (Local)",
       "provider": "ollama",
-      "model": "qwen2.5-coder:14b",
+      "model": "qwen3-coder-next",
       "apiBase": "http://localhost:11434"
     },
     {
-      "title": "Llama 3.3 70B (Local)",
+      "title": "Llama 4 Scout (Local - 10M contexte)",
       "provider": "ollama",
-      "model": "llama3.3:70b-instruct-q4_K_M"
+      "model": "llama4:scout"
     }
   ],
   "tabAutocompleteModel": {
-    "title": "Qwen 7B (Complétion Rapide)",
+    "title": "Gemma 4 E4B (Complétion Rapide)",
     "provider": "ollama",
-    "model": "qwen2.5-coder:7b"
+    "model": "gemma4:e4b"
   },
   "embeddingsProvider": {
     "provider": "ollama",
@@ -539,7 +566,7 @@ Raccourcis VS Code avec Continue.dev :
 
 ```bash
 # Lancer OpenCode avec un modèle Ollama
-opencode --model ollama/qwen2.5-coder:14b
+opencode --model ollama/qwen3-coder-next
 
 # Configuration permanente dans ~/.config/opencode/config.json
 # (voir note 08 - OpenCode)
@@ -550,11 +577,11 @@ opencode --model ollama/qwen2.5-coder:14b
 ```bash
 # pip install aider-chat
 # Utiliser Aider avec Ollama
-aider --model ollama/qwen2.5-coder:14b
+aider --model ollama/qwen3-coder-next
 
 # Ou avec variable d'environnement
 export OLLAMA_API_BASE=http://localhost:11434
-aider --model ollama/qwen2.5-coder:14b mon_fichier.py
+aider --model ollama/qwen3-coder-next mon_fichier.py
 ```
 
 ### 8.3 Script Python réutilisable
@@ -564,7 +591,7 @@ aider --model ollama/qwen2.5-coder:14b mon_fichier.py
 from openai import OpenAI
 import sys
 
-def ask_code_question(question: str, model: str = "qwen2.5-coder:14b") -> str:
+def ask_code_question(question: str, model: str = "qwen3-coder-next") -> str:
     """Pose une question à un modèle Ollama local."""
     client = OpenAI(
         base_url="http://localhost:11434/v1",
@@ -648,10 +675,10 @@ export OLLAMA_FLASH_ATTENTION=1
 # Q8_0   : 8-bit                   → Qualité proche du plein, +100% RAM
 # F16    : 16-bit float (plein)     → Maximum qualité, très lourd
 
-# Exemples pour qwen2.5-coder:14b :
-ollama pull qwen2.5-coder:14b           # Par défaut (~Q4_K_M, ~9GB)
-ollama pull qwen2.5-coder:14b-q8_0     # Haute qualité (~14GB)
-ollama pull qwen2.5-coder:14b-q4_K_M   # Équilibre optimal (~9GB)
+# Exemples pour gemma4:27b :
+ollama pull gemma4:27b           # Par défaut (~Q4_K_M)
+ollama pull gemma4:27b-q8_0     # Haute qualité
+ollama pull gemma4:27b-q4_K_M   # Équilibre optimal
 
 # Règle pratique :
 # Si tu as la RAM → Q8_0 pour la meilleure qualité
@@ -670,7 +697,7 @@ ollama pull qwen2.5-coder:14b-q4_K_M   # Équilibre optimal (~9GB)
 # Via API (paramètre num_ctx)
 curl http://localhost:11434/api/chat \
   -d '{
-    "model": "qwen2.5-coder:14b",
+    "model": "qwen3-coder-next",
     "options": {
       "num_ctx": 32768
     },
@@ -693,7 +720,7 @@ Un Modelfile est une configuration qui définit un modèle personnalisé basé s
 # Modelfile - Exemple complet
 
 # Modèle de base
-FROM qwen2.5-coder:14b
+FROM qwen3-coder-next
 
 # Prompt système permanent (injecté à chaque conversation)
 SYSTEM """
@@ -722,7 +749,7 @@ PARAMETER repeat_penalty 1.1   # Évite les répétitions
 ```bash
 # Créer le fichier Modelfile
 cat > Modelfile << 'EOF'
-FROM qwen2.5-coder:14b
+FROM qwen3-coder-next
 
 SYSTEM """
 Tu es un expert Python spécialisé dans FastAPI et SQLAlchemy.
@@ -749,7 +776,7 @@ ollama run mon-expert-python
 
 ```dockerfile
 # Modelfile pour expert SQL
-FROM qwen2.5-coder:14b
+FROM qwen3-coder-next
 
 SYSTEM """
 Tu es un DBA (Database Administrator) expert en SQL et optimisation de requêtes.
@@ -763,7 +790,7 @@ PARAMETER num_ctx 16384
 
 ```dockerfile
 # Modelfile pour reviewer de code
-FROM qwen2.5-coder:14b
+FROM qwen3-coder-next
 
 SYSTEM """
 Tu es un senior code reviewer exigeant mais bienveillant.
@@ -817,9 +844,9 @@ client = OpenAI(
 {
   "models": [
     {
-      "title": "Serveur Équipe (Qwen 14B)",
+      "title": "Serveur Équipe (Qwen3 Coder Next)",
       "provider": "ollama",
-      "model": "qwen2.5-coder:14b",
+      "model": "qwen3-coder-next",
       "apiBase": "http://192.168.1.100:11434"
     }
   ]
@@ -880,7 +907,7 @@ Erreur obtenue :
 Identifie la cause du bug et propose une correction."""
 
     response = client.chat.completions.create(
-        model="qwen2.5-coder:14b",
+        model="qwen3-coder-next",
         messages=[
             {"role": "system", "content": "Expert Python, analyse les bugs avec précision."},
             {"role": "user", "content": prompt}
@@ -907,7 +934,7 @@ except Exception:
 
 ```bash
 # Commande shell pour générer des tests pour un fichier
-cat mon_module.py | ollama run qwen2.5-coder:14b \
+cat mon_module.py | ollama run qwen3-coder-next \
   "Génère des tests unitaires pytest complets pour ce code. 
    Inclus des cas nominaux, cas limites, et cas d'erreur."
 ```
@@ -978,7 +1005,7 @@ cat mon_module.py | ollama run qwen2.5-coder:14b \
 **Objectif** : Installer Ollama, télécharger un modèle léger, et faire une première requête via l'API Python.
 
 1. Installer Ollama sur ta machine (via winget, brew, ou le script Linux)
-2. Télécharger `qwen2.5-coder:7b` (ou `mistral:7b` si RAM < 8GB)
+2. Télécharger `gemma4:e4b` (ultra-léger, ~8GB RAM) ou `qwen3-coder-next` (meilleur pour le code)
 3. Vérifier que l'API répond : `curl http://localhost:11434`
 4. Écrire un script Python qui utilise `openai.OpenAI` avec `base_url="http://localhost:11434/v1"` pour poser une question simple sur Python
 5. Mesurer le temps de réponse (utilise `time.time()` avant et après) et comparer avec une API cloud
@@ -993,7 +1020,7 @@ cat mon_module.py | ollama run qwen2.5-coder:14b \
 
 1. Identifie ton contexte principal : quel langage, quel framework, quelles contraintes ?
 2. Rédige un `Modelfile` avec :
-   - `FROM qwen2.5-coder:14b` (ou le modèle que tu as)
+   - `FROM qwen3-coder-next` (ou `gemma4:27b` selon ta RAM)
    - Un `SYSTEM` prompt qui décrit ton rôle d'expert idéal
    - Les paramètres : `temperature 0.1`, `num_ctx 32768`
 3. Crée le modèle avec `ollama create mon-modele -f Modelfile`
@@ -1011,7 +1038,7 @@ cat mon_module.py | ollama run qwen2.5-coder:14b \
 1. Prends un script Python existant qui utilise `openai.OpenAI()` avec l'API officielle
 2. Identifie la ligne de création du client
 3. Change uniquement `base_url` et `api_key` pour pointer vers Ollama
-4. Adapte le nom du modèle (ex: `gpt-4` → `qwen2.5-coder:14b`)
+4. Adapte le nom du modèle (ex: `gpt-4` → `qwen3-coder-next` ou `gemma4:27b`)
 5. Teste que le comportement est équivalent
 6. Mesure la différence de latence et de qualité des réponses
 

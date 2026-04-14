@@ -1,11 +1,17 @@
 # 12 - Stratégies Multi-Modèles et Workflows
 
+> [!info] Mis à jour avril 2026
+> Ce fichier a été mis à jour avec les modèles et prix en vigueur en avril 2026.
+
+> [!warning] Les prix changent souvent
+> Les tarifs des APIs IA évoluent régulièrement (parfois toutes les semaines). Vérifiez toujours les pages de tarification officielles avant de budgétiser un projet : [anthropic.com/pricing](https://www.anthropic.com/pricing), [openai.com/pricing](https://openai.com/pricing), [ai.google.dev/pricing](https://ai.google.dev/pricing), [deepseek.com](https://www.deepseek.com).
+
 ## Qu'est-ce que la stratégie multi-modèles ?
 
 La stratégie multi-modèles est l'art de sélectionner et combiner intelligemment plusieurs modèles d'IA en fonction de la nature de chaque tâche, du budget disponible et des contraintes de confidentialité. Plutôt que de s'en remettre aveuglément à un seul modèle "universel", le développeur expert apprend à router ses besoins vers l'outil le plus adapté — comme un chef cuisinier qui sait exactement quel couteau utiliser selon l'ingrédient.
 
 > [!tip] Analogie
-> Imaginez votre cuisine équipée de couteaux spécialisés : le couteau à pain, le couteau de chef, l'éminceur, le couteau à filet. Utiliser un couteau à pain pour émincer des oignons, c'est possible... mais inefficace et coûteux en effort. Il en va de même avec les modèles d'IA : Claude Opus pour générer un docstring simple, c'est gaspiller $15 par million de tokens pour une tâche qu'un modèle à $0.80 ferait parfaitement.
+> Imaginez votre cuisine équipée de couteaux spécialisés : le couteau à pain, le couteau de chef, l'éminceur, le couteau à filet. Utiliser un couteau à pain pour émincer des oignons, c'est possible... mais inefficace et coûteux en effort. Il en va de même avec les modèles d'IA : Claude Opus 4.6 pour générer un docstring simple, c'est gaspiller $25 par million de tokens output pour une tâche qu'un modèle à $1.25 ferait parfaitement.
 
 Le développeur expert de 2025-2026 ne pose plus la question "Quel est le meilleur modèle ?" mais "Quel modèle est le meilleur **pour cette tâche précise, dans ce contexte précis** ?"
 
@@ -18,33 +24,30 @@ Le développeur expert de 2025-2026 ne pose plus la question "Quel est le meille
 Les benchmarks académiques (MMLU, HumanEval, SWE-bench) révèlent une vérité nuancée : chaque modèle excelle dans certains contextes et sous-performe dans d'autres. Un modèle champion sur la mathématique formelle peut être moins fluide en génération de code idiomatique Python. Un modèle ultra-rapide et bon marché peut traiter 90% de vos besoins quotidiens avec une qualité parfaitement suffisante.
 
 ```
-Benchmarks représentatifs (indicatifs, 2025-2026)
-==================================================
+Benchmarks représentatifs (indicatifs, avril 2026)
+===================================================
 
-SWE-bench (résolution de vrais bugs GitHub) :
-  Claude Opus 4.6    ████████████████████ 72%
-  Gemini 2.5 Pro     ███████████████████  68%
-  o3                 ██████████████████   65%
-  Claude Sonnet 4.6  ████████████████     58%
-  GPT-4o             ██████████████       52%
+SWE-bench Verified (résolution de vrais bugs GitHub) :
+  DeepSeek V4        ████████████████████ 81%
+  Claude Opus 4.6    ███████████████████  80.8%
+  Gemini 3.1 Pro     ██████████████████   78.8%
+  Claude Sonnet 4.6  █████████████████    ~70%
+  GPT-5.4*           ███████████████      57.7%
+  Claude Haiku 4.5   █████████████        ~55%
+  Ollama Gemma 4 31B ███████████████████  80%** (LiveCodeBench)
 
-HumanEval (génération de code) :
-  Claude Opus 4.6    ████████████████████ 95%
-  Gemini 2.5 Pro     ███████████████████  93%
-  Claude Sonnet 4.6  ██████████████████   90%
-  GPT-4o             █████████████████    87%
-  GPT-4o-mini        ██████████████       82%
-  Gemini Flash 2.0   █████████████        78%
+*SWE-bench Pro (métrique différente de SWE-bench Verified)
+**LiveCodeBench v6 (pas SWE-bench Verified)
 
 Vitesse de réponse (tokens/sec, approximatif) :
-  Gemini 2.0 Flash   ████████████████████ 200+ tk/s
+  GPT-5.4 Nano       ████████████████████ 200+ tk/s
   Claude Haiku 4.5   ██████████████████   150+ tk/s
-  GPT-4o-mini        ████████████████     120+ tk/s
+  Gemini 3.1 Flash-L ████████████████     130+ tk/s
   Claude Sonnet 4.6  ████████████         90+ tk/s
-  GPT-4o             ██████████           70+ tk/s
-  Gemini 2.5 Pro     ████████             60+ tk/s
+  Gemini 3.1 Pro     ██████████           70+ tk/s
+  GPT-5.4            ████████             60+ tk/s
   Claude Opus 4.6    ██████               45+ tk/s
-  o3-mini            █████                35+ tk/s
+  DeepSeek V4        █████████            55+ tk/s
 ```
 
 > [!info]
@@ -55,78 +58,96 @@ Vitesse de réponse (tokens/sec, approximatif) :
 Un développeur senior ne se contente pas d'un seul IDE, d'un seul langage, d'un seul framework. De même, le développeur augmenté par l'IA de 2025 maintient un écosystème de modèles soigneusement sélectionnés :
 
 ```
-MA BOÎTE À OUTILS IA (exemple)
-===============================
+MA BOÎTE À OUTILS IA (exemple, avril 2026)
+===========================================
 
 ┌─────────────────────────────────────────────────────┐
-│  COMPLÉTION INLINE          │  Continue.dev + Ollama │
-│  (pendant que je code)      │  ou Copilot            │
+│  COMPLÉTION INLINE          │  Continue.dev +        │
+│  (pendant que je code)      │  Qwen3-Coder-Next local│
 ├─────────────────────────────┼────────────────────────┤
-│  QUESTIONS RAPIDES          │  Haiku / GPT-4o-mini   │
-│  (5-10 fois par jour)       │  / Gemini Flash        │
+│  QUESTIONS RAPIDES          │  Haiku 4.5 / GPT-5.4   │
+│  (5-10 fois par jour)       │  Nano / Gemini Flash-L │
 ├─────────────────────────────┼────────────────────────┤
 │  DÉVELOPPEMENT FEATURES     │  Claude Sonnet 4.6     │
-│  (tâche principale)         │  / GPT-4o              │
+│  (tâche principale)         │  / Gemini 3.1 Pro      │
 ├─────────────────────────────┼────────────────────────┤
-│  PROBLÈMES DIFFICILES       │  Claude Opus / o3      │
-│  (quand bloqué)             │                        │
+│  PROBLÈMES DIFFICILES       │  Claude Opus 4.6 / o3  │
+│  (quand bloqué)             │  / Gemini 3.1 Pro      │
 ├─────────────────────────────┼────────────────────────┤
 │  CODE CONFIDENTIEL          │  Ollama local          │
-│  (données sensibles)        │  qwen2.5-coder:14b     │
+│  (données sensibles)        │  Gemma 4 31B / Llama 4 │
 └─────────────────────────────┴────────────────────────┘
 ```
 
 ---
 
-## 2. Matrice Coût/Qualité 2025-2026
+## 2. Matrice Coût/Qualité Avril 2026
 
-> [!warning]
-> Les prix indiqués sont des estimations basées sur les tarifs observés début 2026. Les prix changent régulièrement — vérifiez toujours les pages de tarification officielles avant de budgétiser un projet.
+| Modèle | Coût input (1M tk) | Coût output (1M tk) | Qualité code /10 | SWE-bench | Contexte |
+|--------|--------------------|---------------------|------------------|-----------|---------|
+| Claude Haiku 4.5 | $1 | $5 | 7/10 | ~55% | 200k |
+| Claude Sonnet 4.6 | $3 | $15 | 9/10 | ~70% | 1M |
+| Claude Opus 4.6 | $5 | $25 | 10/10 | **80.8%** | 1M |
+| GPT-5.4 | $2.50 | $15 | 8.5/10 | 57.7%* | 272K |
+| GPT-5.4 Nano | $0.20 | $1.25 | 6.5/10 | - | 400K |
+| Gemini 3.1 Pro | $2 | $12 | 9/10 | **78.8%** | 1M |
+| Gemini 3.1 Flash-Lite | $0.25 | $1.50 | 7/10 | - | ? |
+| DeepSeek V4 | $0.30 | $0.50 | 9.5/10 | **81%** | 1M |
+| Mistral Small 4 | ~$0.50 | ~$1.50 | 7.5/10 | - | 128K |
+| Ollama (Gemma 4 31B) | $0 | $0 | 7.5/10 | 80%** | 256K |
 
-| Modèle | Coût input (1M tk) | Qualité code /10 | Vitesse | Contexte | Usage recommandé |
-|---|---|---|---|---|---|
-| Claude Haiku 4.5 | ~$0.80 | 7/10 | Ultra rapide | 200k | Tâches simples, batch |
-| Claude Sonnet 4.6 | ~$3 | 9/10 | Rapide | 200k | Dev quotidien, polyvalent |
-| Claude Opus 4.6 | ~$15 | 10/10 | Modéré | 200k | Problèmes critiques |
-| GPT-4o-mini | ~$0.15 | 7/10 | Rapide | 128k | Budget serré, volume |
-| GPT-4o | ~$2.50 | 8.5/10 | Rapide | 128k | Alternative équilibrée |
-| o3-mini | ~$1.10 | 9/10 | Modéré | 200k | Raisonnement, algos |
-| Gemini 2.0 Flash | ~$0.10 | 7.5/10 | Ultra rapide | 1M | Gratuit genereux, gros contexte |
-| Gemini 2.5 Pro | ~$1.25 | 9/10 | Modéré | 2M | Analyse de grands repos |
-| DeepSeek-V3 | ~$0.27 | 8.5/10 | Rapide | 128k | Excellent rapport qualité/prix |
-| Mistral Large | ~$2 | 8/10 | Rapide | 128k | Alternative européenne |
-| Ollama (local) | $0 | 6-8/10 | Variable | 128k | Confidentialité, zéro coût |
+*SWE-bench Pro (métrique différente de SWE-bench Verified)
+**LiveCodeBench v6 (pas SWE-bench Verified)
+
+> [!warning] DeepSeek V4 : le cas surprenant
+> DeepSeek V4 obtient **81% SWE-bench Verified** — meilleur score du marché — à $0.30/M tokens (vs $5/M pour Claude Opus). Cependant, c'est une entreprise chinoise : à ne pas utiliser pour du code propriétaire ou sensible (voir note 11).
 
 ### Lecture de la matrice
 
 ```
-QUADRANT COÛT/QUALITÉ
-======================
+QUADRANT COÛT/QUALITÉ (avril 2026)
+====================================
 
 Qualité
-  10 │                          ● Opus 4.6
+ 9.5 │● DeepSeek V4 ($0.30)
      │
-   9 │           ● o3-mini  ● Sonnet 4.6
-     │       ● Gemini 2.5   ● DeepSeek-V3
-   8 │                 ● GPT-4o  ● Mistral
+  10 │                              ● Opus 4.6 ($5)
      │
- 7.5 │  ● Gemini Flash
+   9 │         ● Gemini 3.1 Pro ($2)  ● Sonnet 4.6 ($3)
      │
-   7 │● GPT-4o-mini  ● Haiku
+ 8.5 │               ● GPT-5.4 ($2.50)
      │
-   6 │● Ollama 7B
-     └─────────────────────────────────── Coût
-       $0    $0.5    $1     $3     $15
+ 7.5 │  ● Gemma 4 31B local  ● Mistral Small 4
+     │
+   7 │● GPT-5.4 Nano ($0.20)  ● Haiku 4.5 ($1)  ● Gemini Flash-L ($0.25)
+     │
+ 6.5 │
+     └──────────────────────────────────────────── Coût
+       $0    $0.30   $1     $2-3    $5+
 
-Zone verte  : Gemini Flash, GPT-4o-mini (excellent rapport)
-Zone bleue  : Sonnet, DeepSeek, o3-mini (équilibre premium)
-Zone rouge  : Opus (réserver aux cas qui le nécessitent vraiment)
-Zone locale : Ollama (hors marché, confidentialité maximale)
+Zone verte  : DeepSeek V4, Gemini Flash-Lite (excellent rapport)
+Zone bleue  : Sonnet 4.6, Gemini 3.1 Pro (équilibre premium)
+Zone rouge  : Opus 4.6 (réserver aux cas critiques)
+Zone locale : Ollama/Gemma 4 (hors marché, confidentialité maximale)
 ```
 
 ---
 
 ## 3. Routing des Tâches : Quel Modèle pour Quoi ?
+
+### Résumé du routing (avril 2026)
+
+| Cas d'usage | Modèle recommandé | Coût indicatif |
+|-------------|-------------------|----------------|
+| Questions simples/rapides | Claude Haiku 4.5 ou GPT-5.4 Nano | $0.20-1/M |
+| Dev quotidien | Claude Sonnet 4.6 ou Gemini 3.1 Pro | $2-3/M |
+| Problèmes difficiles | Claude Opus 4.6 ou Gemini 3.1 Pro | $5/M |
+| Code open source, budget minimal | DeepSeek V4 ou Gemini 3.1 Flash-Lite | $0.25-0.30/M |
+| Complétion inline gratuite | Continue.dev + Qwen3-Coder-Next local | $0 |
+| Code propriétaire | Ollama (Gemma 4 ou Llama 4 Scout) | $0 |
+| Analyse grand repo | Gemini 3.1 Pro (1M ctx) ou Llama 4 Scout local (10M ctx) | $2/M ou $0 |
+| Raisonnement mathématique/algo | o3/o4 (OpenAI) ou Claude Opus | $5+/M |
+| Génération en masse cheap | DeepSeek V4 avec cache | $0.03/M (tokens mis en cache) |
 
 ### Tâches quotidiennes rapides → Modèle économique
 
@@ -134,12 +155,12 @@ Ces tâches représentent souvent 60-70% du volume de requêtes mais ne nécessi
 
 | Tâche | Modèle recommandé | Justification |
 |---|---|---|
-| Questions simples de syntaxe | GPT-4o-mini / Haiku / Gemini Flash | Réponse immédiate, contexte court |
-| Complétion inline | Copilot / Codeium / Ollama | Latence critique, intégré IDE |
+| Questions simples de syntaxe | GPT-5.4 Nano / Haiku 4.5 / Gemini Flash-Lite | Réponse immédiate, contexte court |
+| Complétion inline | Continue.dev + Qwen3-Coder-Next local | Latence critique, intégré IDE, gratuit |
 | Reformulation de texte | N'importe quel modèle léger | Tâche triviale |
-| Génération de boilerplate | Haiku ou Ollama local | Répétitif, pattern simple |
-| Conversion de format | Gemini Flash ou Haiku | Transformation mécanique |
-| Explication de code court | Haiku ou GPT-4o-mini | Contexte limité suffisant |
+| Génération de boilerplate | Haiku 4.5 ou Ollama local | Répétitif, pattern simple |
+| Conversion de format | Gemini Flash-Lite ou Haiku | Transformation mécanique |
+| Explication de code court | Haiku 4.5 ou GPT-5.4 Nano | Contexte limité suffisant |
 
 ### Tâches de qualité → Modèle équilibré
 
@@ -147,25 +168,25 @@ Le coeur du travail développeur quotidien : suffisamment complexe pour nécessi
 
 | Tâche | Modèle recommandé | Alternatives |
 |---|---|---|
-| Développement de features | Claude Sonnet 4.6 | GPT-4o, DeepSeek-V3 |
-| Debugging complexe | Claude Sonnet | Claude Opus si bloqué |
-| Code review complet | Claude Sonnet 4.6 | Gemini 2.5 Pro |
-| Architecture système | Claude Sonnet / Opus | Gemini 2.5 Pro |
-| Tests unitaires | Sonnet ou Haiku | Haiku souvent suffisant |
-| Documentation technique | Claude Sonnet | GPT-4o |
-| Refactoring modéré | Claude Sonnet | DeepSeek-V3 |
+| Développement de features | Claude Sonnet 4.6 | Gemini 3.1 Pro, DeepSeek V4 (open source) |
+| Debugging complexe | Claude Sonnet 4.6 | Claude Opus 4.6 si bloqué |
+| Code review complet | Claude Sonnet 4.6 | Gemini 3.1 Pro |
+| Architecture système | Claude Sonnet 4.6 / Opus 4.6 | Gemini 3.1 Pro |
+| Tests unitaires | Sonnet 4.6 ou Haiku 4.5 | Haiku souvent suffisant |
+| Documentation technique | Claude Sonnet 4.6 | GPT-5.4 |
+| Refactoring modéré | Claude Sonnet 4.6 | DeepSeek V4 (open source) |
 
 ### Tâches critiques → Modèle premium
 
-À utiliser avec parcimonie — c'est là que les $15/1M tokens se justifient.
+À utiliser avec parcimonie — c'est là que les $5-25/1M tokens output se justifient.
 
 | Tâche | Modèle recommandé | Pourquoi premium ? |
 |---|---|---|
-| Algorithmes complexes / maths | o3 / Claude Opus | Raisonnement multi-étapes profond |
+| Algorithmes complexes / maths | o3/o4 (OpenAI) ou Claude Opus 4.6 | Raisonnement multi-étapes profond |
 | Architecture de sécurité | Claude Opus 4.6 | Erreur = faille critique |
-| Débogage profond et difficile | Claude Opus ou o3 | Diagnostic exhaustif nécessaire |
-| Refactoring massif multi-fichiers | Claude Opus | Cohérence sur grand contexte |
-| Design de protocoles | Claude Opus | Implications à long terme |
+| Débogage profond et difficile | Claude Opus 4.6 ou o3 | Diagnostic exhaustif nécessaire |
+| Refactoring massif multi-fichiers | Claude Opus 4.6 | Cohérence sur grand contexte (1M tk) |
+| Design de protocoles | Claude Opus 4.6 | Implications à long terme |
 
 ### Tâches privées → Local obligatoire
 
@@ -174,105 +195,103 @@ Le coeur du travail développeur quotidien : suffisamment complexe pour nécessi
 
 | Tâche | Modèle local recommandé | Configuration |
 |---|---|---|
-| Code propriétaire sensible | qwen2.5-coder:14b | Ollama local |
+| Code propriétaire sensible | Gemma 4 31B ou Llama 4 Scout | Ollama local |
 | Traitement de données clients | Tout modèle local | Air-gapped si possible |
-| Secrets, credentials | Codestral local | Ne JAMAIS uploader |
+| Secrets, credentials | Gemma 4 local | Ne JAMAIS uploader |
 | Environnement air-gapped | Ollama + modèle local | vLLM en serveur interne |
-| IP d'entreprise critique | Serveur Ollama interne | Réseau isolé |
+| IP d'entreprise critique | Serveur Ollama interne (vLLM) | Réseau isolé |
 
 ### Tâches en masse → Batch API
 
 | Tâche | Approche | Économie |
 |---|---|---|
-| Génération de 1000 docstrings | API batch Anthropic (-50%) | Haiku batch ~$0.40/1M tk |
-| Tests pour tout un projet | Claude Haiku en batch | Faible coût, haut volume |
-| Traduction de commentaires | Haiku ou Ollama | Tâche parallélisable |
-| Analyse de logs massifs | Gemini Flash (1M contexte) | Contexte énorme, coût minimal |
+| Génération de 1000 docstrings | API batch Anthropic (-50%) | Haiku 4.5 batch ~$0.50/1M tk |
+| Tests pour tout un projet | Claude Haiku 4.5 en batch | Faible coût, haut volume |
+| Traduction de commentaires | Haiku 4.5 ou Ollama | Tâche parallélisable |
+| Analyse de logs massifs | Gemini 3.1 Pro (1M contexte) | Contexte énorme, coût raisonnable |
+| Génération en masse open source | DeepSeek V4 avec prompt cache | $0.03/M tokens mis en cache |
 
 ---
 
 ## 4. Workflows par Profil Développeur
 
-### Le Freelance (budget contrôlé, ~$20-50/mois)
+### L'Étudiant (budget zéro)
 
 ```
-WORKFLOW FREELANCE
-==================
+WORKFLOW ÉTUDIANT (avril 2026)
+==============================
 
-COMPLÉTION IDE   ──► Continue.dev + Ollama/qwen2.5-coder:7b
-                     Coût : $0/mois
-                     
-QUESTIONS RAPIDES ──► Claude Haiku 4.5 / GPT-4o-mini
-                      Coût : ~$0.002/question
-                      
-DÉVELOPPEMENT    ──► Claude Sonnet 4.6 (budget mensuel ~$20-50)
-                     Pour toutes les features importantes
-                     
-PROBLÈMES DURS   ──► Claude Opus (usage exceptionnel, ~$5/mois max)
+COMPLÉTION    ──► Gemini 3.1 Flash-Lite API gratuite (quota généreux)
+                  ou Ollama + Gemma 4 E4B
+                  Coût : $0
 
-CODE PROPRIÉTAIRE ──► Toujours via Ollama local
-                      Jamais de code client en cloud
+CHAT RAPIDE   ──► Groq (Llama 4 Scout gratuit ultra-rapide)
+                  Coût : $0
 
-ESTIMATION BUDGET :
-  Haiku (questions) : ~$3/mois
-  Sonnet (dev)      : ~$30/mois
-  Opus (critique)   : ~$5/mois
-  ─────────────────────────────
-  TOTAL             : ~$38/mois
-```
+QUESTIONS     ──► Claude.ai plan gratuit (Sonnet 4.6)
+                  Coût : $0
 
-> [!example]
-> Scénario freelance type : Un développeur React freelance travaille sur une app SaaS cliente. Il utilise Ollama pour toute complétion inline (code client confidentiel), Claude Haiku pour répondre à ses questions CSS/JS rapides, Claude Sonnet pour implémenter les features complexes en lui partageant uniquement les extraits non-sensibles, et Claude Opus uniquement quand Sonnet bloque sur un problème d'architecture. Budget réel : $35/mois.
-
-### L'Étudiant (budget minimal, ~$0/mois)
-
-```
-WORKFLOW ÉTUDIANT
-=================
-
-TOUT LE DÉVELOPPEMENT ──► Gemini 2.0 Flash
-                           Gratuit, quota très généreux
-                           Contexte 1M tokens !
-                           
-COMPLÉTION IDE ──► Continue.dev + Ollama
-                   Gratuit, modèles 7B suffisants pour apprendre
-                   
-QUESTIONS COMPLEXES ──► Claude.ai plan gratuit
-                        Limité mais suffisant pour étudier
-                        
-ULTRA RAPIDE GRATUIT ──► Groq + Llama 3.3 70B
-                          API gratuite, vitesse exceptionnelle
-                          
-PROJETS PERSO ──► Google AI Studio (Gemini gratuit)
-                  $0/mois pour usage raisonnable
+AGENT LOCAL   ──► OpenCode + Ollama (gratuit total)
+                  Coût : $0
 ```
 
 > [!tip] Analogie
-> Pour un étudiant, Gemini Flash et Google AI Studio sont comme la bibliothèque universitaire gratuite : moins glamour qu'Amazon, mais parfaitement suffisante pour apprendre et produire de bons travaux.
+> Pour un étudiant en 2026, Gemini Flash-Lite et Google AI Studio sont comme la bibliothèque universitaire gratuite : moins glamour, mais parfaitement suffisants pour apprendre et produire de bons travaux — et Ollama + Gemma 4 permet même d'avoir un agent local complet sans dépenser un centime.
+
+### Le Freelance (budget contrôlé, ~$20-50/mois)
+
+```
+WORKFLOW FREELANCE (avril 2026)
+================================
+
+COMPLÉTION    ──► Continue.dev + Qwen3-Coder-Next local (gratuit)
+                  Coût : $0/mois
+
+DEV STANDARD  ──► Claude Sonnet 4.6 ($3/M input, ~$20-50/mois)
+                  Pour toutes les features importantes
+
+CODE OUVERT   ──► DeepSeek V4 ($0.30/M — 10x moins cher que Sonnet)
+                  Pour projets open source uniquement
+
+PRIVÉ         ──► Gemma 4 31B local (gratuit)
+                  Jamais de code client en cloud
+
+ESTIMATION BUDGET :
+  Haiku 4.5 (questions) : ~$2/mois
+  Sonnet 4.6 (dev)      : ~$25/mois
+  DeepSeek V4 (open src): ~$3/mois
+  ──────────────────────────────────
+  TOTAL                 : ~$30/mois
+```
+
+> [!example]
+> Scénario freelance type : Un développeur React freelance travaille sur une app SaaS cliente. Il utilise Gemma 4 31B local pour toute complétion inline (code client confidentiel), Claude Haiku 4.5 pour ses questions CSS/JS rapides, Claude Sonnet 4.6 pour implémenter les features complexes, et DeepSeek V4 pour ses projets open source personnels. Budget réel : $30/mois.
 
 ### Le Dev Senior / Architecte
 
 ```
-WORKFLOW DEV SENIOR
-====================
+WORKFLOW DEV SENIOR (avril 2026)
+=================================
 
-EXPLORATION CODEBASE ──► Gemini 2.5 Pro
-                          2M tokens = analyser un repo entier
-                          Idéal pour prendre en main un legacy
-                          
-DÉVELOPPEMENT QUOTIDIEN ──► Claude Sonnet 4.6
-                             Qualité premium, contexte 200k
-                             CLAUDE.md configuré par projet
-                             
-PROBLÈMES DURS ──► Claude Opus 4.6 / o3
+CONTEXTE LONG ──► Gemini 3.1 Pro (1M tk)
+                   Analyser un repo entier en un appel
+                   ou Llama 4 Scout local (10M tk, gratuit)
+
+DEV QUOTIDIEN ──► Claude Sonnet 4.6
+                   Qualité premium, contexte 1M
+                   CLAUDE.md configuré par projet
+
+ALGO DIFFICILE ──► o3/o4 OpenAI
+                    Raisonnement mathématique/formel poussé
+
+QUALITÉ MAX    ──► Claude Opus 4.6 ($5/M)
                    Quand Sonnet répond "je ne suis pas sûr"
-                   Budget alloué : ~$15/mois
-                   
-AGENTS AUTONOMES ──► Claude Code avec sub-agents
-                      Pour tâches longues multi-fichiers
-                      
-CONFIDENTIEL ──► Ollama local (qwen2.5-coder:14b)
-                 Pour IP sensible de l'entreprise
+
+AGENT         ──► Claude Code avec sub-agents
+                   Pour tâches longues multi-fichiers
+
+CONFIDENTIEL  ──► Ollama local (Gemma 4 31B ou Llama 4 Scout)
+                   Pour IP sensible de l'entreprise
 
 BUDGET ESTIMÉ : ~$80-150/mois
 ```
@@ -280,27 +299,28 @@ BUDGET ESTIMÉ : ~$80-150/mois
 ### L'Équipe Entreprise
 
 ```
-WORKFLOW ÉQUIPE ENTREPRISE
-===========================
+WORKFLOW ÉQUIPE ENTREPRISE (avril 2026)
+========================================
 
 IDE DÉVELOPPEURS ──► Continue.dev configuré
-                      → Serveur Ollama interne (vLLM)
+                      → Serveur Ollama interne (vLLM + Gemma 4 31B)
                       → Azure OpenAI pour débordement
-                      
-AGENTS CI/CD ──► Claude API dans les pipelines
-                  Code review automatique PR
-                  Génération de tests automatisée
-                  
-LOCAL SENSITIVE ──► Serveur Ollama interne
-                     vLLM sur GPU serveur entreprise
-                     Zéro donnée hors réseau
-                     
-CLOUD ENTERPRISE ──► Azure OpenAI (isolation data UE)
-                      ou Anthropic Enterprise (DPA signé)
-                      
+
+AGENTIC DEV    ──► Claude API (Sonnet 4.6)
+                   Code review automatique PR
+                   Génération de tests automatisée
+
+PRIVÉ LOCAL    ──► Serveur vLLM + Gemma 4 31B ou Llama 4 Scout
+                   vLLM sur GPU serveur entreprise
+                   Zéro donnée hors réseau
+
+CLOUD CONFORME ──► Azure OpenAI (GPT-5.4, résidence data UE)
+                   ou AWS Bedrock (Claude Sonnet 4.6)
+                   DPA signé, logs désactivés, isolation tenant
+
 POLITIQUE ──► Classification des données stricte :
               - Niveau 1 (public) → Cloud OK
-              - Niveau 2 (interne) → Azure OpenAI
+              - Niveau 2 (interne) → Azure OpenAI / AWS Bedrock
               - Niveau 3 (confidentiel) → Local uniquement
               - Niveau 4 (secret) → Air-gapped local
 ```
@@ -317,14 +337,15 @@ POLITIQUE ──► Classification des données stricte :
 Le pattern le plus puissant pour contrôler les coûts tout en maintenant la qualité : essayer d'abord le moins cher, escalader seulement si insuffisant.
 
 ```
-CASCADE DE MODÈLES
-==================
+CASCADE DE MODÈLES (avril 2026)
+================================
 
         Tâche reçue
              │
              ▼
     ┌─────────────────┐
-    │  Haiku / Flash  │  $0.10-0.80/1M tk
+    │  Haiku 4.5      │  $1/$5 input/output par 1M tk
+    │  / Flash-Lite   │  $0.25/$1.50 par 1M tk
     │  (tenter d'abord)│
     └────────┬────────┘
              │
@@ -334,7 +355,8 @@ CASCADE DE MODÈLES
              │
              ▼
     ┌─────────────────┐
-    │ Sonnet / GPT-4o │  $2.50-3/1M tk
+    │ Sonnet 4.6      │  $3/$15 par 1M tk
+    │ / Gemini 3.1 Pro│  $2/$12 par 1M tk
     │ (escalade)      │
     └────────┬────────┘
              │
@@ -344,7 +366,7 @@ CASCADE DE MODÈLES
              │
              ▼
     ┌─────────────────┐
-    │  Opus / o3      │  $15/1M tk
+    │  Opus 4.6 / o3  │  $5/$25 par 1M tk
     │  (premium)      │
     └────────┬────────┘
              │
@@ -366,9 +388,9 @@ def cascade_completion(prompt: str, max_budget: float = 0.01) -> str:
     client = anthropic.Anthropic()
     
     cascade = [
-        {"model": "claude-haiku-4-5", "cost_per_1m": 0.80},
-        {"model": "claude-sonnet-4-6", "cost_per_1m": 3.00},
-        {"model": "claude-opus-4-6",   "cost_per_1m": 15.00},
+        {"model": "claude-haiku-4-5", "cost_per_1m": 1.00},   # $1/M input, $5/M output
+        {"model": "claude-sonnet-4-6", "cost_per_1m": 3.00},  # $3/M input, $15/M output
+        {"model": "claude-opus-4-6",   "cost_per_1m": 5.00},  # $5/M input, $25/M output
     ]
     
     for tier in cascade:
@@ -403,25 +425,26 @@ def cascade_completion(prompt: str, max_budget: float = 0.01) -> str:
 ### Gérer son Budget Tokens Mensuel
 
 ```
-ALLOCATION BUDGET MENSUEL RECOMMANDÉE ($50/mois exemple)
-=========================================================
+ALLOCATION BUDGET MENSUEL RECOMMANDÉE ($50/mois exemple, avril 2026)
+=====================================================================
 
 ┌─────────────────────────────────────────────────────┐
 │  60% → Claude Sonnet 4.6    $30/mois                │
 │         Tâches dev quotidiennes                     │
-│         ~10M tokens input / mois                    │
+│         ~10M tokens input / mois à $3/M             │
 ├─────────────────────────────────────────────────────┤
 │  25% → Claude Haiku 4.5     $12.50/mois             │
 │         Questions rapides, batch                    │
-│         ~15M tokens input / mois                    │
+│         ~12.5M tokens input / mois à $1/M           │
 ├─────────────────────────────────────────────────────┤
 │  15% → Claude Opus 4.6      $7.50/mois              │
 │         Problèmes critiques uniquement              │
-│         ~500k tokens input / mois                   │
+│         ~1.5M tokens input / mois à $5/M            │
 └─────────────────────────────────────────────────────┘
 
 Surveiller avec : /cost dans Claude Code
-Alerte à 80% du budget mensuel → passer à Haiku
+Alerte à 80% du budget mensuel → passer à Haiku 4.5
+Astuce : DeepSeek V4 à $0.30/M pour les projets open source
 ```
 
 ### Prompt Cache et Économies
@@ -509,9 +532,10 @@ STACK STARTUP SAAS
 │                CLAUDE.md configuré par projet   │
 │                Sub-agents pour tâches longues   │
 ├─────────────────────────────────────────────────┤
-│  Cloud API     Claude Sonnet → features prod    │
-│                Claude Haiku → batch jobs        │
-│                DeepSeek-V3 → alternative éco    │
+│  Cloud API     Claude Sonnet 4.6 → features prod │
+│                Claude Haiku 4.5 → batch jobs    │
+│                DeepSeek V4 → alternative éco    │
+│                (open source uniquement)         │
 ├─────────────────────────────────────────────────┤
 │  Monitoring    Tableau de bord coûts API        │
 │                Alertes sur dépassement budget   │
@@ -546,8 +570,8 @@ STACK GRANDE ENTREPRISE
 ├─────────────────────────────────────────────────┤
 │  Infra locale  Serveur GPU interne              │
 │                vLLM + Ollama enterprise         │
-│                Modèles : qwen2.5-coder:32b      │
-│                         Codestral 22B           │
+│                Modèles : Gemma 4 31B            │
+│                         Llama 4 Scout           │
 ├─────────────────────────────────────────────────┤
 │  Politique     Classification niveau 1-4        │
 │                Formation obligatoire devs       │
@@ -570,10 +594,11 @@ CHRONOLOGIE DES SORTIES MAJEURES (exemple 2024-2026)
 2024 Q3  ─── GPT-4o, Sonnet 3.5 (meilleur code)
 2024 Q4  ─── o1, Gemini 2.0 Flash, Llama 3.3
 2025 Q1  ─── Claude 3.7, o3, DeepSeek-V3 (choc des prix)
-2025 Q2  ─── Gemini 2.5 Pro (SWE-bench record)
-2025 Q3  ─── GPT-4.5, Claude 4 (Haiku/Sonnet/Opus)
-2025 Q4  ─── o3 mini, Gemini 2.5 Flash
-2026 Q1  ─── [nouveaux modèles en cours...]
+2025 Q2  ─── Gemini 2.5 Pro (SWE-bench record), GPT-4.5
+2025 Q3  ─── Claude 4 (Haiku/Sonnet/Opus), Llama 4
+2025 Q4  ─── o3/o4, Gemma 4, DeepSeek V4
+2026 Q1  ─── GPT-5.4, Gemini 3.1 Pro/Flash-Lite, Claude 4.5/4.6
+2026 Q2  ─── [prochaines sorties en cours...]
 
 Fréquence : ~1 sortie majeure tous les 2-3 mois
 ```
@@ -696,13 +721,13 @@ Compétences valorisées :
   → Tester Claude avec ton propre code
 
 □ Créer compte Google AI Studio (aistudio.google.com)
-  → Gemini 2.0 Flash gratuit
+  → Gemini 3.1 Flash-Lite gratuit
   → API key gratuite pour expérimenter
 
 □ Installer Ollama
   → https://ollama.ai
-  → ollama pull qwen2.5-coder:7b (4GB)
-  → Tester : ollama run qwen2.5-coder:7b
+  → ollama pull gemma4:e4b (modèle léger, ~4GB)
+  → Tester : ollama run gemma4:e4b
 
 □ Configurer Continue.dev dans VS Code
   → Extension Continue.dev
@@ -748,7 +773,7 @@ Compétences valorisées :
     Haiku suffisant ? Sonnet nécessaire ? Opus requis ?
   → Documenter dans ton CLAUDE.md ou notes perso
 
-□ Tester GPT-4o vs Claude Sonnet sur tes cas réels
+□ Tester GPT-5.4 vs Claude Sonnet 4.6 sur tes cas réels
   → Prendre 5 tâches réelles de ton workflow
   → Les tester sur les deux modèles
   → Évaluer qualité, vitesse, coût
@@ -803,8 +828,8 @@ Compétences valorisées :
   Simple    Critique  Étudiant  Equipe   Modèles  Prompt
     │          │       │          │       │          │
   Haiku     Opus    Budget    vLLM    Haiku→     -90%
-  Flash     o3      Zéro      Interne Sonnet→   tokens
-  Local              Gemini           Opus       répétés
+  Flash-L   o3/o4   Zéro      Interne Sonnet→   tokens
+  Local             Gemini           Opus        répétés
                                          │
                                      CONFIDENTIEL
                                          │

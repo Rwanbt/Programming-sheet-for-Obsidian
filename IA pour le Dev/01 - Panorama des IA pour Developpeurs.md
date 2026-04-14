@@ -1,5 +1,7 @@
 # 01 - Panorama des IA pour Développeurs
 
+> [!info] Mis à jour avril 2026
+
 ## Qu'est-ce qu'une IA pour développeurs ?
 
 Une **IA pour développeurs** est un système logiciel capable de comprendre, générer, analyser et transformer du code source. Ces outils vont du simple autocompleteur de lignes à l'agent autonome capable de naviguer dans un projet entier, exécuter des tests, corriger des bugs et soumettre des Pull Requests — sans intervention humaine.
@@ -28,10 +30,10 @@ GPT-3        GitHub       ChatGPT       GPT-4         Claude 3.5     Agents
 (OpenAI)     Copilot      (nov. 2022)   Claude 2      Sonnet         autonomes
 Premiers     Completion   Explosion     Gemini 1.5    Cursor IDE     Claude Code
 LLMs         en prod.     du grand      Pro (1M ctx)  Windsurf       OpenCode
-capables     pour le      public        o1 reasoning  DeepSeek V3    Gemini 2.5
-de coder     code                       Code agents   Qwen2.5 Coder  o3 / R1
+capables     pour le      public        o1 reasoning  DeepSeek V4    Gemini 3.1
+de coder     code                       Code agents   Qwen 3.6-Plus  o3 / R1
                                         Mistral       Codestral      SWE-bench
-                                        Llama 2       Llama 3.3      90%+ scores
+                                        Llama 2       Llama 4        80%+ scores
 
  Modèles       IDE          Chat          Multi-        IDE Agents    Agents
  de base    completion      IA pour      modal +       autonomes    CLI + Cloud
@@ -109,7 +111,7 @@ Ces outils s'intègrent directement dans ton éditeur et suggèrent du code à m
 
 | Outil | Modèle sous-jacent | Prix | Spécificité |
 |---|---|---|---|
-| **GitHub Copilot** | GPT-4o + modèles Microsoft | 10$/mois | Le plus répandu, excellent contexte projet |
+| **GitHub Copilot** | GPT-5.4 + modèles Microsoft | 10$/mois | Le plus répandu, excellent contexte projet |
 | **Codeium** | Modèle propriétaire | Gratuit (plan de base) | Rapide, bon support multi-langages |
 | **Supermaven** | Modèle propriétaire (Sourcegraph) | Gratuit / 10$+ | Contexte 1M tokens, très rapide |
 | **Tabnine** | Modèles propriétaires | Gratuit / 12$/mois | Option on-premise, RGPD-friendly |
@@ -123,10 +125,10 @@ Interfaces conversationnelles pour poser des questions, obtenir des explications
 
 | Outil | Modèle | Contexte | Forces |
 |---|---|---|---|
-| **ChatGPT** | GPT-4o, o3 | 128K tokens | Très polyvalent, plugins, image |
-| **Claude** | Claude Sonnet/Opus 4.x | 200K tokens | Raisonnement, code long, suivi d'instructions |
-| **Gemini** | Gemini 2.5 Pro | 2M tokens (!) | Contexte exceptionnel, gratuit en partie |
-| **Le Chat (Mistral)** | Mistral Large 2, Codestral | 128K tokens | Souverain EU, Codestral pour le code |
+| **ChatGPT** | GPT-5.4, o3/o4 | 272K tokens | Très polyvalent, plugins, image |
+| **Claude** | Claude Sonnet/Opus 4.6 | 1M tokens | Raisonnement, code long, suivi d'instructions |
+| **Gemini** | Gemini 3.1 Pro | 1M tokens | Contexte géant, gratuit en partie |
+| **Le Chat (Mistral)** | Mistral Small 4, Codestral | 128K tokens | Souverain EU, Codestral pour le code |
 
 #### 2.3 Agents CLI
 
@@ -154,7 +156,7 @@ Ces éditeurs remplacent VS Code et intègrent l'IA à tous les niveaux : compl�
 
 | Outil | Base | Modèle | Particularité |
 |---|---|---|---|
-| **Cursor IDE** | VS Code fork | GPT-4o, Claude, Gemini | Le plus populaire, agents "Composer" |
+| **Cursor IDE** | VS Code fork | GPT-5.4, Claude, Gemini | Le plus populaire, agents "Composer" |
 | **Windsurf** | VS Code fork | Modèles Codeium | "Cascade" agent très autonome |
 | **Cline** | Extension VS Code | Multi-modèles | Open source, contrôle fin des permissions |
 | **Continue.dev** | Extension VS Code/JetBrains | Multi-modèles | Open source, ultra-configurable |
@@ -165,8 +167,8 @@ Faire tourner des modèles sur ta propre machine — aucune donnée ne quitte to
 
 ```bash
 # Exemple Ollama
-$ ollama pull qwen2.5-coder:32b
-$ ollama run qwen2.5-coder:32b
+$ ollama pull qwen3-coder:32b
+$ ollama run qwen3-coder:32b
 >>> Écris une fonction de validation d'email en Python
 ```
 
@@ -191,18 +193,18 @@ Anthropic se distingue par sa culture de la sécurité IA ("Constitutional AI") 
 │  claude-sonnet-4-6   →  Équilibre optimal qualité/coût     │
 │  claude-opus-4-6     →  Intelligence maximale, tâches dures│
 │                                                            │
-│  Contexte : 200K tokens   Sortie : jusqu'à 32K tokens      │
-│  Vision : Oui             Code : Excellent                 │
+│  Contexte : 200K (Haiku) / 1M tokens (Sonnet, Opus)       │
+│  Vision : Oui             Code : Excellent (80.8% SWE)     │
 └────────────────────────────────────────────────────────────┘
 ```
 
 | Modèle | Vitesse | Qualité | Prix indicatif (input/output) | Idéal pour |
 |---|---|---|---|---|
-| **claude-haiku-4-5** | Très rapide | Bonne | ~$0.80 / $4 par M tokens | Tâches répétitives, complétion, chat rapide |
-| **claude-sonnet-4-6** | Rapide | Excellente | ~$3 / $15 par M tokens | Code complexe, agents, usage quotidien |
-| **claude-opus-4-6** | Modéré | Maximale | ~$15 / $75 par M tokens | Architecture, raisonnement profond, tâches critiques |
+| **claude-haiku-4-5** | Très rapide | Bonne | $1 / $5 par M tokens | Tâches répétitives, complétion, chat rapide |
+| **claude-sonnet-4-6** | Rapide | Excellente | $3 / $15 par M tokens | Code complexe, agents, usage quotidien |
+| **claude-opus-4-6** | Modéré | Maximale | $5 / $25 par M tokens | Architecture, raisonnement profond, tâches critiques |
 
-**Forces Claude :** suivi d'instructions remarquable, honnêteté (dit quand il ne sait pas), fenêtre de contexte 200K, excellent pour le code long et le refactoring.
+**Forces Claude :** suivi d'instructions remarquable, honnêteté (dit quand il ne sait pas), fenêtre de contexte jusqu'à 1M tokens (Sonnet/Opus), excellent pour le code long et le refactoring. Claude Opus 4.6 atteint **80.8% sur SWE-bench**.
 
 **Faiblesses :** plus coûteux que certains concurrents, pas encore de recherche web native dans tous les contextes.
 
@@ -214,52 +216,53 @@ OpenAI reste la référence grand public avec ChatGPT, et pousse l'innovation de
 ┌────────────────────────────────────────────────────────────┐
 │  FAMILLE OpenAI                                            │
 │                                                            │
-│  GPT-4o          →  Polyvalent, multimodal, rapide         │
-│  GPT-4o-mini     →  Économique, tâches courantes           │
-│  o1              →  Raisonnement lent et profond           │
-│  o1-mini         →  Raisonnement économique                │
+│  GPT-5.4         →  Polyvalent, multimodal, rapide         │
+│  GPT-5.4 Nano    →  Ultra-économique, tâches courantes     │
+│  GPT-5.4 Mini    →  Milieu de gamme                        │
 │  o3              →  Meilleur raisonnement disponible       │
-│  o3-mini         →  Raisonnement rapide et abordable       │
+│  o4              →  Raisonnement dernière génération       │
 │                                                            │
-│  Contexte : 128K tokens   Vision : Oui                     │
+│  Contexte : 272K (std) / 1M via Codex   Vision : Oui       │
 └────────────────────────────────────────────────────────────┘
 ```
 
 | Modèle | Type | Prix indicatif | Forces | Faiblesses |
 |---|---|---|---|---|
-| **GPT-4o** | Polyvalent | ~$5 / $15 par M tokens | Multimodal, rapide, excellent chat | Moins fort en raisonnement pur |
-| **GPT-4o-mini** | Économique | ~$0.15 / $0.6 par M tokens | Prix minimal, bon pour le volume | Qualité réduite sur tâches complexes |
-| **o1** | Raisonnement | ~$15 / $60 par M tokens | Problèmes mathématiques/algorithmiques | Lent, cher, pas multimodal |
+| **GPT-5.4** | Polyvalent | $2.50 / $15 par M tokens | Multimodal, rapide, excellent chat | 57.7% SWE-bench (métrique Pro) |
+| **GPT-5.4 Nano** | Économique | $0.20 / $1.25 par M tokens | Prix minimal, 400K contexte | Qualité réduite sur tâches complexes |
+| **GPT-5.4 Mini** | Milieu de gamme | Variable | Bon compromis | Moins puissant que GPT-5.4 |
 | **o3** | Raisonnement max | Variable | Meilleur du monde en benchmark | Très lent, coût élevé |
-| **o3-mini** | Raisonnement rapide | ~$1.1 / $4.4 par M tokens | Bon compromis vitesse/raisonnement | Moins fort qu'o3 full |
+| **o4** | Raisonnement avancé | Variable | Dernière génération de raisonnement | Lent, coût élevé |
 
 > [!info] Les modèles "o" : qu'est-ce que le raisonnement ?
-> Les modèles o1/o3 utilisent une technique appelée **chain-of-thought interne** : avant de répondre, le modèle réfléchit en silence pendant plusieurs secondes à minutes. Ce "temps de réflexion" leur permet de résoudre des problèmes mathématiques, logiques et algorithmiques complexes bien mieux que les modèles standard. Le prix à payer : la lenteur et le coût.
+> Les modèles o3/o4 utilisent une technique appelée **chain-of-thought interne** : avant de répondre, le modèle réfléchit en silence pendant plusieurs secondes à minutes. Ce "temps de réflexion" leur permet de résoudre des problèmes mathématiques, logiques et algorithmiques complexes bien mieux que les modèles standard. Le prix à payer : la lenteur et le coût.
 
 ### 3.3 Google — Gemini
 
-Google a fait une percée majeure avec Gemini 2.5 Pro et son contexte de 2 millions de tokens — un avantage concurrentiel unique.
+Google a fait une percée majeure avec Gemini 3.1 Pro (sorti fév. 2026) et son contexte de 1 million de tokens, avec d'excellentes performances sur le code.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  FAMILLE GEMINI (Google DeepMind)                          │
 │                                                            │
-│  Gemini 2.0 Flash    →  Rapide, gratuit en API             │
-│  Gemini 2.5 Pro      →  2M tokens contexte, excellent code │
-│  Gemini CLI          →  Outil CLI gratuit (beta 2025)      │
+│  Gemini 3.1 Flash-Lite  →  Le moins cher de la gamme      │
+│  Gemini 3.1 Flash       →  Rapide, milieu de gamme         │
+│  Gemini 3.1 Pro         →  1M tokens contexte, top code   │
+│  Gemini CLI             →  Outil CLI gratuit               │
 │                                                            │
-│  Contexte : jusqu'à 2M tokens   Vision : Oui              │
-│  Gratuit : Oui (limites)        Code : Très bon            │
+│  Contexte : jusqu'à 1M tokens   Vision : Oui              │
+│  Gratuit : Oui (limites)        Code : Très bon (78.8% SWE)│
 └────────────────────────────────────────────────────────────┘
 ```
 
 | Modèle | Contexte | Prix indicatif | Forces | Faiblesses |
 |---|---|---|---|---|
-| **Gemini 2.0 Flash** | 1M tokens | Gratuit (quota) / ~$0.075/M | Vitesse, coût nul | Moins puissant que 2.5 Pro |
-| **Gemini 2.5 Pro** | 2M tokens | ~$1.25 / $5 par M tokens | Contexte géant, code, multimodal | Parfois verbeux |
-| **Gemini CLI** | 2.5 Pro gratuit | Gratuit (beta) | Accès terminal direct, gratuit | En beta, limitations |
+| **Gemini 3.1 Flash-Lite** | Variable | $0.25 / $1.50 par M tokens | Le moins cher, tâches simples | Qualité limitée |
+| **Gemini 3.1 Flash** | Variable | Variable | Vitesse, bon rapport qualité/prix | Moins puissant que 3.1 Pro |
+| **Gemini 3.1 Pro** | 1M tokens | $2 / $12 par M tokens | Contexte 1M, code, multimodal, 78.8% SWE | Parfois verbeux |
+| **Gemini CLI** | 3.1 Pro gratuit | Gratuit (quota) | Accès terminal direct, gratuit | Limitations de quota |
 
-**Le contexte de 2M tokens de Gemini 2.5 Pro** est révolutionnaire : tu peux envoyer un projet entier de 1,5 million de lignes de code en une seule requête pour l'analyser ou le refactoriser.
+**Le contexte de 1M tokens de Gemini 3.1 Pro** est remarquable : tu peux envoyer un projet entier en une seule requête pour l'analyser ou le refactoriser.
 
 ### 3.4 Mistral AI — Le champion européen
 
@@ -269,21 +272,21 @@ Mistral AI, startup française, offre des modèles souverains (hébergés en Eur
 ┌────────────────────────────────────────────────────────────┐
 │  FAMILLE MISTRAL AI (Paris, France)                        │
 │                                                            │
-│  Mistral Large 2     →  Modèle flagship, polyvalent        │
-│  Codestral           →  Spécialisé code, 80K contexte      │
-│  Mistral 7B          →  Léger, rapide, open-weights        │
+│  Mistral Small 4     →  Raisonnement + code + multimodal   │
+│  Codestral 2508      →  Spécialisé code 22B, 80K+ contexte │
+│  Devstral            →  Modèle agentique (nouveau)         │
 │                                                            │
-│  RGPD : Oui (hébergement EU)   Open-weights : Partiel      │
+│  RGPD : Oui (hébergement EU)   Open-weights : Oui         │
 └────────────────────────────────────────────────────────────┘
 ```
 
 | Modèle | Paramètres | Prix indicatif | Forces | Faiblesses |
 |---|---|---|---|---|
-| **Mistral Large 2** | ~123B | ~$2 / $6 par M tokens | Polyvalent, multilingue, EU | Légèrement en retrait sur le code vs Claude |
-| **Codestral** | ~22B | ~$0.1 / $0.3 par M tokens | Spécialisé code, 80K contexte, rapide | Moins polyvalent |
-| **Mistral 7B** | 7B | Gratuit (local) | Ultra-léger, tourne sur CPU | Qualité limitée |
+| **Mistral Small 4** | Variable | ~$0.50 / $1.50 par M tokens | Raisonnement + code + multimodal, open-weight | Moins puissant que les géants cloud |
+| **Codestral 2508** | ~22B | ~$0.1 / $0.3 par M tokens | Spécialisé code, 80K+ contexte, FIM, rapide | Moins polyvalent |
+| **Devstral** | Variable | Variable | Modèle agentique, tâches autonomes | Récent, moins éprouvé |
 
-**Pourquoi Codestral est intéressant :** modèle de code spécialisé à 80K tokens de contexte, prix minimal, utilisable dans Cursor/Continue.dev. Idéal pour les équipes avec contraintes budgétaires ou RGPD.
+**Pourquoi Codestral 2508 est intéressant :** modèle de code spécialisé avec support FIM (Fill-In-the-Middle), 80K+ tokens de contexte, prix minimal, utilisable dans Cursor/Continue.dev. Idéal pour les équipes avec contraintes budgétaires ou RGPD.
 
 ### 3.5 Meta — Llama (open source)
 
@@ -293,11 +296,8 @@ Meta a fait le choix stratégique de l'open source : les modèles Llama sont té
 ┌────────────────────────────────────────────────────────────┐
 │  FAMILLE LLAMA (Meta AI) — OPEN SOURCE                     │
 │                                                            │
-│  Llama 3.1  8B    →  Léger, pour CPU/GPU modeste          │
-│  Llama 3.1  70B   →  Très bon, GPU 48GB+ requis           │
-│  Llama 3.1  405B  →  Rival GPT-4, GPU cluster requis      │
-│  Llama 3.3  70B   →  Meilleur que 3.1 70B pour le code    │
-│  CodeLlama        →  Spécialisé code (ancienne génération) │
+│  Llama 4 Scout    →  109B total, 17B actifs, 10M contexte │
+│  Llama 4 Maverick →  17B actifs, 128 experts              │
 │                                                            │
 │  Licence : Meta Llama License (usage commercial autorisé  │
 │  sous conditions pour les grands acteurs)                  │
@@ -306,58 +306,53 @@ Meta a fait le choix stratégique de l'open source : les modèles Llama sont té
 
 | Modèle | Taille | RAM GPU requise | Forces | Faiblesses |
 |---|---|---|---|---|
-| **Llama 3.1 8B** | 8B | ~6 GB VRAM | Léger, rapide, local | Qualité basique |
-| **Llama 3.3 70B** | 70B | ~40 GB VRAM | Excellent code, gratuit | Matériel conséquent requis |
-| **Llama 3.1 405B** | 405B | Cluster GPU | Rival GPT-4 | Inaccessible localement |
+| **Llama 4 Scout** | 109B (17B actifs, MoE) | ~24 GB VRAM (MoE) | **10M tokens** contexte (!), open-weight, 16 experts | Infrastructure MoE requise |
+| **Llama 4 Maverick** | 17B actifs, 128 experts | ~40 GB VRAM | Polyvalent, grand nombre d'experts, gratuit | Matériel conséquent requis |
 
 ### 3.6 Alibaba — Qwen (le champion du code)
 
-La famille Qwen2.5-Coder d'Alibaba est devenue l'une des références pour le code en open-weights, rivalisant avec des modèles propriétaires bien plus chers.
+La famille Qwen d'Alibaba est devenue l'une des références pour le code en open-weights, rivalisant avec des modèles propriétaires bien plus chers.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  FAMILLE QWEN (Alibaba Cloud) — OPEN-WEIGHTS               │
 │                                                            │
-│  Qwen2.5-Coder 7B   →  Léger, très bon pour sa taille     │
-│  Qwen2.5-Coder 14B  →  Excellent rapport qualité/taille   │
-│  Qwen2.5-Coder 32B  →  Rival Codestral, très capable      │
-│  Qwen2.5-Coder 72B  →  Meilleur open-weights pour code    │
-│  Qwen2.5 72B        →  Polyvalent, excellent code          │
+│  Qwen 3.6-Plus        →  1M contexte, agentic coding      │
+│  Qwen3.5 (397B)       →  Sorti fév. 2026, 201 langues     │
+│  Qwen3-Coder-Next     →  80B total, 3B actifs (MoE)       │
 │                                                            │
 │  Disponible sur : Ollama, LM Studio, Hugging Face          │
 └────────────────────────────────────────────────────────────┘
 ```
 
-> [!example] Qwen2.5-Coder 32B en local
+> [!example] Qwen3-Coder-Next en local
 > ```bash
-> $ ollama pull qwen2.5-coder:32b
-> $ ollama run qwen2.5-coder:32b
+> $ ollama pull qwen3-coder:32b
+> $ ollama run qwen3-coder:32b
 > >>> Implémente un algorithme de Dijkstra en Rust avec gestion d'erreurs
 > ```
-> Ce modèle de 32B tourne sur un GPU grand public (RTX 4090 ou similaire) et produit du code Python, Rust, TypeScript, Java de qualité comparable à GPT-4 pour la majorité des tâches.
+> Le Qwen3-Coder-Next (80B total, 3B actifs en MoE) offre des performances remarquables avec une consommation mémoire bien inférieure à son nombre total de paramètres. Idéal pour du code Python, Rust, TypeScript, Java sur GPU grand public.
 
 ### 3.7 DeepSeek — La surprise chinoise
 
-DeepSeek a créé la surprise en 2024-2025 avec des modèles open-source rivaux des meilleurs modèles propriétaires, à des prix dérisoires.
+DeepSeek continue de surprendre avec des modèles open-source rivaux des meilleurs modèles propriétaires, à des prix dérisoires.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  FAMILLE DEEPSEEK (DeepSeek AI, Chine) — OPEN-WEIGHTS      │
 │                                                            │
-│  DeepSeek-V3         →  Rival GPT-4o, très économique     │
-│  DeepSeek-R1         →  Raisonnement, rival o1             │
-│  DeepSeek-Coder-V2   →  Excellent pour le code            │
+│  DeepSeek V4   →  1T params, 37B actifs, 81% SWE-bench   │
+│  DeepSeek R2   →  Raisonnement, rival o3                   │
 │                                                            │
-│  Prix API : 10× moins cher que OpenAI (approximatif)       │
+│  Prix API : fraction du prix OpenAI                        │
 │  Risque : données hébergées en Chine                       │
 └────────────────────────────────────────────────────────────┘
 ```
 
 | Modèle | Forces | Faiblesses | Prix indicatif |
 |---|---|---|---|
-| **DeepSeek-V3** | Qualité GPT-4o, prix minimal | Latence, infrastructure instable | ~$0.27 / $1.1 par M tokens |
-| **DeepSeek-R1** | Raisonnement excellent, open-weights | Lent, verbose | ~$0.55 / $2.19 par M tokens |
-| **DeepSeek-Coder-V2** | Code de très haute qualité | Politique de confidentialité | Variable |
+| **DeepSeek V4** | **81% SWE-bench**, 1T params (37B actifs), 1M contexte, prix minimal | Données hébergées en Chine, infrastructure parfois instable | $0.30 / $0.50 par M tokens |
+| **DeepSeek R2** | Raisonnement excellent, open-weights, rival o3 | Lent, verbose | Variable |
 
 > [!warning] DeepSeek et la confidentialité des données
 > Les APIs DeepSeek hébergent tes données sur des serveurs en Chine. Pour du code propriétaire, des projets sensibles ou des entreprises soumises au RGPD, l'utilisation des API cloud DeepSeek est déconseillée. En revanche, les modèles open-weights peuvent être exécutés localement avec Ollama — sans aucun problème de confidentialité.
@@ -380,7 +375,31 @@ Microsoft mise sur les "Small Language Models" (SLM) ultra-efficaces pour des d�
 
 **Phi-4** est une démonstration que la taille n'est pas tout : entraîné sur des données soigneusement sélectionnées ("Textbooks are all you need"), il surpasse des modèles 3× plus grands sur les benchmarks de code et de raisonnement. Parfait pour tourner en local sur n'importe quelle machine.
 
-### 3.9 Zhipu AI — GLM-4
+### 3.9 Google — Gemma (open source)
+
+Google propose aussi une famille de modèles open source avec la licence Apache 2.0.
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  FAMILLE GEMMA (Google) — OPEN SOURCE, Apache 2.0          │
+│                                                            │
+│  Gemma 4 E2B, E4B  →  MoE ultra-légers                    │
+│  Gemma 4 26B-A4B   →  26B total, 4B actifs (MoE)          │
+│  Gemma 4 31B       →  Dense, 84.3% GPQA, 256K contexte    │
+│                                                            │
+│  Licence : Apache 2.0 (usage commercial libre)             │
+└────────────────────────────────────────────────────────────┘
+```
+
+| Modèle | Taille | Forces | Usage |
+|---|---|---|---|
+| **Gemma 4 E2B / E4B** | 2B / 4B actifs (MoE) | Ultra-léger, embarqué, faible VRAM | Appareils contraints, edge computing |
+| **Gemma 4 26B-A4B** | 26B total, 4B actifs | Bon rapport qualité/taille, MoE efficace | GPU modeste, local |
+| **Gemma 4 31B** | 31B (dense) | **Meilleur open-source 2026**, 84.3% GPQA, 256K contexte | Tâches exigeantes en local |
+
+**Gemma 4 31B** est actuellement le meilleur modèle open-source de 2026, notamment pour les tâches de raisonnement et de code. Sa licence Apache 2.0 le rend utilisable sans restriction commerciale.
+
+### 3.10 Zhipu AI — GLM-4
 
 GLM-4 de Zhipu AI (Université Tsinghua) est un modèle remarquable pour le code et le texte en chinois et en anglais.
 
@@ -418,22 +437,20 @@ Les benchmarks permettent de comparer les modèles sur des tâches standardisée
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 4.2 Tableau comparatif des scores (approximatifs, 2025-2026)
+### 4.2 Tableau comparatif des scores (approximatifs, avril 2026)
 
-| Modèle | HumanEval | SWE-bench | MBPP | MMLU |
+| Modèle | HumanEval | SWE-bench Verified | MBPP | Notes |
 |---|---|---|---|---|
-| **Claude Opus 4.6** | ~92% | ~72% | ~90% | ~90% |
-| **Claude Sonnet 4.6** | ~90% | ~65% | ~88% | ~88% |
-| **GPT-4o** | ~90% | ~49% | ~87% | ~88% |
-| **o3** | ~98% | ~70%+ | ~96% | ~91% |
-| **Gemini 2.5 Pro** | ~91% | ~63% | ~89% | ~90% |
-| **DeepSeek-V3** | ~89% | ~42% | ~86% | ~88% |
-| **DeepSeek-R1** | ~93% | ~50% | ~90% | ~90% |
-| **Qwen2.5-Coder 72B** | ~88% | ~45% | ~85% | ~84% |
-| **Llama 3.3 70B** | ~82% | ~35% | ~80% | ~80% |
-| **Mistral Large 2** | ~85% | ~38% | ~83% | ~84% |
-| **Codestral** | ~81% | ~32% | ~79% | ~76% |
-| **Phi-4 (3.8B)** | ~77% | ~20% | ~74% | ~72% |
+| **DeepSeek V4** | ~92% | **~81%** | ~90% | Meilleur SWE-bench |
+| **Claude Opus 4.6** | ~92% | **~80.8%** | ~90% | Meilleur code Anthropic |
+| **Gemini 3.1 Pro** | ~91% | **~78.8%** | ~89% | Fort sur contexte |
+| **Claude Sonnet 4.6** | ~90% | **~70%** | ~88% | Excellent quotidien |
+| **GPT-5.4** | ~90% | ~57.7% (Pro) | ~87% | Métrique SWE-bench Pro différente |
+| **o3** | ~98% | ~70%+ | ~96% | Raisonnement max |
+| **Llama 4 Scout** | ~85% | ~45% | ~84% | 10M contexte, open-weight |
+| **Qwen3-Coder-Next** | ~88% | ~50% | ~85% | Performances remarquables |
+| **Codestral 2508** | ~81% | ~35% | ~79% | Spécialisé code |
+| **Phi-4 (3.8B)** | ~77% | ~20% | ~74% | Léger, local, CPU |
 
 > [!warning] Limites des benchmarks
 > Les scores sont approximatifs et évoluent rapidement avec chaque nouvelle version. De plus :
@@ -448,22 +465,24 @@ Les benchmarks permettent de comparer les modèles sur des tâches standardisée
 
 | Modèle | Éditeur | Type | Contexte | Force principale | Prix (M tokens input) | Local ? |
 |---|---|---|---|---|---|---|
-| Claude Haiku 4.5 | Anthropic | Chat/API | 200K | Vitesse, économique | ~$0.80 | Non |
-| Claude Sonnet 4.6 | Anthropic | Chat/API/Agent | 200K | Équilibre qualité/coût | ~$3 | Non |
-| Claude Opus 4.6 | Anthropic | Chat/API/Agent | 200K | Intelligence maximale | ~$15 | Non |
-| GPT-4o | OpenAI | Chat/API | 128K | Polyvalent, multimodal | ~$5 | Non |
-| GPT-4o-mini | OpenAI | Chat/API | 128K | Prix minimal | ~$0.15 | Non |
-| o3 | OpenAI | Raisonnement | 128K | Problèmes complexes | Variable | Non |
-| o3-mini | OpenAI | Raisonnement | 128K | Raisonnement rapide | ~$1.1 | Non |
-| Gemini 2.0 Flash | Google | Chat/API | 1M | Rapidité, gratuit | ~$0.075 | Non |
-| Gemini 2.5 Pro | Google | Chat/API | 2M | Contexte géant, code | ~$1.25 | Non |
-| Mistral Large 2 | Mistral AI | Chat/API | 128K | Souverain EU | ~$2 | Non |
-| Codestral | Mistral AI | Code/API | 80K | Code spécialisé | ~$0.1 | Non |
-| DeepSeek-V3 | DeepSeek | Chat/API | 64K | Prix dérisoire | ~$0.27 | Oui (weights) |
-| DeepSeek-R1 | DeepSeek | Raisonnement | 64K | Open reasoning | ~$0.55 | Oui (weights) |
-| Qwen2.5-Coder 32B | Alibaba | Code | 128K | Code open-weights | Gratuit (local) | Oui |
-| Qwen2.5-Coder 72B | Alibaba | Code | 128K | Meilleur open code | Gratuit (local) | Oui |
-| Llama 3.3 70B | Meta | Polyvalent | 128K | Open source, code | Gratuit (local) | Oui |
+| Claude Haiku 4.5 | Anthropic | Chat/API | 200K | Vitesse, économique | $1 | Non |
+| Claude Sonnet 4.6 | Anthropic | Chat/API/Agent | 1M | Équilibre qualité/coût | $3 | Non |
+| Claude Opus 4.6 | Anthropic | Chat/API/Agent | 1M | Intelligence maximale, 80.8% SWE | $5 | Non |
+| GPT-5.4 | OpenAI | Chat/API | 272K (1M Codex) | Polyvalent, multimodal | $2.50 | Non |
+| GPT-5.4 Nano | OpenAI | Chat/API | 400K | Prix minimal | $0.20 | Non |
+| o3 | OpenAI | Raisonnement | Variable | Problèmes complexes | Variable | Non |
+| o4 | OpenAI | Raisonnement | Variable | Raisonnement dernière génération | Variable | Non |
+| Gemini 3.1 Flash-Lite | Google | Chat/API | Variable | Le moins cher Google | $0.25 | Non |
+| Gemini 3.1 Pro | Google | Chat/API | 1M | Contexte 1M, code, 78.8% SWE | $2 | Non |
+| Mistral Small 4 | Mistral AI | Chat/API | 128K | Raisonnement+code+multimodal, EU | ~$0.50 | Non |
+| Codestral 2508 | Mistral AI | Code/API | 80K+ | Code spécialisé, FIM | ~$0.1 | Non |
+| DeepSeek V4 | DeepSeek | Chat/API | 1M | 81% SWE-bench, prix dérisoire | $0.30 | Oui (weights) |
+| DeepSeek R2 | DeepSeek | Raisonnement | Variable | Open reasoning, rival o3 | Variable | Oui (weights) |
+| Qwen 3.6-Plus | Alibaba | Code/Agent | 1M | Agentic coding, open-weights | Gratuit (local) | Oui |
+| Qwen3-Coder-Next | Alibaba | Code | Variable | 80B/3B actifs MoE, perf. remarquables | Gratuit (local) | Oui |
+| Llama 4 Scout | Meta | Polyvalent | 10M | Open source, 10M contexte | Gratuit (local) | Oui |
+| Llama 4 Maverick | Meta | Polyvalent | Variable | Open source, 128 experts | Gratuit (local) | Oui |
+| Gemma 4 31B | Google | Polyvalent | 256K | Meilleur open-source 2026, Apache 2 | Gratuit (local) | Oui |
 | Phi-4 (3.8B) | Microsoft | Compact | 16K | Efficacité sur CPU | Gratuit (local) | Oui |
 | GLM-4 | Zhipu | Polyvalent | 128K | Bilingue CH/EN | ~$0.7 | Non |
 
@@ -477,29 +496,30 @@ Les benchmarks permettent de comparer les modèles sur des tâches standardisée
 │                                                                 │
 │  Ta tâche est...                                                │
 │       │                                                         │
-│       ├── Rapide / simple ? ──── Claude Haiku / GPT-4o-mini    │
-│       │                          Gemini 2.0 Flash               │
+│       ├── Rapide / simple ? ──── Claude Haiku / GPT-5.4 Nano  │
+│       │                          Gemini 3.1 Flash-Lite          │
 │       │                                                         │
 │       ├── Code confidentiel ? ── IA Locale : Ollama + Qwen /   │
-│       │   (propriétaire,         LM Studio + Llama             │
+│       │   (propriétaire,         LM Studio + Llama 4           │
 │       │    RGPD sensible)        Tabnine on-premise             │
 │       │                                                         │
-│       ├── Gros projet /  ─────── Gemini 2.5 Pro (2M ctx)       │
-│       │   codebase entier         Claude Sonnet 4.6 (200K)     │
+│       ├── Gros projet /  ─────── Gemini 3.1 Pro (1M ctx)       │
+│       │   codebase entier         Claude Sonnet 4.6 (1M)       │
+│       │                           Llama 4 Scout (10M ctx!)     │
 │       │                                                         │
-│       ├── Raisonnement ─────────  o3 / o3-mini                 │
-│       │   mathématique/algo       DeepSeek-R1                  │
+│       ├── Raisonnement ─────────  o3 / o4                      │
+│       │   mathématique/algo       DeepSeek R2                  │
 │       │                           Claude Opus 4.6              │
 │       │                                                         │
-│       ├── Budget serré ─────────  Gemini 2.0 Flash (gratuit)   │
-│       │                           GPT-4o-mini                  │
-│       │                           Codestral                    │
+│       ├── Budget serré ─────────  Gemini 3.1 Flash-Lite        │
+│       │                           GPT-5.4 Nano                 │
+│       │                           Codestral 2508               │
 │       │                                                         │
-│       ├── Génération en masse ──  GPT-4o-mini, Haiku 4.5       │
-│       │   (milliers de requêtes)  Gemini 2.0 Flash             │
+│       ├── Génération en masse ──  GPT-5.4 Nano, Haiku 4.5      │
+│       │   (milliers de requêtes)  Gemini 3.1 Flash-Lite        │
 │       │                                                         │
 │       └── Architecture système ─  Claude Opus 4.6              │
-│           / design complexe       o3 (si budget ok)            │
+│           / design complexe       o3/o4 (si budget ok)         │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -507,16 +527,16 @@ Les benchmarks permettent de comparer les modèles sur des tâches standardisée
 
 | Tâche | IA recommandée | Raison |
 |---|---|---|
-| **Question rapide / explication** | Claude Haiku, GPT-4o-mini, Gemini Flash | Réponse quasi-instantanée, coût minimal |
-| **Débogage complexe** | Claude Sonnet 4.6, GPT-4o | Excellent suivi du raisonnement sur du code existant |
-| **Architecture système** | Claude Opus 4.6, o3 | Raisonnement profond sur des contraintes multiples |
-| **Code propriétaire / confidentiel** | Ollama + Qwen2.5-Coder ou Llama 3.3 | 100% local, aucune donnée envoyée |
-| **Budget serré** | Gemini 2.0 Flash (gratuit), Codestral | Qualité correcte à coût nul ou minimal |
-| **Génération en masse (API)** | GPT-4o-mini, Claude Haiku, Gemini Flash | Faible coût par token, rate limits élevés |
-| **Raisonnement mathématique** | o3, DeepSeek-R1, Claude Opus 4.6 | Chain-of-thought profond |
-| **Refactoring de gros codebase** | Gemini 2.5 Pro (2M tokens) | Voit tout le projet en une seule requête |
+| **Question rapide / explication** | Claude Haiku 4.5, GPT-5.4 Nano, Gemini 3.1 Flash | Réponse quasi-instantanée, coût minimal |
+| **Débogage complexe** | Claude Sonnet 4.6, GPT-5.4 | Excellent suivi du raisonnement sur du code existant |
+| **Architecture système** | Claude Opus 4.6, o3/o4 | Raisonnement profond sur des contraintes multiples |
+| **Code propriétaire / confidentiel** | Ollama + Qwen3-Coder ou Llama 4 Scout | 100% local, aucune donnée envoyée |
+| **Budget serré** | Gemini 3.1 Flash-Lite (gratuit), Codestral 2508 | Qualité correcte à coût nul ou minimal |
+| **Génération en masse (API)** | GPT-5.4 Nano, Claude Haiku 4.5, Gemini 3.1 Flash | Faible coût par token, rate limits élevés |
+| **Raisonnement mathématique** | o3/o4, DeepSeek R2, Claude Opus 4.6 | Chain-of-thought profond |
+| **Refactoring de gros codebase** | Gemini 3.1 Pro (1M tokens), Claude Sonnet 4.6 (1M) | Voit tout le projet en une seule requête |
 | **Code spécialisé (complétion IDE)** | GitHub Copilot, Supermaven, Codeium | Optimisés pour l'inline completion |
-| **Projets RGPD / entreprise EU** | Mistral Large 2, Codestral | Hébergement en Europe, conformité EU |
+| **Projets RGPD / entreprise EU** | Mistral Small 4, Codestral 2508 | Hébergement en Europe, conformité EU |
 
 ---
 
@@ -549,10 +569,10 @@ Les benchmarks permettent de comparer les modèles sur des tâches standardisée
 
 | Contexte | Recommandation | Raison |
 |---|---|---|
-| **Startup, projet perso** | Cloud (Claude Sonnet, GPT-4o) | Pas d'infra à gérer, accès aux meilleurs modèles |
-| **Entreprise avec données sensibles** | Local ou cloud EU (Mistral) | Conformité RGPD, secret industriel |
-| **Développeur isolé sans internet** | Local (Ollama + Llama/Qwen) | Fonctionne hors connexion |
-| **Étudiants / budget zéro** | Gemini Flash gratuit + Ollama local | Sans débourser un centime |
+| **Startup, projet perso** | Cloud (Claude Sonnet 4.6, GPT-5.4) | Pas d'infra à gérer, accès aux meilleurs modèles |
+| **Entreprise avec données sensibles** | Local ou cloud EU (Mistral Small 4) | Conformité RGPD, secret industriel |
+| **Développeur isolé sans internet** | Local (Ollama + Llama 4 / Qwen3) | Fonctionne hors connexion |
+| **Étudiants / budget zéro** | Gemini 3.1 Flash-Lite gratuit + Ollama local | Sans débourser un centime |
 | **Grande équipe, volume élevé** | Cloud API (coût prévisible) | Scalabilité, monitoring centralisé |
 | **Code très propriétaire (banque, défense)** | Local on-premise uniquement | Aucune fuite possible |
 
@@ -565,11 +585,11 @@ Les benchmarks permettent de comparer les modèles sur des tâches standardisée
 
 ```
 GPU VRAM  →  Modèles utilisables
-  8 GB    →  Phi-4 (3.8B), Qwen2.5-Coder 7B, Llama 3.1 8B
- 16 GB    →  Qwen2.5-Coder 14B, Mistral 7B quantisé
- 24 GB    →  Qwen2.5-Coder 32B (bonne qualité), CodeLlama 34B
- 48 GB    →  Llama 3.3 70B (quantisé), Qwen2.5-Coder 72B (quantisé)
- 80 GB+   →  Modèles 70B en pleine précision, DeepSeek-V3 partiel
+  8 GB    →  Phi-4 (3.8B), Gemma 4 E4B, Llama 4 Scout (MoE, 17B actifs)
+ 16 GB    →  Gemma 4 26B-A4B (4B actifs), Qwen3-Coder 7B quantisé
+ 24 GB    →  Llama 4 Maverick (17B actifs MoE), Gemma 4 31B quantisé
+ 48 GB    →  Gemma 4 31B (pleine précision), Qwen3.5 72B (quantisé)
+ 80 GB+   →  Modèles denses 70B+, DeepSeek V4 partiel
 ```
 
 ---
@@ -627,20 +647,21 @@ L'IA pour le code évolue à une vitesse sans précédent. Un modèle "state of 
 TENDANCES MAJEURES 2026 :
 
   1. AGENTS DE PLUS EN PLUS AUTONOMES
-     SWE-bench passe de 5% (2023) → 70%+ (2025)
+     SWE-bench passe de 5% (2023) → 80%+ (2026)
      Les agents résolvent de vrais bugs GitHub seuls
+     DeepSeek V4 (81%), Claude Opus 4.6 (80.8%)
 
   2. CONTEXTES TOUJOURS PLUS GRANDS
-     2M tokens chez Gemini → probablement 10M+ en 2027
+     1M tokens chez Claude/Gemini, 10M chez Llama 4 Scout
      Toute une codebase en un seul prompt
 
-  3. MODÈLES SPÉCIALISÉS DÉPASSENT LES GÉNÉRALISTES
-     Codestral, Qwen2.5-Coder > GPT-4o sur le code
-     La spécialisation fine devient clé
+  3. MODÈLES SPÉCIALISÉS ET AGENTIQUES
+     Codestral 2508, Devstral, Qwen3-Coder-Next
+     L'IA agentique (Qwen 3.6-Plus, Devstral) devient clé
 
   4. IA LOCALE DE PLUS EN PLUS VIABLE
-     Phi-4 3.8B rivalise avec GPT-3.5
-     Les petits modèles rattrapent leur retard
+     Gemma 4 31B : meilleur open-source 2026
+     Llama 4 Scout : 10M contexte en open-weight
 
   5. MULTIMODALITÉ GÉNÉRALISÉE
      Code + images + voix + vidéo → norme en 2026
@@ -648,7 +669,7 @@ TENDANCES MAJEURES 2026 :
 
   6. PRIX EN CHUTE LIBRE
      GPT-4 2023 : ~30$/M tokens output
-     GPT-4o-mini 2025 : ~0.6$/M tokens
+     DeepSeek V4 2026 : ~0.50$/M tokens output
      Tendance à la poursuite
 ```
 
@@ -663,18 +684,18 @@ STACK IA RECOMMANDÉE — DÉVELOPPEUR 2026
 
   USAGE QUOTIDIEN (code)
   ├── Complétion inline : GitHub Copilot ou Supermaven
-  └── Chat rapide : Claude Sonnet 4.6 ou GPT-4o
+  └── Chat rapide : Claude Sonnet 4.6 ou GPT-5.4
 
   TÂCHES COMPLEXES
   ├── Architecture / design : Claude Opus 4.6
-  └── Raisonnement algo : o3-mini ou DeepSeek-R1
+  └── Raisonnement algo : o3/o4 ou DeepSeek R2
 
   CODE CONFIDENTIEL
-  └── Local : Ollama + Qwen2.5-Coder 32B
+  └── Local : Ollama + Qwen3-Coder ou Llama 4 Scout
 
   BUDGET ZÉRO
-  ├── Gemini 2.0 Flash (gratuit, dans la limite des quotas)
-  └── Ollama + Phi-4 ou Llama 3.3 70B (si GPU)
+  ├── Gemini 3.1 Flash-Lite (gratuit, dans la limite des quotas)
+  └── Ollama + Phi-4 ou Gemma 4 31B (si GPU 48GB)
 
   IDE
   └── Cursor IDE ou VS Code + Continue.dev (configurable)
@@ -695,26 +716,26 @@ STACK IA RECOMMANDÉE — DÉVELOPPEUR 2026
    ┌──────┼──────┐      ┌─────┼─────┐       ┌─────┼─────┐
    |      |      |      |     |     |       |     |     |
 Complet. Chat  Agents  Anthro OpenAI Google Tâche Budget Confid.
-inline        CLI/IDE  Claude GPT-4o Gemini   |     |     |
+inline        CLI/IDE  Claude GPT-5.4 Gemini  |     |     |
    |      |      |      |     |     |      Local Cloud RGPD
-Copilot ChatGPT Claude Sonnet o3   2.5Pro
-Codeium Claude  Code    4.6        2M ctx
+Copilot ChatGPT Claude Sonnet o3/o4 3.1Pro
+Codeium Claude  Code    4.6        1M ctx
 Supermav Gemini Cursor    |          |
 TabNine         Windsurf Mistral  DeepSeek
-                Aider    Codestral   V3/R1
+                Aider    Codestral   V4/R2
                           |       Meta
-                        Qwen    Llama 3.3
-                        Coder   70B open
-                        7-72B       |
+                        Qwen    Llama 4
+                        3-Coder Scout
+                        Devstral    |
                           |      Phi-4
-                        Local     3.8B
-                        Ollama      |
+                        Local   Gemma4
+                        Ollama  31B     |
                         LMStudio  BENCH-
                                   MARKS
                                     |
                              ┌──────┼──────┐
                              |      |      |
-                          Human   SWE-   MMLU
+                          Human   SWE-   GPQA
                           Eval    bench
 ```
 
@@ -724,7 +745,7 @@ TabNine         Windsurf Mistral  DeepSeek
 
 ### Exercice 1 — Benchmark personnel (2h)
 
-Choisis une vraie tâche de code que tu dois faire (ex. : écrire une fonction de tri, créer un endpoint REST, déboguer une erreur). Soumets exactement le même prompt à **4 modèles différents** : Claude Sonnet, GPT-4o, Gemini 2.5 Pro et un modèle local (Ollama + Qwen2.5-Coder).
+Choisis une vraie tâche de code que tu dois faire (ex. : écrire une fonction de tri, créer un endpoint REST, déboguer une erreur). Soumets exactement le même prompt à **4 modèles différents** : Claude Sonnet 4.6, GPT-5.4, Gemini 3.1 Pro et un modèle local (Ollama + Qwen3-Coder).
 
 Évalue chaque réponse sur :
 - Correction du code (fonctionne ?)
@@ -737,9 +758,9 @@ Documente tes résultats. Tu auras ainsi ton propre benchmark personnel adapté 
 ### Exercice 2 — Installer et tester l'IA locale (1h30)
 
 1. Installe Ollama sur ta machine (`curl https://ollama.ai/install.sh | sh` sur Linux/Mac)
-2. Télécharge `ollama pull qwen2.5-coder:7b` (si peu de VRAM) ou `:32b` (si GPU 24GB+)
+2. Télécharge `ollama pull qwen3-coder:7b` (si peu de VRAM) ou `ollama pull gemma4:27b` (si GPU 24GB+)
 3. Lance une session interactive et pose 5 questions de code de difficulté croissante
-4. Compare les réponses avec celles de Claude ou GPT-4o sur les mêmes questions
+4. Compare les réponses avec celles de Claude Sonnet 4.6 ou GPT-5.4 sur les mêmes questions
 5. Note : dans quels cas le modèle local est-il suffisant ? Dans quels cas la différence de qualité est-elle rédhibitoire ?
 
 ### Exercice 3 — Construire ta stack personnelle (30 min)
