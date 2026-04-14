@@ -1,552 +1,833 @@
-# Claude & Claude Code — Maîtrise Avancée et Optimisation des Tokens
+# Claude & Claude Code — Guide Complet de Zéro à Expert
 
 > [!info] À qui s'adresse ce cours ?
-> Ce cours s'adresse à **tout développeur** qui utilise Claude, Claude Code, ou tout autre LLM (GPT-4, Gemini, modèles locaux via Ollama/LM Studio/OpenCode). Il part de zéro mais va très loin : comprendre comment les tokens sont consommés, comment configurer son environnement pour minimiser les coûts, et comment tirer le maximum de chaque session.
->
-> **Prérequis** : savoir utiliser un terminal et avoir Claude Code installé (`npm install -g @anthropic-ai/claude-code`).
+> Ce cours va de l'**installation complète** jusqu'aux **optimisations avancées**. Il couvre Claude Code (le CLI officiel d'Anthropic), l'API Claude, et les bonnes pratiques valables aussi pour GPT-4, Gemini, et les modèles locaux (Ollama, LM Studio, OpenCode). Parfait si tu n'as jamais utilisé l'IA dans ton workflow, ou si tu veux passer au niveau supérieur.
 
 ---
 
-## 1. Comprendre les Tokens — La Monnaie de l'IA
+## PARTIE 1 — DÉMARRAGE : INSTALLATION ET PREMIÈRE SESSION
 
-### Qu'est-ce qu'un token ?
+### 1.1 Qu'est-ce que Claude Code ?
 
-Un **token** est l'unité de traitement des modèles de langage. Ce n'est pas un mot, ni un caractère : c'est un fragment de texte découpé par un algorithme appelé **tokenizer**.
-
-```
-"Bonjour le monde"  →  ["Bon", "jour", " le", " monde"]   = 4 tokens
-"Hello world"        →  ["Hello", " world"]                 = 2 tokens
-"printf("            →  ["printf", "(\""]                    = 2 tokens
-```
-
-> [!tip] Règle empirique
-> - 1 token ≈ 0,75 mot en anglais
-> - 1 token ≈ 0,6 mot en français (le français coûte ~20% plus cher)
-> - 1 token ≈ 4 caractères pour du code ASCII
-> - Le code C/Rust est dense → économique en tokens
-> - Le JSON verbeux est coûteux → préférer YAML ou formats courts
-
-### La fenêtre de contexte (Context Window)
-
-Chaque modèle a une **fenêtre de contexte** maximale, exprimée en tokens :
+**Claude Code** est un assistant IA en ligne de commande (CLI) développé par Anthropic. Il s'intègre directement dans ton terminal et ton éditeur pour t'aider à coder, débugger, refactoriser, documenter, et bien plus.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                   FENÊTRE DE CONTEXTE                       │
+│                   L'ÉCOSYSTÈME CLAUDE                       │
 │                                                             │
-│  claude-opus-4-6    : ~200 000 tokens ≈ 150 000 mots       │
-│  claude-sonnet-4-6  : ~200 000 tokens ≈ 150 000 mots       │
-│  claude-haiku-4-5   : ~200 000 tokens ≈ 150 000 mots       │
-│  GPT-4o             : ~128 000 tokens                       │
-│  Gemini 2.0 Flash   : ~1 000 000 tokens                     │
-│  Llama 3.3 (local)  : 8 000 à 128 000 tokens selon version │
+│  claude.ai       → Interface web (chat classique)          │
+│  Claude Code CLI → Terminal interactif (ce cours)          │
+│  Desktop App     → Application macOS/Windows native        │
+│  VSCode Extension → Intégration éditeur                    │
+│  JetBrains Plugin → IntelliJ, PyCharm, WebStorm...        │
+│  API Anthropic   → Intégration dans tes propres applis     │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Ce qui compte dans la fenêtre** : TOUT — system prompt, historique de conversation, résultats d'outils, fichiers lus, sorties de commandes.
+### 1.2 Prérequis
 
-### Comment on est facturé
+```bash
+# Vérifier les prérequis
+node --version    # Node.js ≥ 18.0.0 requis
+npm --version     # npm ≥ 8.0.0 requis
+git --version     # Git (recommandé)
 
-Les APIs Claude facturent :
-- **Tokens d'entrée (input)** : tout ce que Claude lit (historique + prompt)
-- **Tokens de sortie (output)** : tout ce que Claude génère (réponse + code)
-
-```
-Prix indicatifs Claude (API, avril 2026) :
-┌─────────────────┬──────────────┬───────────────┐
-│ Modèle          │ Input/1M tk  │ Output/1M tk  │
-├─────────────────┼──────────────┼───────────────┤
-│ claude-opus-4-6 │     $15      │     $75       │
-│ sonnet-4-6      │      $3      │     $15       │
-│ haiku-4-5       │    $0.80     │      $4       │
-└─────────────────┴──────────────┴───────────────┘
+# Installer Node.js si absent :
+# → https://nodejs.org (télécharger LTS)
+# → Ou via gestionnaire de paquets :
+brew install node        # macOS (Homebrew)
+winget install nodejs    # Windows
+sudo apt install nodejs  # Ubuntu/Debian
 ```
 
-> [!warning] Les sorties coûtent 5× plus que les entrées
-> Demander à Claude de "réécrire tout le fichier" coûte 5× plus cher que "modifier la ligne 42". Toujours cibler précisément.
+### 1.3 Installation de Claude Code
+
+```bash
+# Installation globale via npm
+npm install -g @anthropic-ai/claude-code
+
+# Vérifier l'installation
+claude --version
+
+# Alternative macOS (Homebrew)
+brew install anthropic-ai/claude/claude-code
+
+# Mise à jour
+npm update -g @anthropic-ai/claude-code
+```
+
+> [!tip] Windows spécifique
+> Sur Windows, utilise **Git Bash**, **WSL**, ou **PowerShell** (pas CMD). Le `py` launcher est préféré à `python` ou `python3` sur Windows.
+
+### 1.4 Authentification
+
+```bash
+# Méthode 1 : Login interactif (recommandé pour débutants)
+claude login
+# → Ouvre le navigateur → Se connecter à claude.ai → Autoriser
+
+# Méthode 2 : API Key (recommandé pour scripts/CI/CD)
+export ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxx"
+# → Ajouter dans ~/.bashrc ou ~/.zshrc pour persister
+
+# Méthode 3 : Fichier .env dans le projet
+echo "ANTHROPIC_API_KEY=sk-ant-api03-xxx" >> .env
+
+# Vérifier l'authentification
+claude --print "dis bonjour"
+```
+
+> [!warning] Sécurité de l'API Key
+> Ne commite JAMAIS ton API key dans Git. Utilise `.gitignore` pour exclure `.env`, et préfère les variables d'environnement système pour les projets partagés.
+
+### 1.5 Premier lancement
+
+```bash
+# Démarrer Claude Code dans le répertoire courant
+claude
+
+# Démarrer dans un dossier spécifique
+claude --cwd /chemin/vers/projet
+
+# Mode non-interactif (pour scripts)
+claude --print "explique ce que fait ce fichier" < mon_fichier.py
+
+# Aide complète
+claude --help
+```
+
+**L'interface interactive ressemble à :**
+
+```
+╔══════════════════════════════════════════════════════╗
+║  Claude Code v1.x.x  │  claude-sonnet-4-6            ║
+║  Dossier : /mon-projet                                ║
+║  Contexte : ██████░░░░░░░░░ 40%                      ║
+╠══════════════════════════════════════════════════════╣
+║  > _                                                  ║
+╚══════════════════════════════════════════════════════╝
+```
+
+### 1.6 Initialisation d'un nouveau projet
+
+```bash
+# Dans ton dossier de projet, initialiser Claude Code
+cd mon-projet
+claude
+
+# Puis dans l'interface :
+/init
+```
+
+La commande `/init` analyse ton projet et **génère automatiquement** un `CLAUDE.md` adapté à ta stack technique. Elle détecte :
+- Le langage principal et la version
+- Les frameworks utilisés (FastAPI, React, Django…)
+- Les fichiers de config (package.json, Cargo.toml, pyproject.toml…)
+- Les conventions git en place
+
+> [!example] Exemple de CLAUDE.md généré par /init
+> ```markdown
+> # Project — FastAPI Backend
+>
+> ## Stack
+> Python 3.12, FastAPI 0.110, PostgreSQL 16, Alembic, pytest
+>
+> ## Commands
+> - Run dev: `uvicorn main:app --reload`
+> - Tests: `pytest -v`
+> - Migrate: `alembic upgrade head`
+>
+> ## Code Style
+> - Type hints on all functions
+> - Google-style docstrings
+> - Max line length: 88 (black)
+> ```
 
 ---
 
-## 2. La Relecture Exponentielle — Le Piège Fondamental
+## PARTIE 2 — LES COMMANDES ESSENTIELLES
 
-### Comment Claude lit vraiment votre conversation
+### 2.1 Slash Commands — La référence complète
 
-C'est le concept le plus important à comprendre. Claude ne "se souvient" pas : il **relit intégralement la conversation à chaque message**.
+| Commande | Description |
+|----------|-------------|
+| `/init` | Analyse le projet et génère CLAUDE.md |
+| `/help` | Affiche l'aide et les commandes disponibles |
+| `/clear` | Réinitialise la session (efface l'historique) |
+| `/compact` | Compresse l'historique en résumé dense |
+| `/context` | Affiche l'état du contexte et les tokens utilisés |
+| `/fast` | Bascule en mode sortie rapide |
+| `/model` | Change le modèle actif (haiku/sonnet/opus) |
+| `/commit` | Analyse les changements et génère un message de commit |
+| `/review-pr` | Revue complète d'une Pull Request |
+| `/plan` | Active le Plan Mode (planifier avant d'agir) |
+| `/cost` | Affiche le coût estimé de la session |
+| `/memory` | Gère les fichiers mémoire (voir, ajouter, supprimer) |
+| `/doctor` | Diagnostic de l'installation et de la config |
 
-```
-Message 1 : 100 tokens lus
-Message 2 : 200 tokens lus  (100 historique + 100 nouveau)
-Message 3 : 300 tokens lus  (200 historique + 100 nouveau)
-...
-Message 10: 1000 tokens lus
+### 2.2 Raccourcis clavier
 
-Total cumulé : 100+200+300+...+1000 = 5500 tokens consommés
-Pour seulement 1000 tokens de contenu réel !
-```
+| Raccourci | Action |
+|-----------|--------|
+| `Ctrl+C` | Interrompre la génération en cours |
+| `Ctrl+L` | Effacer l'affichage du terminal |
+| `↑` / `↓` | Naviguer dans l'historique des commandes |
+| `Tab` | Autocomplétion des commandes |
+| `Escape` | Annuler la saisie en cours |
 
-> [!warning] Coût RÉEL = n × (n+1) / 2 × taille_moyenne
-> Une conversation de 20 messages de 500 tokens chacun coûte en réalité :
-> 20 × 21 / 2 × 500 = **105 000 tokens** pour 10 000 tokens de contenu.
-> **C'est pourquoi les longues conversations explosent les coûts.**
+### 2.3 Flags CLI importants
 
-### La solution : éviter les messages séparés inutiles
+```bash
+# Choisir le modèle
+claude --model claude-haiku-4-5-20251001
+claude --model claude-sonnet-4-6
+claude --model claude-opus-4-6
 
-```
-❌ MAUVAIS — 3 messages séparés = 6 relectures cumulées :
-  Toi : "Lis le fichier main.c"
-  Claude : [lit et répond]
-  Toi : "Explique la fonction malloc_wrapper"
-  Claude : [relit tout + répond]
-  Toi : "Ajoute un commentaire"
-  Claude : [relit tout + répond]
+# Mode non-interactif (pour scripts automatisés)
+claude --print "génère des tests pour auth.py"
 
-✓ BON — 1 message groupé :
-  Toi : "Lis main.c, explique malloc_wrapper et ajoute un commentaire"
-  Claude : [fait tout en une passe]
-```
+# Format de sortie
+claude --output-format json --print "analyse ce code"
+claude --output-format stream-json --print "..."
 
-**Règle d'or** : grouper les instructions connexes dans un seul message.
+# Limiter les permissions (mode sécurisé)
+claude --no-permissions   # Demande confirmation pour chaque action
+claude --dangerously-skip-permissions  # JAMAIS en production
 
----
+# Verbosité
+claude --verbose          # Affiche les détails des appels outils
+claude --debug            # Mode debug complet
 
-## 3. Lost in the Middle — Le Problème de la Mémoire Longue
+# Spécifier un dossier de travail
+claude --cwd /chemin/projet
 
-### Le phénomène
-
-Les recherches montrent que les LLMs ont une capacité d'attention **non uniforme** sur leur contexte :
-
-```
-Attention du modèle selon la position dans le contexte :
-
-  Début ████████████████████ (forte attention)
-  Milieu ████████             (attention réduite 40-60%)
-  Fin    ████████████████████ (forte attention)
-```
-
-Ce phénomène s'appelle **"Lost in the Middle"** : les informations placées au milieu d'une longue conversation sont moins bien prises en compte.
-
-> [!tip] Implication pratique
-> - Les instructions importantes → **début de conversation ou dernier message**
-> - Les fichiers les plus critiques → lire en **dernier** avant la demande
-> - Si Claude "oublie" une instruction donnée il y a 15 messages → **rappeler dans le dernier message**
-
-### Stratégies contre le Lost in the Middle
-
-```
-1. CLAUDE.md : placer les règles permanentes ici (toujours en début)
-2. Répétition ciblée : "Rappel : pas de commentaires dans le code"
-3. /compact : condenser le milieu, garder un résumé dense
-4. Démarrer une nouvelle session pour les sujets sans rapport
+# Passer une instruction via fichier
+claude --print < prompt.txt
 ```
 
----
+### 2.4 Variables d'environnement utiles
 
-## 4. Le Prompt Cache — 5 Minutes pour Économiser 90%
+```bash
+# Clé API principale
+export ANTHROPIC_API_KEY="sk-ant-..."
 
-### Comment fonctionne le cache
+# Modèle par défaut (éviter de le spécifier à chaque fois)
+export CLAUDE_MODEL="claude-sonnet-4-6"
 
-Anthropic implémente un **cache automatique de prompts**. Quand Claude relit votre historique, si ce contexte est identique à une lecture récente, il est servi depuis le cache à **~10% du prix normal**.
+# Chemin custom pour la config
+export CLAUDE_CONFIG_DIR="~/.config/claude"
 
-```
-┌──────────────────────────────────────────────────────┐
-│               PROMPT CACHE                           │
-│                                                      │
-│  Durée de vie : 5 minutes (TTL = 300 secondes)      │
-│  Réduction coût : ~90% sur les tokens mis en cache   │
-│  Applicable à : historique, fichiers lus, tools      │
-│                                                      │
-│  ⚠️  Après 5 min d'inactivité → cache expiré         │
-│      → prochain message relit TOUT à plein tarif     │
-└──────────────────────────────────────────────────────┘
-```
+# Désactiver la télémétrie
+export CLAUDE_TELEMETRY_DISABLED=1
 
-> [!tip] Hack du prompt cache
-> Si vous devez faire une pause, **revenez avant 5 minutes**. Un simple message "continue" ou "ok" suffit à maintenir le cache actif.
-> 
-> Dans Claude Code, le timer `/loop` utilise 270s (sous les 5 min) pour rester dans le cache. Au-delà de 300s, il vaut mieux attendre 20-30 min (un seul cache miss vaut mieux que 12 relectures partielles).
+# Mode CI/CD (désactive les prompts interactifs)
+export CLAUDE_NON_INTERACTIVE=1
 
-### Impact concret
-
-```
-Session de 2h avec 100 000 tokens d'historique :
-
-Sans cache : 100 000 × 40 messages = 4 000 000 tokens facturés
-Avec cache : 100 000 × 0.1 × 40  = 400 000 tokens facturés (prix cache)
-             + nouveaux tokens normaux
-
-Économie : ~$9 → $0.90 sur Sonnet (×10 moins cher !)
+# Proxy (réseau d'entreprise)
+export HTTPS_PROXY="http://proxy.company.com:8080"
 ```
 
 ---
 
-## 5. CLAUDE.md — La Configuration Maîtresse
+## PARTIE 3 — CONFIGURATION AVANCÉE
 
-### Qu'est-ce que CLAUDE.md ?
+### 3.1 CLAUDE.md — La Configuration Maîtresse
 
-`CLAUDE.md` est un fichier Markdown placé à la racine de votre projet (ou dans `~/.claude/CLAUDE.md` pour les règles globales). Claude le lit **automatiquement à chaque session** — c'est votre "system prompt permanent" sans effort.
+`CLAUDE.md` est un fichier Markdown lu **automatiquement** au démarrage de chaque session. C'est ton "system prompt permanent" sans effort répétitif.
 
 ```
-~/.claude/CLAUDE.md          ← règles globales (tous les projets)
-mon-projet/CLAUDE.md         ← règles du projet
-mon-projet/src/CLAUDE.md     ← règles du sous-dossier (héritées)
+~/.claude/CLAUDE.md          ← règles globales (TOUS les projets)
+mon-projet/CLAUDE.md         ← règles du projet courant
+mon-projet/src/CLAUDE.md     ← règles d'un sous-dossier (héritées)
 ```
 
-### Structure d'un CLAUDE.md efficace
+**Structure optimale d'un CLAUDE.md :**
 
 ```markdown
-# Mon Projet — Instructions Claude
+# [Nom du Projet] — Instructions Claude
 
 ## Contexte
-Application web FastAPI + React. Base PostgreSQL.
-Stack : Python 3.12, Node 20, Docker Compose.
+[Description courte : stack, objectif, contraintes importantes]
 
-## Règles de Code
-- Python : PEP8, type hints obligatoires, docstrings Google style
-- Ne JAMAIS modifier les migrations Alembic existantes
-- Tests pytest obligatoires pour toute nouvelle fonction
+## Commandes fréquentes
+- Démarrer : `uvicorn main:app --reload`
+- Tests : `pytest -v --tb=short`
+- Lint : `ruff check . && black --check .`
+- Build Docker : `docker compose up --build`
 
-## Conventions Git
-- Branches : feature/nom, fix/nom, docs/nom
-- Commits : format conventionnel (feat:, fix:, docs:, refactor:)
-
-## Fichiers à NE PAS toucher
-- config/production.env
-- migrations/ (lecture seule)
+## Conventions code
+- [règle 1 dense et précise]
+- [règle 2]
+- Ne PAS modifier : [fichiers/dossiers interdits]
 
 ## Comportement attendu
-- Toujours demander avant de toucher à plus de 5 fichiers
+- Toujours demander avant de toucher >3 fichiers
+- Réponses courtes sauf si demandé
 - Proposer un plan avant tout refactoring
-- Réponses courtes sauf si explication demandée
 ```
 
-> [!tip] Le CLAUDE.md comme économie de tokens
-> Sans CLAUDE.md : vous répétez vos conventions à chaque session → 200-500 tokens perdus.
-> Avec CLAUDE.md : zéro répétition, règles toujours actives, chargé une fois en cache.
+> [!tip] Optimiser la densité
+> Chaque mot du CLAUDE.md est relu à chaque session → investir du temps à l'écrire dense et précis.
+> ```
+> ❌ "Quand tu écris du Python, pense bien à mettre des type hints"
+> ✓ "Python : type hints obligatoires sur toutes les signatures"
+> ```
 
-### Optimiser son CLAUDE.md
+### 3.2 .claudeignore — Exclure l'Inutile
 
-```markdown
-❌ MAUVAIS (verbeux, redondant) :
-"Quand tu écris du code Python, s'il te plaît, n'oublie pas d'ajouter 
-des type hints à toutes les fonctions que tu crées ou modifies, 
-c'est très important pour nous."
+Fonctionne exactement comme `.gitignore` : liste les fichiers/dossiers que Claude ne doit PAS explorer automatiquement.
 
-✓ BON (dense, précis) :
-"Python : type hints obligatoires sur toutes les fonctions."
-```
+```gitignore
+# .claudeignore — template universel
 
-**Principes** : dense, impératif, sans politesse inutile. Les politesses coûtent des tokens sans ajouter de valeur.
-
----
-
-## 6. .claudeignore — Exclure l'Inutile
-
-### Fonctionnement
-
-`.claudeignore` fonctionne exactement comme `.gitignore` : il dit à Claude quels fichiers **ne pas lire automatiquement** lors de l'exploration du projet.
-
-```
-# .claudeignore exemple
-
-# Dépendances (jamais utiles à lire)
+# Dépendances (JAMAIS utile à lire)
 node_modules/
 .venv/
 __pycache__/
-target/          # Rust build output
-
-# Fichiers générés
+.mypy_cache/
+target/          # Rust build output → RTK (Rust Token Killer)
 dist/
 build/
-*.min.js
-*.min.css
+.next/
+.nuxt/
 
 # Données volumineuses
 *.csv
 *.parquet
+*.sqlite
 data/raw/
+datasets/
+
+# Fichiers générés
+*.min.js
+*.min.css
+*.map
+coverage/
+htmlcov/
 
 # Logs
 *.log
 logs/
 
-# Config secrètes (ne jamais exposer)
+# Secrets (ne JAMAIS exposer)
 .env
 .env.*
 secrets/
+*.pem
+*.key
+
+# Médias
+*.mp4
+*.mp3
+*.png
+*.jpg
+*.pdf
 ```
 
-> [!warning] Sans .claudeignore
-> Claude peut explorer `node_modules/` (200 000+ fichiers, des millions de tokens) si vous demandez "analyse mon projet". Avec `.claudeignore`, il est protégé.
+### 3.3 Fichier de configuration JSON
 
-### Stratégie de direction vers des dossiers spécifiques
+```json
+// ~/.claude/config.json — config globale Claude Code
 
-Au lieu de dire "regarde mon projet", guidez précisément :
-
+{
+  "defaultModel": "claude-sonnet-4-6",
+  "autoCompact": {
+    "enabled": true,
+    "threshold": 0.60
+  },
+  "theme": "dark",
+  "notifications": true,
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-postgres",
+               "postgresql://localhost/mydb"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_TOKEN": "ghp_xxxx" }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/user/projects"]
+    }
+  }
+}
 ```
-❌ "Peux-tu analyser mon application ?"
-   → Claude va potentiellement lire 50 fichiers pour comprendre la structure
 
-✓ "Regarde src/api/routes/users.py et src/models/user.py"
-   → Lecture de 2 fichiers ciblés, 10× moins de tokens
-```
+### 3.4 Le Système de Mémoire Persistante
 
-**Règle** : plus vous êtes précis sur les fichiers concernés, moins Claude consomme de contexte en exploration.
-
----
-
-## 7. Le Système de Mémoire Persistante
-
-### memory/ — La mémoire entre sessions
-
-Claude Code dispose d'un système de fichiers mémoire dans `~/.claude/projects/[projet]/memory/`. Ces fichiers sont relus dans les futures conversations pour maintenir la continuité.
+La mémoire permet de **conserver des informations entre sessions**. Elle est stockée dans des fichiers Markdown dans `~/.claude/projects/[projet]/memory/`.
 
 ```
 ~/.claude/projects/mon-projet/memory/
-├── MEMORY.md          ← index de toutes les mémoires (chargé auto)
-├── user_prefs.md      ← préférences personnelles
-├── feedback.md        ← corrections et retours
-├── project.md         ← contexte projet en cours
-└── reference.md       ← pointeurs vers ressources externes
+├── MEMORY.md          ← index automatiquement chargé
+├── user.md            ← préférences personnelles (style, niveau)
+├── feedback.md        ← corrections apportées par l'utilisateur
+├── project.md         ← état du projet, décisions prises
+└── reference.md       ← liens vers ressources externes
 ```
 
-> [!tip] Quand demander à Claude de mémoriser
-> "Mémorise que je préfère les tests d'intégration sans mocking"
-> "Retiens que le fichier config.py ne doit jamais être modifié"
-> "Note que le bug sur l'auth est résolu — cause : cookie SameSite=None"
+**Demander à Claude de mémoriser :**
+```
+"Mémorise que je préfère les tests d'intégration sans mocking"
+"Retiens que le module payments/ ne doit jamais être modifié directement"
+"Note que le bug auth est résolu — cause : cookie SameSite=None manquant"
+```
 
-### Ce qu'il NE faut PAS mémoriser
-
+**Ce qu'il NE faut PAS mettre en mémoire :**
 - Structure du code (lire le code actuel est toujours plus fiable)
-- Historique git (utiliser `git log`)
-- État temporaire de la session en cours
-- Listes de tâches (utiliser TodoWrite dans la session)
+- Historique git (`git log` est autoritaire)
+- Tâches de la session en cours (utiliser les todos de session)
 
 ---
 
-## 8. Les Commandes Essentielles
+## PARTIE 4 — COMPRENDRE LES TOKENS ET LES COÛTS
 
-### /compact — Compresser sans perdre
+### 4.1 Qu'est-ce qu'un token ?
 
-`/compact` condense l'historique de la conversation en un résumé dense, réduisant massivement les tokens tout en préservant les informations clés.
+Un token est l'unité de base traitée par les LLMs. Ce n'est ni un mot ni un caractère.
+
+```
+"Bonjour le monde"  →  ["Bon", "jour", " le", " monde"]   = 4 tokens
+"Hello world"        →  ["Hello", " world"]                = 2 tokens
+int main() {         →  ["int", " main", "()", " {"]       = 4 tokens
+```
+
+**Règle empirique :**
+- 1 token ≈ 0,75 mot anglais
+- 1 token ≈ 0,60 mot français (**le français coûte ~20% plus cher**)
+- 1 token ≈ 4 caractères de code ASCII
+
+**Prix des modèles (API, 2026) :**
+
+```
+┌─────────────────┬──────────────┬───────────────┐
+│ Modèle          │ Input/1M tk  │ Output/1M tk  │
+├─────────────────┼──────────────┼───────────────┤
+│ claude-opus-4-6 │    $15.00    │    $75.00     │
+│ sonnet-4-6      │     $3.00    │    $15.00     │
+│ haiku-4-5       │     $0.80    │     $4.00     │
+└─────────────────┴──────────────┴───────────────┘
+⚠️  Les sorties coûtent 5× plus que les entrées !
+```
+
+### 4.2 La Relecture Exponentielle
+
+C'est le concept le plus important à comprendre. Claude **relit intégralement la conversation à chaque message**.
+
+```
+Message 1 →  100 tokens lus
+Message 2 →  200 tokens lus  (100 historique + 100 nouveau)
+Message 3 →  300 tokens lus
+...
+Message 20 → 2000 tokens lus
+
+Coût réel = 100+200+300+...+2000 = n×(n+1)/2 × taille_moy
+           = 20×21/2 × 100 = 21 000 tokens pour 2 000 de contenu !
+```
+
+**Solution : grouper les instructions connexes dans UN seul message**
+
+```
+❌ 3 messages séparés = 6 relectures cumulées
+  → Toi : "Lis main.py"
+  → Claude : [lit]
+  → Toi : "Explique la fonction process_data"
+  → Claude : [relit tout + répond]
+  → Toi : "Ajoute des tests"
+  → Claude : [relit tout + répond]
+
+✓ 1 message groupé = 1 seule lecture
+  → "Lis main.py, explique process_data et génère ses tests"
+  → Claude : [fait tout en une passe]
+```
+
+### 4.3 Lost in the Middle
+
+Les LLMs ont une attention **non uniforme** sur leur contexte :
+
+```
+Attention du modèle :
+
+  Début ████████████████████  ← Forte (system prompt, début conv)
+  Milieu ████████              ← Réduite (~40-60%)
+  Fin    ████████████████████  ← Forte (derniers messages)
+```
+
+Les instructions au milieu d'une longue conversation sont moins bien prises en compte.
+
+**Stratégies :**
+- Instructions critiques → `CLAUDE.md` (toujours en début) ou dernier message
+- Rappeler les règles importantes dans le message final si la session est longue
+- `/compact` pour condenser le milieu et garder un résumé dense
+
+### 4.4 Le Prompt Cache — 5 Minutes Magiques
+
+Anthropic met en cache automatiquement les contextes récemment lus. Si le contexte n'a pas changé depuis moins de 5 minutes, il est servi à **~10% du prix normal**.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                  PROMPT CACHE                            │
+│  TTL : 5 minutes (300 secondes)                         │
+│  Réduction : ~90% sur les tokens mis en cache           │
+│  Déclenché par : contexte identique dans la fenêtre TTL │
+│                                                          │
+│  ⏱  Après 5 min d'inactivité → cache expiré            │
+│     → prochain message relit TOUT à plein tarif         │
+└──────────────────────────────────────────────────────────┘
+```
+
+> [!tip] Maintenir le cache actif
+> Si tu dois faire une pause, reviens dans les 5 minutes. Un message court ("continue", "ok") suffit à maintenir le cache actif et économise jusqu'à 90% sur le prochain échange.
+
+---
+
+## PARTIE 5 — GESTION DU CONTEXTE
+
+### 5.1 /compact — Compresser sans perdre
+
+`/compact` condense l'historique en un résumé dense, réduisant drastiquement les tokens tout en préservant les informations clés.
 
 ```
 Avant /compact : 80 000 tokens d'historique
-Après /compact : 8 000 tokens de résumé (ratio ×10 typique)
+Après /compact :  8 000 tokens de résumé (ratio ×10 typique)
 
-Économie sur les prochains messages : 72 000 tokens × prix_cache
+Économie sur prochains messages : 72 000 tokens × prix_cache
 ```
 
-**Quand utiliser** :
-- Quand la barre de contexte Claude Code atteint 60-70%
-- Après avoir résolu un problème complexe (résumer avant de passer au suivant)
-- Quand vous sentez Claude "oublier" des choses du début
+**Quand utiliser :**
+- Barre de contexte à 60-70%
+- Après avoir résolu un problème complexe
+- Avant de passer à un nouveau sujet dans la même session
 
-> [!tip] Auto-compact intelligent
-> Dans les paramètres Claude Code, activer l'auto-compact à **60% du contexte**. Cela déclenche automatiquement une compression avant que le contexte soit critique.
+### 5.2 /clear — Repartir à Zéro
 
-### /clear — Repartir à zéro
-
-`/clear` efface complètement l'historique. La session recommence vierge.
+Efface complètement l'historique. La session redémarre vierge.
 
 ```
 Utiliser /clear quand :
-✓ Changer complètement de sujet (ex: passer de "debug C" à "déploiement Docker")
-✓ Claude semble "confus" ou donne des réponses incohérentes
-✓ La conversation a beaucoup dérivé par rapport au sujet initial
-✓ Après /compact si le résumé ne suffit pas
+✓ Changement complet de sujet
+✓ Claude semble confus ou incohérent
+✓ La conversation a trop dérivé
 
 NE PAS utiliser /clear quand :
 ✗ En plein milieu d'un refactoring multi-fichiers
-✗ Quand Claude a du contexte utile sur votre projet
-✗ Pour "économiser" sans raison (vous perdez du contexte utile)
+✗ Claude a du contexte utile sur ton projet
 ```
 
-### Combo résumé + /clear
-
-La technique la plus efficace pour les longues sessions :
+### 5.3 Le Combo Résumé + /clear (technique pro)
 
 ```
-1. Avant /clear, demander : "Fais un résumé structuré de ce qu'on a fait,
-   les décisions prises, l'état actuel, et les prochaines étapes."
+1. Demander : "Fais un résumé structuré : ce qu'on a fait,
+   décisions prises, état actuel, prochaines étapes."
 2. Claude génère un résumé de 200-500 tokens
-3. /clear (efface les 50 000 tokens d'historique)
+3. /clear  (efface 50 000 tokens d'historique)
 4. Coller le résumé dans le premier message de la nouvelle session
 5. Reprendre le travail avec un contexte frais et ciblé
 ```
 
-> [!example] Économie réelle du combo
-> 50 000 tokens d'historique → 400 tokens de résumé
-> Économie sur le prochain message : 49 600 tokens (soit ~$0.15 sur Sonnet)
-> Sur une journée de travail avec 10 /clear : ~$1.50 économisés
-
-### /context — Voir ce qui est chargé
-
-`/context` affiche un résumé de ce qui est actuellement dans la fenêtre de contexte : fichiers lus, tokens utilisés, pourcentage restant.
-
+**Économie concrète :**
 ```
-Utiliser pour :
-- Savoir combien de contexte reste disponible
-- Identifier quels fichiers volumineux ont été lus
-- Décider si un /compact est nécessaire
+50 000 tokens d'historique → 400 tokens de résumé
+Économie : 49 600 tokens × $0.003/1K = ~$0.15 par /clear
+Sur 10 /clear dans une journée : ~$1.50 économisés sur Sonnet
+```
+
+### 5.4 Auto-compact
+
+Dans la config ou via les paramètres, activer l'auto-compact à **60% du contexte** :
+
+```json
+// ~/.claude/config.json
+{
+  "autoCompact": {
+    "enabled": true,
+    "threshold": 0.60
+  }
+}
+```
+
+Cela déclenche automatiquement `/compact` avant que le contexte soit critique.
+
+### 5.5 /context — Voir l'État du Contexte
+
+Affiche un résumé de ce qui est dans la fenêtre de contexte : fichiers lus, tokens utilisés, pourcentage restant. Utiliser pour décider si un `/compact` est nécessaire.
+
+---
+
+## PARTIE 6 — MODES ET WORKFLOWS AVANCÉS
+
+### 6.1 Plan Mode — Réfléchir Avant d'Agir
+
+Plan Mode force Claude à **présenter son plan avant d'exécuter**.
+
+```bash
+# Activer le Plan Mode
+/plan
+
+# Ou dans le message directement
+"AVANT D'AGIR : fais-moi un plan détaillé de comment tu vas
+refactoriser le module auth, puis attends ma validation."
+```
+
+**Workflow recommandé :**
+```
+1. Activer Plan Mode
+2. Décrire la tâche complexe
+3. Claude présente : fichiers concernés, ordre des modifications,
+   risques identifiés, questions de clarification
+4. Valider, modifier, ou demander des précisions
+5. Seulement alors → Claude exécute
+```
+
+> [!tip] Le hack "95% de confiance"
+> Ajouter dans chaque prompt complexe :
+> **"Ne fais aucun changement tant que tu n'as pas 95% de confiance. Pose-moi des questions de suivi d'abord."**
+>
+> Cela évite les allers-retours coûteux ("non c'est pas ça que je voulais" → 3 messages de correction = tokens perdus).
+
+### 6.2 Mode Non-Interactif (Scripts et CI/CD)
+
+```bash
+# Utilisation dans un script shell
+#!/bin/bash
+result=$(claude --print "analyse les erreurs dans build.log" < build.log)
+echo "$result" >> rapport.txt
+
+# Avec format JSON pour parsing
+claude --print --output-format json "liste les TODO dans src/" \
+  | jq '.content[0].text'
+
+# Intégration CI/CD (GitHub Actions)
+- name: Code Review avec Claude
+  env:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  run: |
+    git diff HEAD~1 | claude --print "revue de code, liste les problèmes"
+```
+
+### 6.3 Skills — Raccourcis Réutilisables
+
+Les skills sont des commandes personnalisées qui déclenchent des workflows complexes.
+
+```markdown
+# ~/.claude/skills/deploy-check.md
+Avant tout déploiement, vérifier :
+1. Tests passent : `pytest -v --tb=short`
+2. Linting propre : `ruff check . && black --check .`
+3. Variables d'env production définies (check .env.example)
+4. Migrations à jour : `alembic heads`
+5. Docker build réussit : `docker compose build`
+Générer un rapport PASS/FAIL pour chaque point.
+```
+
+```bash
+# Utilisation
+/deploy-check    # Lance le workflow complet
+```
+
+**Skills intégrés utiles :**
+```
+/commit         → analyse les changements + message de commit conventionnel
+/review-pr      → revue complète d'une PR avec GitHub CLI
+/compact        → compression du contexte
+/init           → initialisation du projet + génération CLAUDE.md
 ```
 
 ---
 
-## 9. Sub-agents — Coûts et Stratégies de Parallélisation
+## PARTIE 7 — SUB-AGENTS ET PARALLÉLISATION
 
-### Qu'est-ce qu'un sub-agent ?
+### 7.1 Qu'est-ce qu'un Sub-agent ?
 
-Un sub-agent est une instance Claude **séparée** lancée pour effectuer une tâche spécifique. Chaque sub-agent a son propre contexte, ses propres outils, et consomme ses propres tokens.
-
-```
-┌──────────────────────────────────────────────────────┐
-│                   AGENT PRINCIPAL                    │
-│   Contexte : 50 000 tokens                           │
-│         │                                            │
-│    ┌────┴────────────────┐                           │
-│    ▼                     ▼                           │
-│  Agent A              Agent B                        │
-│  Contexte: 30K        Contexte: 25K                  │
-│  Tâche: Tests         Tâche: Docs                    │
-│         │                     │                      │
-│         └──────────┬──────────┘                      │
-│                    ▼                                  │
-│              Résultats agrégés                        │
-│              dans agent principal                     │
-└──────────────────────────────────────────────────────┘
-```
-
-### Coût réel des sub-agents
-
-> [!warning] Les sub-agents coûtent cher
-> Chaque sub-agent démarre avec son propre contexte + hérite du contexte parent résumé.
-> Lancer 3 agents en parallèle peut coûter 2-3× un seul agent.
-> **Ce n'est pas gratuit** — c'est un choix vitesse vs coût.
+Un sub-agent est une instance Claude **séparée**, avec son propre contexte et ses propres outils, lancée pour une tâche spécifique.
 
 ```
-Calcul approximatif :
-Agent principal      : 10 000 tokens contexte
-3 sub-agents lancés  : 3 × (10 000 + travail propre) tokens
-                     = 3 × 25 000 = 75 000 tokens
-vs. travail séquentiel : 10 000 + 15 000 + 15 000 = 40 000 tokens
-
-Les sub-agents coûtent ~1.9× plus mais sont 3× plus rapides.
+┌──────────────────────────────────────────────────────────────┐
+│                   AGENT PRINCIPAL                            │
+│   Contexte : 50 000 tokens                                   │
+│   Tâche globale : "migrer le projet vers FastAPI"            │
+│              │                                               │
+│    ┌─────────┼──────────────┐                                │
+│    ▼         ▼              ▼                                │
+│  Agent A   Agent B        Agent C                            │
+│  Tâche:    Tâche:         Tâche:                             │
+│  Tests     Documentation  Migration DB                       │
+│  (indép.)  (indép.)       (indép.)                          │
+│    │         │              │                                │
+│    └─────────┴──────────────┘                               │
+│              ▼                                               │
+│         Résultats agrégés → Agent principal                  │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-### Stratégie d'optimisation : parallélisation ciblée
+### 7.2 Types de Sub-agents Disponibles
 
 ```
-✓ Utiliser des sub-agents quand :
-  - Tâches INDÉPENDANTES (pas de dépendances entre elles)
-  - Tâches LONGUES (>5 min chacune)
-  - Exploration de plusieurs dossiers/fichiers différents
-
-✗ NE PAS utiliser quand :
-  - Tâches séquentielles (B dépend de A)
-  - Tâches courtes (overhead > gain)
-  - Budget limité
+general-purpose   → Recherche, exploration, tâches complexes
+Explore           → Exploration rapide de codebase (lecture seule)
+Plan              → Architecture, plans d'implémentation
+claude-code-guide → Questions sur Claude Code, l'API, les MCP
 ```
 
-### Le hack "parallélisation 5 minutes avant la fin"
+### 7.3 Isolation avec Worktree
+
+Pour les modifications risquées, les sub-agents peuvent travailler dans un **worktree Git isolé** — une copie du repo sur une branche temporaire :
+
+```
+Avantages du worktree :
+✓ Modifications isolées (ne touche pas ta branche courante)
+✓ Nettoyage automatique si aucun changement
+✓ Si changements : le chemin de branche est retourné pour review
+✓ Idéal pour tester une approche risquée sans conséquences
+```
+
+### 7.4 Coûts Réels des Sub-agents
+
+> [!warning] Les sub-agents ne sont pas gratuits
+> ```
+> Agent principal      : 10 000 tokens contexte
+> 3 sub-agents lancés  : 3 × (contexte hérité + travail propre)
+>                      = 3 × 25 000 = 75 000 tokens
+>
+> vs. travail séquentiel : 10 000 + 15 000 + 15 000 = 40 000 tokens
+>
+> Les sub-agents coûtent ~1.9× plus mais sont 3× plus rapides.
+> C'est un choix vitesse ↔ coût.
+> ```
+
+### 7.5 Stratégie : Parallélisation 5 Minutes Avant la Fin
 
 > [!tip] Technique avancée de rentabilisation
-> Juste avant que votre contexte soit plein (à ~80%), lancez plusieurs sub-agents en parallèle pour les tâches restantes. Pendant qu'ils travaillent, votre session principale peut se terminer proprement.
->
-> **Pourquoi ?** Les sub-agents héritent du contexte actuel (encore riche) mais travaillent en parallèle — vous "dépensez" vos tokens restants de façon productive plutôt que de les laisser expirer.
+> Quand le contexte approche les 80%, lancer plusieurs sub-agents pour les tâches restantes. Ils héritent du contexte riche actuel et travaillent en parallèle pendant que ta session principale se termine proprement. Tu "dépenses" tes tokens restants productivement plutôt que de les laisser expirer.
 
 ---
 
-## 10. Plan Mode — Réfléchir Avant d'Agir
+## PARTIE 8 — HOOKS : AUTOMATISER CLAUDE CODE
 
-### Qu'est-ce que le Plan Mode ?
+### 8.1 Qu'est-ce qu'un Hook ?
 
-Le Plan Mode force Claude à **planifier et présenter son approche** avant d'exécuter quoi que ce soit. C'est activé via `/plan` ou dans les paramètres.
-
-```
-Sans Plan Mode :
-  Toi : "Refactorise le module auth"
-  Claude : [commence à modifier 12 fichiers immédiatement]
-  → Risque de casser quelque chose, difficile à annuler
-
-Avec Plan Mode :
-  Toi : "Refactorise le module auth"
-  Claude : [présente un plan détaillé]
-  Toi : [valide, modifie, ou annule]
-  Claude : [exécute seulement après validation]
-```
-
-> [!tip] Économie tokens avec Plan Mode
-> Le hack le plus sous-estimé : **"Ne fais aucun changement tant que tu n'as pas 95% de confiance. Pose-moi des questions de suivi."**
->
-> Cela force Claude à clarifier les ambiguïtés AVANT d'agir, évitant des allers-retours coûteux ("non c'est pas ça que je voulais" → 3 messages de correction = tokens perdus).
-
-### Utilisation efficace
+Les **hooks** sont des commandes shell qui s'exécutent automatiquement en réponse à des événements de Claude Code. Ils permettent d'automatiser des actions récurrentes.
 
 ```
-Bon usage du Plan Mode :
-1. Pour tout changement touchant >3 fichiers
-2. Pour des refactorings d'architecture
-3. Pour des migrations de base de données
-4. Quand vous n'êtes pas sûr de l'approche
+┌──────────────────────────────────────────────────────────────┐
+│                     TYPES DE HOOKS                           │
+│                                                              │
+│  PreToolUse    → Avant qu'un outil soit exécuté             │
+│  PostToolUse   → Après qu'un outil soit exécuté             │
+│  Notification  → Quand Claude émet une notification          │
+│  Stop          → Quand Claude termine une réponse           │
+└──────────────────────────────────────────────────────────────┘
+```
 
-Pas nécessaire pour :
-- Corriger un bug précis dans un fichier connu
-- Ajouter une ligne de code simple
-- Reformater/documenter
+### 8.2 Configuration des Hooks
+
+```json
+// ~/.claude/config.json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Commande exécutée : $TOOL_INPUT' >> ~/.claude/bash_history.log"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-send 'Claude Code' '$NOTIFICATION_MESSAGE'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 8.3 Exemples de Hooks Utiles
+
+```bash
+# Hook : Lancer les tests automatiquement après écriture de fichiers Python
+PostToolUse → Write → matcher: "*.py"
+command: "cd $PROJECT_DIR && pytest --tb=short -q 2>&1 | tail -5"
+
+# Hook : Formater le code après modifications
+PostToolUse → Edit → matcher: "*.py"
+command: "black $TOOL_OUTPUT_FILE 2>/dev/null && ruff check --fix $TOOL_OUTPUT_FILE 2>/dev/null"
+
+# Hook : Notification de fin de tâche longue (macOS)
+Stop → command: "osascript -e 'display notification \"Claude a terminé\" with title \"Claude Code\"'"
+
+# Hook : Log de toutes les commandes Bash exécutées
+PostToolUse → Bash
+command: "echo \"$(date): $TOOL_INPUT\" >> ~/claude-bash-audit.log"
+
+# Hook : Bloquer l'exécution de commandes dangereuses
+PreToolUse → Bash → matcher: "rm -rf"
+command: "echo 'BLOQUÉ : rm -rf interdit' && exit 1"
 ```
 
 ---
 
-## 11. Skills — Les Raccourcis Réutilisables
+## PARTIE 9 — SERVEURS MCP (MODEL CONTEXT PROTOCOL)
 
-### Qu'est-ce qu'un skill ?
+### 9.1 Qu'est-ce que MCP ?
 
-Un **skill** (ou slash command personnalisée) est une commande prédéfinie qui déclenche un workflow complexe. Claude Code vient avec des skills intégrés (`/commit`, `/review-pr`) et permet d'en créer des personnalisés.
-
-```
-# Exemple de skill personnalisé : /deploy-check
-Emplacement : ~/.claude/skills/deploy-check.md
-
-Contenu :
-  Avant tout déploiement, vérifier :
-  1. Tests passent (pytest -v)
-  2. Linting propre (ruff check .)
-  3. Variables d'env production définies
-  4. Migrations à jour (alembic heads)
-  Générer un rapport PASS/FAIL pour chaque point.
-```
-
-> [!tip] Économie avec les skills
-> Sans skill : répéter les instructions à chaque fois → 200-500 tokens par invocation
-> Avec skill `/deploy-check` : zéro token d'instruction, juste le résultat
-
-### Skills intégrés utiles
-
-```
-/commit     → analyse les changements et génère un message de commit
-/review-pr  → revue complète d'une pull request
-/compact    → compresse le contexte
-/clear      → réinitialise la session
-/fast       → bascule en mode rapide (même modèle, output plus rapide)
-```
-
----
-
-## 12. Serveurs MCP — Étendre les Capacités
-
-### Model Context Protocol (MCP)
-
-MCP permet à Claude de se connecter à des **sources de données et outils externes** directement dans la session : bases de données, APIs, fichiers distants, services web.
+MCP est un protocole standard qui permet à Claude de se connecter à des **sources de données et outils externes** directement dans la session.
 
 ```
 Claude ←→ MCP Server ←→ Base de données PostgreSQL
-Claude ←→ MCP Server ←→ API GitHub (issues, PRs)
+Claude ←→ MCP Server ←→ API GitHub (issues, PRs, repos)
 Claude ←→ MCP Server ←→ Notion / Jira / Linear
-Claude ←→ MCP Server ←→ Slack / Gmail
+Claude ←→ MCP Server ←→ Gmail / Google Calendar
 Claude ←→ MCP Server ←→ Navigateur web (Playwright)
+Claude ←→ MCP Server ←→ Système de fichiers distant
 ```
 
-### Configuration d'un MCP
+### 9.2 MCP Servers Populaires
+
+```bash
+# PostgreSQL — accès direct à la base de données
+npm install -g @modelcontextprotocol/server-postgres
+
+# Filesystem — accès à des dossiers spécifiques
+npm install -g @modelcontextprotocol/server-filesystem
+
+# GitHub — issues, PRs, repos
+npm install -g @modelcontextprotocol/server-github
+
+# Puppeteer/Playwright — automatisation navigateur
+npm install -g @modelcontextprotocol/server-puppeteer
+
+# Brave Search — recherche web
+npm install -g @modelcontextprotocol/server-brave-search
+
+# SQLite
+npm install -g @modelcontextprotocol/server-sqlite
+```
+
+### 9.3 Configuration MCP
 
 ```json
 // ~/.claude/config.json
@@ -554,536 +835,814 @@ Claude ←→ MCP Server ←→ Navigateur web (Playwright)
   "mcpServers": {
     "postgres": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]
+      "args": [
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://user:password@localhost:5432/mydb"
+      ]
     },
     "github": {
       "command": "npx",
       "args": ["@modelcontextprotocol/server-github"],
       "env": { "GITHUB_TOKEN": "ghp_xxxx" }
+    },
+    "myfiles": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/projects",
+        "/home/user/documents"
+      ]
     }
   }
 }
 ```
 
-> [!tip] MCP vs lecture de fichiers
-> Sans MCP : "Lis le fichier SQL et explique le schéma" → vous devez copier-coller
-> Avec MCP PostgreSQL : Claude interroge directement `\d table_name` → résultat frais, zéro copier-coller
+> [!tip] MCP vs lecture de fichiers manuelle
+> Sans MCP PostgreSQL :
+> "Lis ce dump SQL et explique le schéma" → copier-coller manuel, données potentiellement stale
+>
+> Avec MCP PostgreSQL :
+> Claude fait directement `\d table_name` → données fraîches, zéro copier-coller, 0 token pour le copier-coller
 
-### Impact sur les tokens
-
-Les résultats MCP entrent dans le contexte comme n'importe quelle autre information. Attention aux requêtes qui retournent beaucoup de données — **toujours limiter les résultats** :
-
-```sql
--- ❌ Mauvais : retourne potentiellement millions de lignes
-SELECT * FROM logs;
-
--- ✓ Bon : ciblé et limité
-SELECT message, level, created_at FROM logs
-WHERE level = 'ERROR' AND created_at > NOW() - INTERVAL '1 hour'
-LIMIT 20;
-```
+> [!warning] Toujours limiter les résultats SQL
+> ```sql
+> -- ❌ Peut retourner des millions de lignes
+> SELECT * FROM logs;
+>
+> -- ✓ Ciblé et limité
+> SELECT message, level, created_at FROM logs
+> WHERE level = 'ERROR'
+> ORDER BY created_at DESC
+> LIMIT 20;
+> ```
 
 ---
 
-## 13. System Prompts — Configurer le Comportement Global
+## PARTIE 10 — L'ADVISOR TOOL (NOUVEAUTÉ BETA 2026)
 
-### Qu'est-ce qu'un system prompt ?
+### 10.1 Le Concept Révolutionnaire : Exécuteur + Conseiller
 
-Le **system prompt** est une instruction donnée au modèle avant la conversation. Dans Claude Code, c'est géré via CLAUDE.md. Dans l'API, c'est le paramètre `system`.
+L'**Advisor Tool** est une des innovations les plus importantes de 2026. Il permet d'associer un **modèle exécuteur rapide** (Sonnet ou Haiku) avec un **modèle conseiller plus intelligent** (Opus), consulté ponctuellement pour les décisions stratégiques.
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                   PATTERN ADVISOR                            │
+│                                                              │
+│   EXÉCUTEUR (Sonnet/Haiku)                                   │
+│   → Fait le gros du travail à moindre coût                  │
+│   → Lit les fichiers, écrit le code, exécute les outils     │
+│              │                                               │
+│              │ "Je dois planifier cette tâche complexe"     │
+│              ▼                                               │
+│   CONSEILLER (Opus) ← Lit TOUT le transcript en cours      │
+│   → Produit un plan stratégique (400-700 tokens)            │
+│   → Donne une direction claire                              │
+│              │                                               │
+│              ▼                                               │
+│   EXÉCUTEUR continue avec le plan Opus                      │
+│   → Qualité proche d'Opus solo                              │
+│   → Coût proche de Sonnet solo                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**Bénéfice clé** : intelligence proche d'Opus, au coût de Sonnet pour la majorité du travail.
+
+### 10.2 Utilisation via l'API
 
 ```python
-# Utilisation API Claude
 import anthropic
 
 client = anthropic.Anthropic()
 
-response = client.messages.create(
-    model="claude-sonnet-4-6",
-    max_tokens=1024,
-    system="""Tu es un expert Python senior.
-    Règles :
-    - Réponses en français
-    - Code avec type hints toujours
-    - Jamais de variables globales
-    - Toujours proposer les tests associés""",
+response = client.beta.messages.create(
+    model="claude-sonnet-4-6",          # L'exécuteur
+    max_tokens=4096,
+    betas=["advisor-tool-2026-03-01"],  # Activer le beta
+    tools=[
+        {
+            "type": "advisor_20260301",
+            "name": "advisor",
+            "model": "claude-opus-4-6",  # Le conseiller
+            "max_uses": 3,               # Max 3 consultations par requête
+        }
+    ],
     messages=[
-        {"role": "user", "content": "Comment implémenter un cache LRU ?"}
-    ]
+        {
+            "role": "user",
+            "content": "Implémente un worker pool concurrent en Go avec arrêt gracieux.",
+        }
+    ],
 )
 ```
 
-> [!tip] Optimiser le system prompt
-> Un system prompt bien écrit économise des tokens sur CHAQUE message.
-> Il est mis en cache (prompt cache) après le premier appel.
-> Investir 30 min à écrire un bon system prompt = économies sur des milliers d'appels.
+```bash
+# Via curl
+curl https://api.anthropic.com/v1/messages \
+  -H "x-api-key: $ANTHROPIC_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "anthropic-beta: advisor-tool-2026-03-01" \
+  -H "content-type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "max_tokens": 4096,
+    "tools": [{
+      "type": "advisor_20260301",
+      "name": "advisor",
+      "model": "claude-opus-4-6"
+    }],
+    "messages": [{
+      "role": "user",
+      "content": "Construis un worker pool concurrent en Go."
+    }]
+  }'
+```
+
+### 10.3 Paires Exécuteur/Conseiller Valides
+
+| Exécuteur | Conseiller possible |
+|-----------|---------------------|
+| `claude-haiku-4-5-20251001` | `claude-opus-4-6` |
+| `claude-sonnet-4-6` | `claude-opus-4-6` |
+| `claude-opus-4-6` | `claude-opus-4-6` |
+
+> [!warning] Le conseiller doit être au moins aussi capable que l'exécuteur. Une paire invalide retourne une erreur 400.
+
+### 10.4 Comment l'Advisor Fonctionne en Détail
+
+```
+1. L'exécuteur décide lui-même quand appeler le conseiller
+   (comme n'importe quel autre outil)
+
+2. Quand l'exécuteur appelle l'advisor :
+   → Émission d'un bloc server_tool_use (input toujours vide)
+   → Anthropic lance une inférence séparée sur le modèle conseiller
+   → Le conseiller voit TOUT : system prompt, historique, résultats outils
+   → Le conseiller produit un plan (400-700 tokens)
+
+3. Le résultat revient à l'exécuteur sous forme advisor_tool_result
+4. L'exécuteur continue avec le plan en tête
+
+Tout cela dans UN SEUL appel API — aucun aller-retour supplémentaire.
+```
+
+### 10.5 Optimisation du Prompt System pour l'Advisor
+
+**Quand appeler l'advisor (ajouter au system prompt) :**
+```
+Appelle advisor AVANT tout travail substantiel — avant d'écrire,
+avant de t'engager sur une interprétation, avant de construire
+sur une hypothèse. Si la tâche nécessite d'abord une orientation
+(trouver des fichiers, lire la structure), fais ça, puis appelle advisor.
+
+Appelle aussi advisor :
+- Quand tu penses avoir terminé (AVANT : rends le résultat durable)
+- Quand tu bloques — erreurs répétées, approche qui ne converge pas
+- Quand tu envisages un changement d'approche
+```
+
+**Réduire la longueur des réponses advisor (économise 35-45% des tokens) :**
+```
+"L'advisor doit répondre en moins de 100 mots avec des étapes
+numérotées, pas des explications."
+```
+
+### 10.6 Cache de l'Advisor
+
+```python
+# Activer le cache côté advisor (rentable à partir de 3+ appels)
+tools = [{
+    "type": "advisor_20260301",
+    "name": "advisor",
+    "model": "claude-opus-4-6",
+    "caching": {"type": "ephemeral", "ttl": "5m"},  # ou "1h"
+}]
+```
+
+> [!tip] Quand activer le cache advisor ?
+> - ✓ Conversations longues avec 3+ appels à l'advisor
+> - ✗ Tâches courtes (≤2 appels) : le coût d'écriture dépasse l'économie de lecture
+
+### 10.7 Cas d'Usage Idéaux
+
+```
+✓ Parfait pour l'Advisor :
+  - Agents de code long horizon (>5 étapes)
+  - Pipelines de recherche multi-étapes
+  - Computer use complexe
+  - Refactoring architecturaux
+
+✗ Pas idéal pour l'Advisor :
+  - Questions réponse unique (rien à planifier)
+  - Tâches où chaque tour nécessite Opus solo
+  - Formatage et tâches répétitives simples
+```
 
 ---
 
-## 14. Choisir le Bon Modèle — L'Équilibre Coût/Qualité
+## PARTIE 11 — NOUVEAUTÉS ET FONCTIONNALITÉS AVANCÉES
 
-### La règle des 3 niveaux
+### 11.1 Extended Thinking — Raisonnement Approfondi
+
+Extended Thinking permet à Claude de "réfléchir" avant de répondre, en utilisant des blocs de raisonnement internes.
+
+```python
+response = client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=16000,
+    thinking={
+        "type": "enabled",
+        "budget_tokens": 10000  # Tokens alloués à la réflexion
+    },
+    messages=[{"role": "user", "content": "Résous ce problème algorithmique complexe..."}]
+)
+
+# Les blocs de réflexion apparaissent dans la réponse
+for block in response.content:
+    if block.type == "thinking":
+        print("Réflexion interne:", block.thinking)
+    elif block.type == "text":
+        print("Réponse:", block.text)
+```
+
+**Quand utiliser Extended Thinking :**
+- Problèmes mathématiques/algorithmiques complexes
+- Décisions architecturales à fort impact
+- Debugging de bugs subtils et multi-couches
+- Analyses nécessitant du raisonnement en plusieurs étapes
+
+### 11.2 Web Search Tool — Accès au Web en Temps Réel
+
+```python
+# Le modèle peut chercher sur le web de façon autonome
+response = client.messages.create(
+    model="claude-sonnet-4-6",
+    max_tokens=1024,
+    tools=[{
+        "type": "web_search_20250305",
+        "name": "web_search",
+        "max_uses": 5,          # Limiter les recherches
+    }],
+    messages=[{
+        "role": "user",
+        "content": "Quelle est la dernière version stable de FastAPI ?"
+    }]
+)
+```
+
+> [!tip] Combiner Advisor + Web Search
+> ```python
+> tools = [
+>     {"type": "web_search_20250305", "name": "web_search", "max_uses": 5},
+>     {"type": "advisor_20260301", "name": "advisor", "model": "claude-opus-4-6"},
+>     {"name": "run_bash", ...}  # Tes outils custom
+> ]
+> # L'exécuteur peut chercher sur le web, demander conseil à l'advisor,
+> # et utiliser tes outils, tout dans un même appel.
+> ```
+
+### 11.3 Context Editing — Contrôle Fin du Contexte
+
+```python
+# Supprimer les blocs de thinking pour réduire le contexte
+response = client.messages.create(
+    model="claude-sonnet-4-6",
+    thinking={
+        "type": "enabled",
+        "budget_tokens": 5000
+    },
+    betas=["interleaved-thinking-2025-05-14"],
+    clear_thinking={
+        "keep": "all"           # Garder tous les blocs thinking
+        # ou "keep": {"type": "thinking_turns", "value": 1}
+        # ou "keep": "none"     # Supprimer tous les blocs thinking
+    },
+    ...
+)
+```
+
+### 11.4 Batch Processing — Traitement Massif
+
+Pour traiter des centaines de requêtes à moindre coût (-50%) avec un délai de traitement plus long :
+
+```python
+# Créer un batch de requêtes
+batch = client.messages.batches.create(
+    requests=[
+        {
+            "custom_id": f"test-generation-{i}",
+            "params": {
+                "model": "claude-haiku-4-5-20251001",
+                "max_tokens": 1024,
+                "messages": [{"role": "user", "content": f"Génère un test pour {func}"}]
+            }
+        }
+        for i, func in enumerate(list_of_functions)
+    ]
+)
+
+# Récupérer les résultats (traitement asynchrone)
+results = client.messages.batches.results(batch.id)
+```
+
+**Cas d'usage :** générer 100 tests unitaires, documenter 200 fonctions, analyser des milliers de fichiers → **-50% de coût** vs appels synchrones.
+
+---
+
+## PARTIE 12 — CHOISIR LE BON MODÈLE
+
+### 12.1 La Règle des 3 Niveaux
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    HIÉRARCHIE DES MODÈLES                    │
+│  HAIKU (rapide, économique)                                   │
+│  Coût : $0.80/1M input, $4/1M output                        │
+│  → Classification, extraction, formatage                     │
+│  → Génération répétitive (tests, doc, commentaires)         │
+│  → Tâches où la qualité n'est pas critique                  │
 │                                                              │
-│  HAIKU (rapide, économique)                                  │
-│  → Tâches simples et répétitives                            │
-│  → Classification, extraction, formatage                    │
-│  → Tests/résumés rapides                                     │
-│  → Coût : ~$0.80/1M input tokens                           │
-│                                                              │
-│  SONNET (équilibré, recommandé par défaut)                  │
+│  SONNET (équilibré — le choix par défaut)                    │
+│  Coût : $3/1M input, $15/1M output                          │
 │  → Développement quotidien                                   │
-│  → Debugging, refactoring, documentation                    │
-│  → Analyse de code, revues                                   │
-│  → Coût : ~$3/1M input tokens                              │
+│  → Debugging, refactoring, review de code                   │
+│  → Analyse et explication de code                           │
+│  → 90% des cas d'usage de développement                    │
 │                                                              │
 │  OPUS (le plus puissant)                                     │
-│  → Problèmes complexes nécessitant raisonnement profond     │
-│  → Architecture système, algorithmes non triviaux           │
+│  Coût : $15/1M input, $75/1M output                         │
+│  → Architecture système complexe                            │
+│  → Algorithmes non triviaux, problèmes ouverts             │
 │  → Décisions critiques et irréversibles                     │
-│  → Coût : ~$15/1M input tokens                             │
+│  → En tant qu'Advisor avec Sonnet exécuteur                │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-### Stratégie en pratique
+### 12.2 Planning d'une Session Type
 
 ```
-Session de développement type :
-
-9h00 - Planification architecture    → OPUS    (décision critique)
-9h30 - Implémentation des features   → SONNET  (travail principal)
-15h00 - Génération de tests unitaires → HAIKU   (tâche répétitive)
-16h00 - Debugging complexe           → SONNET  (analyse précise)
-17h00 - Génération de doc/README     → HAIKU   (formatage simple)
+09h00 - Architecture du module auth     → OPUS    (décision critique)
+09h30 - Implémentation des endpoints    → SONNET  (travail principal)
+14h00 - Génération de 50 tests         → HAIKU   (répétitif)
+15h00 - Debug comportement inattendu   → SONNET  (analyse précise)
+16h30 - Génération documentation API   → HAIKU   (formatage)
+17h00 - Review de la PR finale         → SONNET  (jugement global)
 ```
 
-> [!example] Économie par le bon choix de modèle
-> Générer 100 fichiers de tests : Haiku vs Sonnet
-> Haiku : 100 × 2 000 tokens × $0.004 = $0.80
-> Sonnet : 100 × 2 000 tokens × $0.015 = $3.00
-> **Économie : $2.20 sur une seule tâche répétitive**
+### 12.3 Changer de Modèle dans la Session
+
+```bash
+# Dans l'interface Claude Code
+/model haiku    # Passer à Haiku pour les tâches simples
+/model sonnet   # Revenir à Sonnet
+/model opus     # Passer à Opus pour une analyse complexe
+```
 
 ---
 
-## 15. RTK et les Fichiers/Sorties Volumineuses
+## PARTIE 13 — OUTPUTS VOLUMINEUX ET RTK
 
-### RTK : Le Rust Token Killer
+### 13.1 RTK : Le Rust Token Killer
 
-"RTK" désigne le problème des sorties de compilateur Rust extrêmement verbeuses. Le compilateur Rust est réputé pour ses messages d'erreur détaillés — ce qui est une qualité pour les humains mais un gouffre à tokens pour l'IA.
+Le compilateur Rust est réputé pour ses messages d'erreur **extrêmement détaillés** — une qualité pour les humains, un gouffre à tokens pour les LLMs.
 
 ```bash
-# Une compilation Rust avec des warnings peut générer :
+# Une compilation Rust avec warnings peut générer 500-2000 tokens :
 $ cargo build
-   Compiling myproject v0.1.0
 warning: unused variable: `x`
   --> src/main.rs:15:9
    |
 15 |     let x = compute();
-   |         ^ help: if this is intentional, prefix it with an underscore: `_x`
-   |
+   |         ^ help: prefix with underscore: `_x`
    = note: `#[warn(unused_variables)]` on by default
 
-[... 200 lignes de warnings similaires ...]
-error[E0502]: cannot borrow `data` as mutable...
+[... 200 lignes de warnings détaillés ...]
+error[E0502]: cannot borrow `data` as mutable because it is also borrowed...
 [... 50 lignes d'explication du borrow checker ...]
 ```
 
-> [!warning] Impact RTK
-> Une sortie `cargo build` peut faire 500-2000 tokens. Si Claude la lit dans la session, c'est autant de contexte consommé par des logs.
-
-### Solutions au problème des sorties volumineuses
+**Solutions :**
 
 ```bash
-# 1. Filtrer avant d'envoyer à Claude
+# Filtrer seulement les erreurs
 cargo build 2>&1 | grep "^error" | head -20
 
-# 2. Rediriger vers un fichier, ne partager que l'essentiel
-cargo build 2> build_errors.txt
-# Puis : "voici les erreurs : [coller seulement les lignes error:]"
+# Mode quiet
+cargo build -q 2>&1 | grep "error\["
 
-# 3. Utiliser les flags silencieux
-cargo build -q 2>&1 | grep "error\[" 
+# Rediriger, ne partager que l'essentiel
+cargo build 2> /tmp/build_errors.txt
+# Puis : "voici les erreurs : $(grep 'error\[' /tmp/build_errors.txt)"
 
-# 4. Pour pytest Python
-pytest --tb=short -q  # au lieu de pytest --tb=long -v
+# Pour les tests Rust
+cargo test 2>&1 | grep -E "^(FAILED|error)" | head -30
 ```
 
-### Principe général sur les outputs de commandes
+### 13.2 Principe Général sur les Outputs de Commandes
 
 ```
-Avant de coller une sortie de commande dans Claude :
+Avant de coller une sortie dans Claude :
 1. Vérifier la longueur (>100 lignes = potentiellement problématique)
 2. Filtrer pour ne garder que les erreurs/warnings pertinents
 3. Ne jamais coller node_modules, stack traces Java entières, logs systèmes bruts
 
-Exemples de tailles typiques :
-  npm install : 50-200 lignes (OK si problème détecté)
-  cargo build (erreur) : 20-500 lignes (filtrer)
-  docker logs : illimité → TOUJOURS limiter avec --tail 50
-  pytest -v : OK si <50 tests, filtrer pour >100
+Tailles typiques et recommandations :
+  npm install    : 50-200 lignes → OK si problème détecté
+  cargo build    : jusqu'à 2000 lignes → TOUJOURS filtrer
+  docker logs    : illimité → TOUJOURS limiter avec --tail 50
+  pytest -v      : OK si <50 tests, filtrer pour >100
+  git log        : --oneline --last 20 pour ne pas noyer
+  make all       : dépend → filtrer les warnings répétitifs
+```
+
+```bash
+# Commandes "safe" pour Claude
+docker logs mon-conteneur --tail 50 --since 5m
+pytest --tb=short -q 2>&1 | tail -30
+git log --oneline -20
+journalctl -u mon-service --since "5 minutes ago" | tail -50
+npm run build 2>&1 | grep -E "error:|ERROR:" | head -20
 ```
 
 ---
 
-## 16. Peak Hours et Performances
+## PARTIE 14 — HYGIÈNE DE CONTEXTE
 
-### Impact des heures de pointe
-
-Les APIs LLM ont des performances variables selon la charge serveur :
-
-```
-Heures de pointe (US business hours, généralement) :
-  14h-22h heure française = 8h-16h EST
-  → Latences plus élevées
-  → Parfois rate limits plus stricts
-  → Débit de tokens/seconde réduit
-
-Heures creuses :
-  Nuit française (2h-8h)
-  Weekends
-  → Meilleures performances
-  → Pour les gros batches, préférer ces horaires
-```
-
-> [!tip] Stratégie batch processing
-> Si vous avez à générer beaucoup de contenu (ex: 50 fichiers de documentation), planifiez ça la nuit ou le week-end pour de meilleures performances et parfois des tarifs réduits selon les tiers.
-
----
-
-## 17. Hygiène de Contexte — Les Bonnes Pratiques
-
-### Les 10 règles d'or
+### 14.1 Les 10 Règles d'Or
 
 ```
 1. SESSION CIBLÉE
-   Une session = un objectif précis.
-   Ne pas mélanger "debug auth" et "refactoring DB" dans la même session.
+   Une session = un objectif précis. Ne pas mélanger
+   "debug auth" et "refactoring DB" dans la même session.
 
 2. FICHIERS PRÉCIS
    "Regarde src/auth/jwt.py lignes 45-80" > "regarde le code"
 
-3. FERMER AVANT DE COMMENCER
-   Lire les fichiers importants EN DERNIER avant la demande principale.
+3. LIRE EN DERNIER
+   Lire les fichiers importants EN DERNIER juste avant la demande.
 
-4. COMPACT PROACTIF
-   Ne pas attendre d'être à 90% de contexte → /compact à 60%
+4. /compact PROACTIF
+   Ne pas attendre 90% → /compact à 60% (ou auto-compact activé)
 
 5. RÉSUMÉ AVANT /clear
-   Toujours sauvegarder le contexte essentiel avant de tout effacer
+   Toujours sauvegarder le contexte essentiel avant de réinitialiser.
 
 6. GROUPER LES DEMANDES
-   3 questions dans 1 message > 3 messages séparés (3× moins de relectures)
+   3 questions dans 1 message > 3 messages séparés
 
 7. FEEDBACK EN LIGNE
-   "Non, modifie seulement la ligne 42" > "c'est pas ça, recommence tout"
+   "Non, modifie seulement la ligne 42" > "c'est pas ça, recommence"
 
 8. ÉVITER LES CONFIRMATIONS VIDES
-   "ok", "oui", "continue" sans contenu = tokens perdus pour peu de valeur
-   Préférer grouper avec la prochaine instruction vraiment utile
+   "ok" seul = tokens pour 0 valeur → grouper avec la prochaine instruction
 
 9. .claudeignore À JOUR
-   Maintenir .claudeignore quand de nouveaux dossiers volumineux apparaissent
+   Maintenir quand de nouveaux dossiers volumineux apparaissent
 
 10. MÉMOIRE POUR CE QUI DURE
     Ne pas répéter d'une session à l'autre → sauvegarder en mémoire
 ```
 
-### Calculer son efficacité
+### 14.2 Peak Hours et Performances
 
 ```
-Score d'efficacité token = (Valeur produite) / (Tokens consommés)
+Heures de pointe (API LLM) :
+  14h-22h heure française = 8h-16h EST (business hours US)
+  → Latences plus élevées
+  → Rate limits plus stricts
+  → Débit de tokens/seconde réduit
 
-Indicateurs positifs :
-✓ Ratio messages/tokens élevé (beaucoup d'actions par message)
-✓ Peu de corrections ("non refais") après une demande
-✓ Fichiers lus une seule fois (pas de relectures inutiles)
-✓ /compact déclenché avant saturation
+Heures creuses :
+  Nuit française (2h-8h)
+  Weekends
+  → Meilleures performances et débit
 
-Indicateurs négatifs :
-✗ Beaucoup de "non c'est pas ça" (ambiguïtés non clarifiées en amont)
-✗ Lire des fichiers volumineux non liés au problème
-✗ Longues conversations sans /compact
-✗ Messages de pure politesse sans contenu actionnable
+Pour les gros batches (génération massive de tests, docs) :
+  → Planifier hors heures de pointe ou utiliser le Batch API
 ```
 
----
-
-## 18. Application aux Autres IAs
-
-### ChatGPT / GPT-4o (OpenAI)
-
-```
-Similitudes avec Claude :
-- Fenêtre de contexte : 128K tokens (GPT-4o)
-- Prompt cache : oui (même mécanisme TTL ~5min en API)
-- System prompt : paramètre `system`
-- Lost in the Middle : même phénomène
-
-Différences :
-- Mémoire persistante intégrée dans l'interface (pas besoin de memory/)
-- Custom GPTs = équivalent de CLAUDE.md + skills intégrés
-- Pas de sous-agents natifs (sauf via Assistants API avec multi-threads)
-- /compact n'existe pas → utiliser "résume la conversation" manuellement
-
-Commandes équivalentes :
-/compact → "Résume ce qu'on a fait en 200 mots, décisions et état actuel"
-CLAUDE.md → System prompt du Custom GPT ou instructions personnalisées
-```
-
-### Google Gemini
-
-```
-Points forts :
-- Contexte 1M tokens (Gemini 2.0 Flash) → moins de problème de saturation
-- Intégration native Google Workspace (Docs, Sheets, Drive)
-- Multimodal natif (vidéo, audio, images)
-
-Points faibles :
-- Pas d'équivalent CLAUDE.md natif
-- Moins d'outils de gestion de contexte
-- Interface moins adaptée au développement
-
-Optimisations similaires :
-- Grouper les questions (même économie de relectures)
-- Filtrer les outputs de commandes
-- Utiliser des conversations dédiées par sujet
-```
-
-### Modèles Locaux — Ollama / LM Studio / OpenCode
-
-> [!tip] Avantage majeur du local
-> **Zéro coût par token**. Les contraintes économiques disparaissent, mais les contraintes de performance restent.
-
-```
-┌──────────────────────────────────────────────────────┐
-│              MODÈLES LOCAUX (Ollama, LM Studio)      │
-│                                                      │
-│  Avantages :                                         │
-│  ✓ Gratuit à l'usage (coût = électricité + GPU)     │
-│  ✓ Confidentialité totale (données ne quittent pas  │
-│    votre machine)                                    │
-│  ✓ Disponible hors ligne                            │
-│  ✓ Pas de peak hours ni de rate limits              │
-│                                                      │
-│  Inconvénients :                                     │
-│  ✗ Fenêtre contexte réduite (8K-32K selon le modèle)│
-│  ✗ Qualité inférieure sur tâches complexes          │
-│  ✗ Lent sans GPU puissant                           │
-│  ✗ Pas d'outils natifs (pas de sub-agents, MCP      │
-│    limité selon le client)                          │
-└──────────────────────────────────────────────────────┘
-```
-
-### Setup Ollama
-
-```bash
-# Installation
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Télécharger un modèle
-ollama pull llama3.3        # 8B params, bon équilibre
-ollama pull codellama:34b   # Spécialisé code, meilleur que llama pour dev
-ollama pull deepseek-coder-v2  # Excellent pour le code
-
-# Lancer
-ollama run codellama:34b
-
-# API locale (compatible OpenAI)
-curl http://localhost:11434/api/generate \
-  -d '{"model": "codellama", "prompt": "Explique malloc en C"}'
-```
-
-### OpenCode — Claude Code avec modèles locaux
-
-**OpenCode** est un client CLI open-source compatible avec Ollama et autres backends locaux, offrant une expérience similaire à Claude Code :
-
-```bash
-# Installation OpenCode
-npm install -g @opencode-ai/opencode
-
-# Configuration pour Ollama
-opencode config set model ollama/codellama:34b
-opencode config set base-url http://localhost:11434/v1
-```
-
-### Bonnes pratiques spécifiques aux modèles locaux
-
-```
-Adapter au contexte réduit (8K-32K tokens) :
-1. Sessions encore plus courtes et ciblées
-2. Fichiers courts (pas de longs fichiers 500+ lignes)
-3. Résumés manuels fréquents
-4. Découper les projets en micro-tâches indépendantes
-5. Utiliser des modèles spécialisés (codellama pour le code,
-   mistral pour la rédaction, etc.)
-
-Modèles recommandés par cas d'usage (local) :
-  Code général   : deepseek-coder-v2 ou codellama:34b
-  Chat/rédaction : llama3.3:70b ou mistral-large
-  Tâches rapides : llama3.2:3b ou phi4
-  Multilingual   : mistral-nemo
-```
-
----
-
-## 19. Stratégies Combinées — Exemples Complets
-
-### Scenario 1 : Nouveau projet (session initiale)
-
-```
-Étape 1 : Créer CLAUDE.md + .claudeignore avant tout
-Étape 2 : Une session = "comprendre l'architecture"
-           → Lire README, structure, fichiers clés
-           → /compact après cette phase
-Étape 3 : Sessions suivantes par module
-           "aujourd'hui : module auth seulement"
-```
-
-### Scenario 2 : Debugging d'un bug difficile
-
-```
-1. Session dédiée au bug
-2. Fournir : message d'erreur filtré (pas le log complet)
-3. Fichier(s) concerné(s) précis (pas "tout le projet")
-4. Hack 95% : "Ne propose aucun code tant que tu n'es pas
-   sûr à 95% de la cause. Pose des questions d'abord."
-5. Après résolution → /compact + note mémoire de la cause
-```
-
-### Scenario 3 : Génération massive (documentation, tests)
-
-```
-1. Utiliser HAIKU (pas Sonnet ni Opus)
-2. Lancer en dehors des peak hours si possible
-3. Sub-agents parallèles par module (si budget le permet)
-4. Template dans CLAUDE.md pour le format attendu
-5. Output par petits blocs (pas "génère les 50 tests d'un coup")
-```
-
-### Scenario 4 : Session longue (>3h de travail)
-
-```
-Toutes les ~45 min :
-  - Vérifier le % de contexte utilisé (/context)
-  - Si >60% → /compact
-  - Si changement de sujet → résumé + /clear
-
-En fin de journée :
-  - Résumé structuré → sauvegarde mémoire
-  - Note des décisions importantes
-  - État des tâches en cours
-```
-
----
-
-## 20. Tableau de Référence Rapide
-
-### Commandes et leur impact token
-
-| Action | Impact tokens | Quand |
-|--------|--------------|-------|
-| /compact | Réduit contexte ×5-10 | À 60% de contexte |
-| /clear | Remet à zéro | Changement de sujet |
-| /context | Lecture seule | Vérifier l'état |
-| CLAUDE.md | Économise répétitions | Toujours en place |
-| .claudeignore | Évite exploration | Toujours en place |
-| Sub-agents | ×2-3 coût, ×3 vitesse | Tâches indépendantes longues |
-| Plan Mode | Évite corrections | Avant gros changements |
-| Haiku | ×4-19× moins cher | Tâches répétitives |
-
-### Checklist avant chaque session
+### 14.3 Checklist Pré-Session
 
 ```
 □ CLAUDE.md à jour pour ce projet ?
 □ .claudeignore configuré ?
 □ Objectif de la session défini précisément ?
 □ Bon modèle sélectionné (Haiku/Sonnet/Opus) ?
-□ Sorties de commandes filtrées avant partage ?
 □ Auto-compact configuré à 60% ?
-□ Résumé de la session précédente disponible ?
+□ Résumé de la session précédente disponible si continuation ?
+□ Outputs de commandes filtrés avant partage ?
+□ Advisor activé si tâche d'agent complexe ? (API uniquement)
 ```
+
+---
+
+## PARTIE 15 — APPLICATION AUX AUTRES IAs
+
+### 15.1 ChatGPT / GPT-4o (OpenAI)
+
+```
+Similitudes avec Claude :
+  ✓ Fenêtre contexte : 128K tokens (GPT-4o)
+  ✓ Prompt cache : oui (même mécanisme TTL)
+  ✓ Lost in the Middle : même phénomène
+  ✓ Mémoire persistante intégrée (dans l'interface web)
+
+Différences :
+  ✗ Custom GPTs = équivalent CLAUDE.md + skills intégrés
+  ✗ Pas de sub-agents natifs (sauf via Assistants API)
+  ✗ Pas de /compact natif → "résume en 200 mots" manuel
+
+Équivalences de commandes :
+  /compact → "Résume ce qu'on a fait : décisions et état actuel"
+  CLAUDE.md → System prompt du Custom GPT
+  .claudeignore → Pas d'équivalent (gérer manuellement)
+  /model → Sélectionner GPT-4o-mini (=Haiku) vs GPT-4o (=Sonnet)
+```
+
+### 15.2 Google Gemini
+
+```
+Points forts :
+  ✓ Contexte 1M tokens (Gemini 2.0 Flash) → saturation rare
+  ✓ Intégration native Google Workspace
+  ✓ Multimodal natif (vidéo, audio, images, code)
+
+Points faibles :
+  ✗ Pas d'équivalent CLAUDE.md natif
+  ✗ Moins d'outils de gestion de contexte
+  ✗ Interface moins adaptée au développement pur
+
+Mêmes bonnes pratiques s'appliquent :
+  → Grouper les questions
+  → Filtrer les outputs de commandes
+  → Sessions dédiées par sujet
+```
+
+### 15.3 Modèles Locaux — Ollama, LM Studio, OpenCode
+
+> [!tip] L'avantage majeur : zéro coût par token
+> Les contraintes économiques disparaissent. Les contraintes de performance (qualité, vitesse, taille contexte) restent.
+
+```
+┌──────────────────────────────────────────────────────┐
+│           COMPARATIF : LOCAL vs CLOUD                │
+│                                                      │
+│  LOCAL                    CLOUD (Claude/GPT)         │
+│  ✓ Gratuit à l'usage      ✓ Qualité supérieure      │
+│  ✓ Confidentialité totale ✓ Contexte large (200K+)  │
+│  ✓ Disponible hors ligne  ✓ Toujours à jour         │
+│  ✓ Pas de rate limits     ✓ Outils natifs           │
+│  ✗ Qualité inférieure     ✗ Coût variable           │
+│  ✗ Contexte réduit (8-32K)✗ Données envoyées        │
+│  ✗ Lent sans GPU puissant ✗ Dépendance réseau       │
+│  ✗ Peu d'outils natifs                              │
+└──────────────────────────────────────────────────────┘
+```
+
+**Installation Ollama :**
+
+```bash
+# Linux/macOS
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Windows : télécharger l'installeur depuis ollama.ai
+
+# Modèles recommandés
+ollama pull llama3.3           # Polyvalent, 8B params
+ollama pull codellama:34b      # Spécialisé code (meilleur pour dev)
+ollama pull deepseek-coder-v2  # Excellent code, raisonnement fort
+ollama pull phi4               # Très rapide, petits projets
+ollama pull mistral-nemo       # Bon multilingue
+
+# Lancer
+ollama run codellama:34b
+
+# API locale (compatible OpenAI API)
+curl http://localhost:11434/api/generate \
+  -d '{"model": "codellama", "prompt": "Explique malloc en C"}'
+```
+
+**LM Studio — Interface graphique pour modèles locaux :**
+
+```
+1. Télécharger LM Studio (lmstudio.ai)
+2. Chercher et télécharger des modèles GGUF
+3. Activer le serveur local dans l'onglet "Local Server"
+4. Endpoint : http://localhost:1234/v1 (compatible OpenAI)
+```
+
+**OpenCode — Claude Code avec modèles locaux :**
+
+```bash
+# Installation
+npm install -g opencode-ai
+
+# Configurer pour Ollama
+opencode config set model ollama/codellama:34b
+opencode config set base-url http://localhost:11434/v1
+
+# Ou LM Studio
+opencode config set model lmstudio/deepseek-coder
+opencode config set base-url http://localhost:1234/v1
+
+# Utiliser normalement
+opencode
+```
+
+**Modèles recommandés par cas d'usage (local) :**
+
+| Cas d'usage | Modèle recommandé |
+|-------------|-------------------|
+| Code général | `deepseek-coder-v2` ou `codellama:34b` |
+| Chat/Rédaction | `llama3.3:70b` ou `mistral-large` |
+| Tâches rapides | `llama3.2:3b` ou `phi4` |
+| Multilingue | `mistral-nemo` |
+| Raisonnement | `deepseek-r1` |
+
+**Adapter au contexte réduit des modèles locaux :**
+
+```
+Sessions encore plus courtes et ciblées
+Fichiers courts (éviter les fichiers >300 lignes d'un coup)
+Résumés manuels fréquents
+Découper les projets en micro-tâches indépendantes
+Utiliser des modèles spécialisés pour chaque type de tâche
+```
+
+---
+
+## PARTIE 16 — STRATÉGIES COMBINÉES : SCÉNARIOS RÉELS
+
+### Scenario 1 : Premier jour sur un nouveau projet
+
+```
+Étape 1 : Initialisation (5 min)
+  → cd mon-projet && claude
+  → /init                          # Génère CLAUDE.md automatiquement
+  → Ajuster CLAUDE.md selon les besoins spécifiques
+  → Créer .claudeignore
+
+Étape 2 : Exploration (1 session dédiée)
+  → "Donne-moi une vue d'ensemble de l'architecture"
+  → /compact après avoir compris la structure
+  → Note les décisions importantes en mémoire
+
+Étape 3 : Sessions de travail ciblées
+  → Une session = un module ou une feature
+  → Nommer l'objectif dès le premier message
+```
+
+### Scenario 2 : Debugging d'un bug difficile
+
+```
+1. Session dédiée au bug
+2. Fournir : message d'erreur FILTRÉ (pas le log complet)
+3. Fichiers concernés PRÉCIS (pas "tout le projet")
+4. Hack 95% : "Ne propose aucun code tant que tu n'es pas
+   sûr à 95% de la cause. Pose des questions d'abord."
+5. Après résolution → mémoriser la cause pour éviter récidive
+```
+
+### Scenario 3 : Génération massive (100 tests, 50 docs)
+
+```
+1. Utiliser HAIKU (4× moins cher que Sonnet)
+2. Batch API si >20 fichiers (-50% coût supplémentaire)
+3. Template dans CLAUDE.md pour le format attendu
+4. Hors peak hours si possible
+5. Générer par petits blocs (10 à la fois) pour valider la qualité
+```
+
+### Scenario 4 : Agent complexe multi-étapes (API)
+
+```
+1. Utiliser l'Advisor Tool : Sonnet exécuteur + Opus conseiller
+2. Activer le cache advisor si >3 appels prévus
+3. Ajouter un prompt système avec les timings d'appel advisor
+4. Limiter la longueur des réponses advisor (100 mots max)
+5. max_uses: 5 pour éviter les coûts non maîtrisés
+```
+
+### Scenario 5 : Session longue (journée de travail)
+
+```
+Toutes les ~45 minutes :
+  → Vérifier le % de contexte (/context)
+  → Si >60% → /compact
+  → Si changement de sujet → résumé + /clear
+
+Fin de journée :
+  → Résumé structuré → sauvegarde mémoire
+  → État des tâches en cours noté
+  → Prochaine session : coller le résumé en premier message
+```
+
+---
+
+## Tableau de Référence Rapide
+
+### Commandes et Impact Token
+
+| Action | Impact tokens | Quand utiliser |
+|--------|--------------|----------------|
+| `/init` | Génère CLAUDE.md | Démarrage de projet |
+| `/compact` | Réduit contexte ×5-10 | À 60% de contexte |
+| `/clear` | Remet à zéro | Changement de sujet |
+| `/context` | Lecture seule | Vérifier l'état |
+| `/model haiku` | ×4-19× moins cher | Tâches répétitives |
+| CLAUDE.md | Économise répétitions | Toujours en place |
+| .claudeignore | Évite exploration | Toujours en place |
+| Sub-agents | ×2-3 coût, ×3 vitesse | Tâches indépendantes longues |
+| Plan Mode | Évite corrections | Avant gros changements |
+| Advisor Tool | ≈Opus qualité, ≈Sonnet coût | Agents complexes API |
+| Batch API | -50% coût, async | Génération massive |
 
 ---
 
 ## Carte Mentale ASCII
 
 ```
-                    MAÎTRISE CLAUDE & LLM
+              CLAUDE CODE — MAÎTRISE COMPLÈTE
                            │
-           ┌───────────────┼───────────────┐
-           ▼               ▼               ▼
-      COMPRENDRE       CONFIGURER       OPTIMISER
-           │               │               │
-    ┌──────┴──────┐  ┌─────┴──────┐  ┌────┴──────┐
-    ▼             ▼  ▼            ▼  ▼           ▼
- Tokens      Relecture  CLAUDE.md  .claudeignore  /compact  Modèle
- = $$$       exponen-   (règles    (exclusions)   /clear    adapté
-             tielle     perma)                   /context
-                │           │
-         Lost in Middle  Memory/
-         = milieu oublié   (persistance)
-                │
-         Prompt Cache
-         TTL 5 minutes
-         → rester actif
-                │
-    ┌───────────┼───────────┐
-    ▼           ▼           ▼
- Sub-agents  Plan Mode   Skills
- (///)       (95%        (raccourcis)
- coûteux     confiance)
- mais rapide
-                │
-    ┌───────────┼────────────┐
-    ▼           ▼            ▼
-  Autres IAs  Local      Hygiène
-  GPT/Gemini  Ollama/    contexte
-              LM Studio  = sessions
-                          ciblées
+         ┌─────────────────┼──────────────────┐
+         ▼                 ▼                  ▼
+    DÉMARRAGE          CONFIGURATION       CONTEXTE
+         │                 │                  │
+  Installation         CLAUDE.md          Relecture
+  npm install -g       .claudeignore      exponentielle
+  claude login         config.json        Lost in Middle
+  /init → CLAUDE.md    Mémoire/           Prompt Cache 5min
+                        memory/            /compact /clear
+                                          Auto-compact 60%
+                           │
+         ┌─────────────────┼──────────────────┐
+         ▼                 ▼                  ▼
+    SUB-AGENTS          HOOKS              ADVISOR TOOL
+    Parallèles          PreToolUse         (BETA 2026)
+    Worktree isolé      PostToolUse        Executor+Advisor
+    Coût ×2-3           Notification       Sonnet+Opus
+    Vitesse ×3          Stop               ≈Opus, ≈Sonnet coût
+                           │
+         ┌─────────────────┼──────────────────┐
+         ▼                 ▼                  ▼
+      MODÈLES           TOKENS             AUTRES IAs
+      Haiku (éco)       RTK filtre         GPT-4o Custom GPTs
+      Sonnet (défaut)   Outputs limités    Gemini 1M ctx
+      Opus (puissant)   Peak hours         Ollama (local, free)
+      /model switch     Batch API -50%     LM Studio
+                        Extended Thinking  OpenCode
 ```
 
 ---
 
 ## Exercices Pratiques
 
-### Exercice 1 — Configurer son environnement
+### Exercice 1 — Premier Setup Complet
 
-Créer pour un projet existant :
-1. Un `CLAUDE.md` de 200-400 tokens avec les règles du projet
-2. Un `.claudeignore` excluant les dossiers générés
-3. Comparer les tokens consommés sur 5 messages avant/après
+1. Installer Claude Code sur ta machine
+2. S'authentifier avec `claude login`
+3. Choisir un de tes projets existants
+4. Lancer `/init` et examiner le CLAUDE.md généré
+5. Créer un `.claudeignore` adapté à la stack
+6. Vérifier avec `/context` que le contexte est optimal
 
-### Exercice 2 — Mesurer la relecture exponentielle
+### Exercice 2 — Mesurer la Relecture Exponentielle
 
-1. Ouvrir une nouvelle session Claude Code
-2. Envoyer 10 messages de ~100 mots chacun
-3. Vérifier `/context` après chaque message
-4. Calculer la progression réelle des tokens
-5. Comparer avec la formule n×(n+1)/2
+1. Ouvrir une nouvelle session
+2. Envoyer 10 messages de ~50 mots chacun
+3. Faire `/context` après chaque message (noter les tokens)
+4. Calculer le coût réel vs. contenu utile
+5. Recommencer en groupant les 10 questions en 1 message
 
-### Exercice 3 — Pratiquer le combo résumé + /clear
+### Exercice 3 — Pratiquer le Combo Résumé + /clear
 
-1. Travailler 30 min sur une tâche complexe
+1. Travailler 30 min sur un bug complexe
 2. Demander un résumé structuré (décisions, état, prochaines étapes)
-3. Faire /clear
+3. Faire `/clear`
 4. Reprendre avec le résumé collé en premier message
-5. Observer que Claude retrouve le contexte immédiatement
+5. Comparer l'efficacité avec une session sans /clear
 
-### Exercice 4 — Comparer Haiku vs Sonnet
+### Exercice 4 — Comparer les Modèles sur une Vraie Tâche
 
-Choisir une tâche répétitive (générer 10 tests unitaires similaires) :
-1. Faire avec Haiku, noter qualité et coût estimé
-2. Faire avec Sonnet, noter qualité et coût estimé
-3. Décider si la différence de qualité justifie le prix pour cette tâche
+1. Choisir une tâche répétitive (générer 10 tests unitaires)
+2. Faire avec `/model haiku` → noter qualité et satisfaction
+3. Faire avec `/model sonnet` → comparer
+4. Décider si la différence justifie le coût ×4 pour ce type de tâche
+
+### Exercice 5 — Créer un Hook Utile
+
+1. Identifier une action répétitive dans ton workflow
+   (ex: lancer les tests après chaque modification)
+2. Écrire le hook PostToolUse correspondant dans `config.json`
+3. Tester que le hook se déclenche correctement
+4. Vérifier que l'output du hook ne pollue pas inutilement le contexte
 
 ---
 
 ## Liens
 
-- [[01 - IA Assistants de Code]] — Présentation générale des assistants IA
-- [[02 - IA et Productivite Dev]] — Intégration CI/CD, agents, génération de tests
-- [[04 - CI-CD avec GitHub Actions]] — Automatiser avec des pipelines (context MCP)
-- [[01 - Git et GitHub]] — Workflows Git avec assistance IA
+- [[01 - IA Assistants de Code]] — Panorama des assistants IA (Copilot, ChatGPT, Claude)
+- [[02 - IA et Productivite Dev]] — Intégration CI/CD, génération de tests, agents
+- [[04 - CI-CD avec GitHub Actions]] — Automatiser son pipeline avec Claude
+- [[01 - Git et GitHub]] — Workflows Git assistés par IA (`/commit`, revues)
+- [[07 - Python Async et Concurrence]] — Comprendre asyncio (utile pour l'API Claude)
+- [[09 - APIs REST avec FastAPI]] — Construire ses propres agents sur l'API Claude
 ```
