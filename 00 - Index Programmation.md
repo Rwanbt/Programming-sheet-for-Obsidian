@@ -134,13 +134,22 @@
 |---|-------|-------------|
 | 1 | [[02 - Securite Web OWASP]] | Top 10 OWASP, XSS, CSRF, injection, HTTPS, CORS |
 
-### IA pour le Développement
+### IA pour le Développement — Trimestre Complet
 
 | # | Cours | Description |
 |---|-------|-------------|
-| 1 | [[01 - IA Assistants de Code]] | Copilot, ChatGPT, Claude, prompt engineering |
-| 2 | [[02 - IA et Productivite Dev]] | Génération tests/docs, agents, MCP, CI/CD |
-| 3 | [[03 - Claude et Claude Code Maitrise Avancee]] | Installation, config, tokens, prompt cache, CLAUDE.md, hooks, Advisor Tool, sub-agents, Ollama |
+| 1 | [[01 - Panorama des IA pour Developpeurs]] | Toutes les familles de modèles, benchmarks, cloud vs local, tableau comparatif |
+| 2 | [[02 - Comprendre les LLMs et les Tokens]] | Architecture Transformer, tokenisation, context window, quantisation, hallucinations |
+| 3 | [[03 - Prompt Engineering pour le Code]] | Techniques zero/few-shot, chain-of-thought, templates debug/refactor/tests, hack 95% |
+| 4 | [[04 - Claude et Claude Code Maitrise Avancee]] | Installation, CLAUDE.md, hooks, sub-agents, Advisor Tool, MCP, prompt cache, Ollama |
+| 5 | [[05 - ChatGPT Codex et GitHub Copilot]] | GPT-4o, o1/o3, GitHub Copilot setup, API OpenAI, Canvas, Code Interpreter |
+| 6 | [[06 - Gemini Mistral et Alternatives Cloud]] | Gemini 2.5 Pro, Gemini CLI, Codestral, DeepSeek, Qwen, Llama, accès gratuits |
+| 7 | [[07 - Integrations IDE et Extensions]] | VS Code (Copilot, Continue.dev, Cline), Cursor, Windsurf, JetBrains AI |
+| 8 | [[08 - OpenCode et CLI Alternatifs]] | OpenCode, Aider (auto-commits), Goose, Amp, usage avec Ollama |
+| 9 | [[09 - IA Locale avec Ollama]] | Installation, Qwen/DeepSeek/Llama locaux, API compatible OpenAI, serveur équipe |
+| 10 | [[10 - LM Studio et Hardware Local]] | Interface GUI, quantisation Q4/Q8, GPU vs CPU, requirements hardware, Jan/LocalAI |
+| 11 | [[11 - IA Confidentialite et Entreprise]] | RGPD, politiques providers, Azure/Vertex/Bedrock, auto-hébergement, vLLM, Tabby |
+| 12 | [[12 - Strategies Multi-Modeles et Workflows]] | Matrice coût/qualité, routing des tâches, stacks par profil, plan d'action 4 semaines |
 
 ---
 
