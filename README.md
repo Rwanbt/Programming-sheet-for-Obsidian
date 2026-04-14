@@ -1,6 +1,6 @@
 # Programming Sheet for Obsidian
 
-**86 cours de programmation complets, en francais, au format Obsidian.**
+**95 cours de programmation complets, en francais, au format Obsidian.**
 
 > Un coffre Obsidian couvrant 3 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, SQL, Rust, et DevOps.
 
@@ -10,8 +10,8 @@
 
 | | |
 |---|---|
-| **Notes** | 86 fichiers Markdown |
-| **Lignes** | ~91 500 lignes de contenu |
+| **Notes** | 95 fichiers Markdown |
+| **Lignes** | ~102 000 lignes de contenu |
 | **Langages** | C, Python, JavaScript, SQL, Rust, HTML/CSS, Bash, HCL, YAML |
 | **Langue** | Francais (termes techniques en anglais) |
 | **Format** | Obsidian Markdown avec `[[wikilinks]]`, callouts, diagrammes ASCII |
@@ -171,9 +171,19 @@ Programming-sheet-for-Obsidian/
 |-- Git/                                (1 note)
 |   +-- 01 - Git et GitHub
 |
-+-- IA pour le Dev/                     (2 notes)
-    |-- 01 - IA Assistants de Code
-    +-- 02 - IA et Productivite Dev
++-- IA pour le Dev/                     (12 notes)
+    |-- 01 - Panorama des IA pour Developpeurs
+    |-- 02 - Comprendre les LLMs et les Tokens
+    |-- 03 - Prompt Engineering pour le Code
+    |-- 04 - Claude et Claude Code Maitrise Avancee
+    |-- 05 - ChatGPT Codex et GitHub Copilot
+    |-- 06 - Gemini Mistral et Alternatives Cloud
+    |-- 07 - Integrations IDE et Extensions
+    |-- 08 - OpenCode et CLI Alternatifs
+    |-- 09 - IA Locale avec Ollama
+    |-- 10 - LM Studio et Hardware Local
+    |-- 11 - IA Confidentialite et Entreprise
+    +-- 12 - Strategies Multi-Modeles et Workflows
 ```
 
 ---
@@ -208,7 +218,7 @@ Backend Python, frontend HTML/CSS/JS, bases de donnees SQL, tests, CI/CD et secu
 | Tests | 3 | pytest, TDD, integration, E2E (Selenium/Playwright), linting |
 | DevOps | 3 | Docker avance, Docker Compose, CI/CD GitHub Actions |
 | Securite Web | 1 | OWASP Top 10, XSS, CSRF, CORS, HTTPS, JWT |
-| IA pour le Dev | 2 | Copilot, Claude, prompt engineering, agents, MCP |
+| IA pour le Dev | 12 | LLMs, tokens, prompt engineering, Claude/GPT/Gemini/Mistral, IDE integrations, Ollama, LM Studio, confidentialite entreprise, multi-modeles |
 | **Projet** | **HBnB** | **Clone AirBnB complet (API + frontend + auth + DB)** |
 
 ### Trimestre 3 — DevOps & Cloud
