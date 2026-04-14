@@ -2,7 +2,7 @@
 
 **95 cours de programmation complets, en francais, au format Obsidian.**
 
-> Un coffre Obsidian couvrant 3 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, SQL, Rust, et DevOps.
+> Un coffre Obsidian couvrant 4 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, SQL, Rust, DevOps, et un trimestre complet dedie a l'IA pour les developpeurs (Claude, GPT-5.4, Gemini 3.1, modeles locaux, integrations IDE, confidentialite entreprise).
 
 ---
 
@@ -23,6 +23,7 @@
 - Etudiants en ecole de programmation (Holberton School, 42, etc.)
 - Developpeurs debutants qui veulent des cours structures et progressifs
 - Toute personne souhaitant apprendre la programmation de zero a deployement en production
+- Developpeurs souhaitant maitriser les outils IA (Claude Code, Copilot, Cursor, Ollama...) et travailler plus intelligemment
 
 Chaque note est concue pour qu'un **novice complet** puisse, apres lecture, **ecrire et mettre en pratique** toutes les connaissances abordees.
 
@@ -218,7 +219,6 @@ Backend Python, frontend HTML/CSS/JS, bases de donnees SQL, tests, CI/CD et secu
 | Tests | 3 | pytest, TDD, integration, E2E (Selenium/Playwright), linting |
 | DevOps | 3 | Docker avance, Docker Compose, CI/CD GitHub Actions |
 | Securite Web | 1 | OWASP Top 10, XSS, CSRF, CORS, HTTPS, JWT |
-| IA pour le Dev | 12 | LLMs, tokens, prompt engineering, Claude/GPT/Gemini/Mistral, IDE integrations, Ollama, LM Studio, confidentialite entreprise, multi-modeles |
 | **Projet** | **HBnB** | **Clone AirBnB complet (API + frontend + auth + DB)** |
 
 ### Trimestre 3 — DevOps & Cloud
@@ -240,6 +240,25 @@ Un parcours complet pour apprendre Rust en parallele, avec des comparaisons cons
 | Notes | Sujets cles |
 |-------|-------------|
 | 7 | Ownership, borrowing, lifetimes, structs/enums, pattern matching, traits, generiques, iterateurs, projet CLI complet |
+
+### Trimestre Bonus — IA pour le Developpeur
+
+Un trimestre complet dedie a l'utilisation intelligente de l'IA dans le developpement logiciel. Couvre tous les outils cloud et locaux, les integrations IDE, la confidentialite en entreprise et les strategies multi-modeles. **Mis a jour avril 2026.**
+
+| # | Note | Sujets cles |
+|---|------|-------------|
+| 01 | Panorama des IA pour Developpeurs | Claude, GPT-5.4, Gemini 3.1, DeepSeek V4, Qwen3, Llama 4, Gemma 4, benchmarks |
+| 02 | Comprendre les LLMs et les Tokens | Architecture Transformer, tokenisation, context window, MoE, quantisation |
+| 03 | Prompt Engineering pour le Code | Zero/few-shot, chain-of-thought, templates debug/refactor/tests, hack 95% |
+| 04 | Claude et Claude Code Maitrise Avancee | Installation, CLAUDE.md, hooks, sub-agents, Advisor Tool, MCP, prompt cache |
+| 05 | ChatGPT Codex et GitHub Copilot | GPT-5.4, o3/o4, GitHub Copilot setup, API OpenAI, Canvas |
+| 06 | Gemini Mistral et Alternatives Cloud | Gemini 3.1 Pro/Flash, Codestral 2508, Devstral, Qwen3, DeepSeek V4, Llama 4 |
+| 07 | Integrations IDE et Extensions | VS Code (Continue.dev, Cline, Copilot), Cursor, Windsurf, JetBrains AI |
+| 08 | OpenCode et CLI Alternatifs | OpenCode multi-modele, Aider (auto-commits), Goose, usage avec Ollama |
+| 09 | IA Locale avec Ollama | Gemma 4, Qwen3-Coder-Next, Llama 4 Scout, API OpenAI-compatible, serveur equipe |
+| 10 | LM Studio et Hardware Local | Interface GUI, quantisation Q4/Q8, MoE vs dense, requirements GPU/CPU |
+| 11 | IA Confidentialite et Entreprise | RGPD, politiques providers, Azure/Bedrock/Vertex, vLLM, Tabby, classification |
+| 12 | Strategies Multi-Modeles et Workflows | Matrice cout/qualite 2026, routing des taches, stacks par profil |
 
 ---
 
@@ -263,21 +282,35 @@ Chaque note suit un format pedagogique coherent :
 ## Parcours recommande
 
 ```
+--- TRIMESTRE 1 : Fondations C & Systeme ---
 Semaine 1-2    : Terminal + Git + Introduction au C
 Semaine 3-4    : Pointeurs + Chaines + Structures + Memoire (malloc/free)
 Semaine 5-6    : Recursion + Listes chainees + Hash tables + GDB + Valgrind
 Semaine 7-8    : Arbres binaires + Tri/Big O + Printf + Makefiles
 Semaine 9      : PROJET SIMPLE SHELL
+
+--- TRIMESTRE 2 : Fullstack & Web ---
 Semaine 10-11  : Python (bases, POO, fichiers, modules)
 Semaine 12-13  : SQL + HTML/CSS + JavaScript (bases, DOM, async)
 Semaine 14-15  : APIs (Flask/FastAPI) + SQLAlchemy + Tests
 Semaine 16-17  : Docker avance + CI/CD + Securite OWASP
 Semaine 18     : PROJET HBnB (clone AirBnB)
+
+--- TRIMESTRE 3 : DevOps & Cloud ---
 Semaine 19-20  : Terraform + Ansible + Cloud
 Semaine 21-22  : Reseaux + Kubernetes + Monitoring
 Semaine 23-24  : DevSecOps + Observabilite avancee
 Semaine 25-27  : PROJET CAPSTONE DEVOPS
-En continu     : Rust (en parallele), IA pour le dev
+
+--- TRIMESTRE BONUS : IA pour le Developpeur ---
+Semaine 28-29  : Panorama IA + LLMs/Tokens + Prompt Engineering
+Semaine 30-31  : Claude Code + ChatGPT/Copilot + Gemini/Mistral/Alternatives
+Semaine 32-33  : Integrations IDE (Cursor, Continue.dev) + CLI agents (OpenCode, Aider)
+Semaine 34-35  : IA Locale (Ollama + LM Studio) + Confidentialite & Entreprise
+Semaine 36     : Strategies Multi-Modeles + Construction de ton stack IA personnel
+
+--- EN CONTINU ---
+Tout au long   : Rust (en parallele des T1-T3), IA comme outil quotidien
 ```
 
 ---
@@ -311,8 +344,10 @@ Ce projet est partage librement pour l'education. Utilisez-le, partagez-le, amel
 ## Auteurs
 
 - **Erwan Barat** ([@Rwanbt](https://github.com/Rwanbt)) — Etudiant Holberton School
-- **Claude Opus 4.6** — Assistant IA (generation et structuration du contenu)
+- **Claude Sonnet 4.6** — Assistant IA (generation et structuration du contenu)
 - **Gemini** — Assistant IA (discussions d'apprentissage et exercices)
+
+> **Note :** Le trimestre IA est mis a jour regulierement pour rester en phase avec l'evolution rapide de l'ecosysteme. Verifier la date de mise a jour dans chaque note.
 
 ---
 
