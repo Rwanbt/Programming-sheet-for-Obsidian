@@ -272,16 +272,6 @@ En continu     : Rust (en parallele), IA pour le dev
 
 ---
 
-## Sources
-
-Ces notes ont ete creees a partir de :
-
-- **Cheatsheets Holberton School** par [adamzou-lab](https://github.com/adamzou-lab) (16 fiches HTML)
-- **43 discussions d'apprentissage** avec Gemini (cours et exercices)
-- **Connaissances enrichies** pour combler les lacunes et approfondir chaque sujet
-
----
-
 ## Contribuer
 
 Les contributions sont les bienvenues ! Si tu trouves une erreur, un concept mal explique, ou si tu veux ajouter une note :
@@ -312,6 +302,7 @@ Ce projet est partage librement pour l'education. Utilisez-le, partagez-le, amel
 
 - **Erwan Barat** ([@Rwanbt](https://github.com/Rwanbt)) — Etudiant Holberton School
 - **Claude Opus 4.6** — Assistant IA (generation et structuration du contenu)
+- **Gemini** — Assistant IA (discussions d'apprentissage et exercices)
 
 ---
 
