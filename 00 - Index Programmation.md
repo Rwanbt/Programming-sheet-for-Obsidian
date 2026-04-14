@@ -140,6 +140,7 @@
 |---|-------|-------------|
 | 1 | [[01 - IA Assistants de Code]] | Copilot, ChatGPT, Claude, prompt engineering |
 | 2 | [[02 - IA et Productivite Dev]] | Génération tests/docs, agents, MCP, CI/CD |
+| 3 | [[03 - Claude et Claude Code Maitrise Avancee]] | Tokens, prompt cache, CLAUDE.md, sub-agents, hygiène de contexte, Ollama |
 
 ---
 
