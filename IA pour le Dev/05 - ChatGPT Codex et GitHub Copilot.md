@@ -1,5 +1,7 @@
 # 05 - ChatGPT, Codex et GitHub Copilot
 
+> [!info] Mis à jour avril 2026
+
 ## Qu'est-ce que l'écosystème OpenAI pour les développeurs ?
 
 OpenAI est l'une des organisations les plus influentes de l'histoire récente de l'intelligence artificielle. Fondée en 2015, elle a bouleversé l'industrie du logiciel avec la sortie de GPT-3 en 2020, puis de ChatGPT en novembre 2022 — qui a atteint 100 millions d'utilisateurs en deux mois, un record absolu. Pour les développeurs, OpenAI n'est pas seulement un chatbot : c'est un écosystème complet allant de l'assistant conversationnel aux outils d'intégration dans l'IDE, en passant par une API robuste et des modèles spécialisés pour le raisonnement.
@@ -37,8 +39,8 @@ Cette note couvre les trois piliers de l'offre OpenAI pour les développeurs : *
 │                            │                               │
 │                    ┌───────▼────────┐                      │
 │                    │  Modèles IA    │                      │
-│                    │  GPT-4o, o3,   │                      │
-│                    │  o3-mini, etc. │                      │
+│                    │  GPT-5.4, o3,  │                      │
+│                    │  o4-mini, etc. │                      │
 │                    └────────────────┘                      │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
@@ -54,72 +56,70 @@ L'arrivée de GitHub Copilot (basé initialement sur Codex, un modèle dérivé 
 
 OpenAI maintient une famille de modèles aux caractéristiques très différentes. Comprendre lequel utiliser est crucial pour optimiser coût, vitesse et qualité.
 
-### GPT-4o — Le modèle polyvalent
+### GPT-5.4 — Le modèle flagship
 
-**GPT-4o** ("o" pour "omni") est le modèle phare d'OpenAI pour un usage quotidien. Il est multimodal : il accepte du texte, des images, de l'audio et peut générer du texte et de l'audio.
+**GPT-5.4** (sorti mars 2026) est le modèle phare d'OpenAI. Il est multimodal : il accepte du texte, des images, de l'audio, et intègre nativement le computer use et le tool search. Il est disponible en 5 variantes : Standard, Thinking, Pro, Mini et Nano.
 
-- Fenêtre de contexte : **128 000 tokens**
+- Fenêtre de contexte : **272 000 tokens** (standard), jusqu'à 1M via Codex
 - Vitesse : rapide (génération streaming fluide)
-- Qualité code : excellente pour la majorité des tâches
-- Prix (API, avril 2026 approximatif) : ~$5 / 1M tokens input, ~$15 / 1M tokens output
+- Qualité code : excellente — 57,7 % SWE-bench Pro
+- Prix (API) : $2.50 / 1M tokens input, $15 / 1M tokens output
 
 > [!tip] Analogie
-> GPT-4o est comme un développeur senior polyvalent : il connaît tous les langages, répond vite, et gère bien les projets de taille standard. Il n'est pas le meilleur en mathématiques pures, mais c'est votre collègue idéal pour 90% des tâches quotidiennes.
+> GPT-5.4 est comme un développeur senior polyvalent : il connaît tous les langages, répond vite, gère les grands codebases et peut même utiliser des outils de façon autonome. C'est votre collègue idéal pour 90% des tâches quotidiennes.
 
-### GPT-4o-mini — Le modèle économique
+> [!warning] GPT-4o remplacé
+> GPT-4o est désormais un modèle périmé, remplacé par GPT-5.4 depuis mars 2026. Il n'est plus recommandé pour de nouveaux projets.
 
-Version allégée de GPT-4o, optimisée pour le rapport qualité/coût.
+### GPT-5.4 Nano — Le modèle ultra-économique
+
+Variante la plus légère de la famille GPT-5.4, optimisée pour le rapport vitesse/coût.
+
+- Contexte : **400 000 tokens**
+- Vitesse : ultra-rapide
+- Qualité : acceptable pour tâches simples, génération de contenu, classification
+- Prix : $0.20 / 1M tokens input, $1.25 / 1M tokens output
+
+### GPT-5.4 Mini — Le milieu de gamme économique
+
+Variante intermédiaire de la famille GPT-5.4, bon équilibre qualité/coût.
 
 - Contexte : **128 000 tokens**
-- Vitesse : très rapide
-- Qualité : bonne pour tâches simples, génération de contenu, classification
-- Prix : ~$0.15 / 1M tokens input, ~$0.60 / 1M tokens output (environ 30x moins cher que GPT-4o)
+- Vitesse : rapide
+- Qualité : bonne pour la plupart des tâches de développement courantes
+- Prix : ~$0.40 / 1M tokens input, ~$1.60 / 1M tokens output
 
-### o1 — Le modèle de raisonnement
+### GPT-5.4 Pro — Le premium
 
-**o1** introduit une approche radicalement différente : le modèle "pense" avant de répondre via une chaîne de pensée interne (chain-of-thought). Il prend plus de temps, mais produit des réponses beaucoup plus précises sur les problèmes complexes.
+Variante haut de gamme de la famille GPT-5.4, pour les cas d'usage les plus exigeants.
 
-- Contexte : 128 000 tokens
-- Vitesse : lente (les tokens de raisonnement ne sont pas visibles mais sont facturés)
-- Qualité code complexe : supérieure à GPT-4o sur les algos difficiles
-- Prix : élevé (~$15 / 1M input, ~$60 / 1M output)
+- Contexte : 272 000 tokens
+- Qualité : maximale sur toute la gamme GPT-5.4
+- Prix : plus élevé que GPT-5.4 Standard
 
-### o1-mini — Version allégée de o1
+### o3 / o4-mini — Les modèles de raisonnement profond
 
-Conserve les capacités de raisonnement d'o1 mais avec moins de paramètres. Bon compromis pour le raisonnement mathématique sans payer le prix plein d'o1.
+**o3** et **o4-mini** conservent une approche radicalement différente : le modèle "réfléchit" avant de répondre via une chaîne de pensée interne (chain-of-thought). Ils prennent plus de temps, mais produisent des réponses bien plus précises sur les problèmes complexes.
 
-### o3 — Le successeur SOTA
-
-**o3** (2025) est le successeur d'o1 avec des capacités de raisonnement significativement améliorées. Il atteint des scores "state of the art" (SOTA) sur des benchmarks mathématiques, scientifiques et de programmation compétitive (ARC-AGI, AIME, etc.).
-
-- Raisonnement : le meilleur disponible via OpenAI
-- Usage recommandé : problèmes algorithmiques difficiles, preuves mathématiques, debugging de systèmes complexes
-- Prix : très élevé
-
-### o3-mini — Équilibre raisonnement/coût
-
-Offre une grande partie des capacités d'o3 à un coût beaucoup plus raisonnable. C'est souvent le meilleur choix quand on a besoin de raisonnement mais pas de la puissance maximale d'o3.
-
-### o4-mini — Multimodal léger et raisonnement
-
-**o4-mini** (2025-2026) combine les capacités de raisonnement des modèles "o" avec la multimodalité (vision) dans un package économique. Il peut analyser des images et raisonner dessus, ce qui en fait un outil puissant pour les développeurs travaillant avec des interfaces visuelles ou du code contenant des diagrammes.
+- o3 — Contexte : ~200 000 tokens ; Prix : ~$2 / 1M input, ~$8 / 1M output
+- o4-mini — Multimodal (vision) + raisonnement dans un package économique
+- Vitesse : lente (tokens de raisonnement internes facturés)
+- Qualité : excellence sur les maths, algorithmes et architecture système
 
 ---
 
 ### Tableau comparatif des modèles
 
 ```
-┌─────────────┬──────────┬──────────────┬──────────┬────────────┬─────────────┐
-│  Modèle     │ Vitesse  │ Qualité code │ Contexte │ Prix input │ Prix output │
-├─────────────┼──────────┼──────────────┼──────────┼────────────┼─────────────┤
-│ GPT-4o      │ Rapide   │ ★★★★☆        │ 128k     │ $5/1M      │ $15/1M      │
-│ GPT-4o-mini │ Très rap.│ ★★★☆☆        │ 128k     │ $0.15/1M   │ $0.60/1M    │
-│ o1          │ Lente    │ ★★★★★ (algo) │ 128k     │ $15/1M     │ $60/1M      │
-│ o1-mini     │ Moyenne  │ ★★★★☆ (algo) │ 128k     │ $3/1M      │ $12/1M      │
-│ o3          │ Lente    │ ★★★★★ (SOTA) │ 128k+    │ Élevé      │ Très élevé  │
-│ o3-mini     │ Moyenne  │ ★★★★☆        │ 128k     │ $1.1/1M    │ $4.4/1M     │
-│ o4-mini     │ Rapide   │ ★★★★☆ (+vis.)│ 128k     │ $1.1/1M    │ $4.4/1M     │
-└─────────────┴──────────┴──────────────┴──────────┴────────────┴─────────────┘
+┌──────────────────┬────────────┬──────────────┬──────────┬────────────┬─────────────┐
+│  Modèle          │ Vitesse    │ Qualité code │ Contexte │ Prix input │ Prix output │
+├──────────────────┼────────────┼──────────────┼──────────┼────────────┼─────────────┤
+│ GPT-5.4          │ Rapide     │ ★★★★★        │ 272k     │ $2.50/1M   │ $15/1M      │
+│ GPT-5.4 Mini     │ Rapide     │ ★★★★☆        │ 128k     │ ~$0.40/1M  │ ~$1.60/1M   │
+│ GPT-5.4 Nano     │ Ultra-rap. │ ★★★☆☆        │ 400k     │ $0.20/1M   │ $1.25/1M    │
+│ o3 (raisonnement)│ Lente      │ ★★★★★ (maths)│ 200k     │ ~$2/1M     │ ~$8/1M      │
+│ o4-mini          │ Moyenne    │ ★★★★☆ (+vis.)│ 128k     │ $1.1/1M    │ $4.4/1M     │
+└──────────────────┴────────────┴──────────────┴──────────┴────────────┴─────────────┘
   Note : Prix approximatifs, vérifier platform.openai.com/pricing pour les tarifs actuels
 ```
 
@@ -131,17 +131,17 @@ ARBRE DE DÉCISION — CHOIX DU MODÈLE
 Est-ce une tâche simple ?
 (autocomplétion, reformulation, résumé court)
        │
-       ├── OUI → GPT-4o-mini (économique et rapide)
+       ├── OUI → GPT-5.4 Nano (ultra-économique et ultra-rapide)
        │
        └── NON → Est-ce un problème algorithmique/mathématique difficile ?
                         │
                         ├── OUI → Besoin du meilleur résultat ?
                         │              ├── OUI → o3
-                        │              └── NON → o3-mini ou o4-mini
+                        │              └── NON → o4-mini
                         │
                         └── NON → Tâche générale de qualité ?
-                                       ├── OUI → GPT-4o
-                                       └── Vision/Multimodal ? → o4-mini
+                                       ├── OUI → GPT-5.4 Standard
+                                       └── Budget serré ? → GPT-5.4 Mini
 ```
 
 ---
@@ -150,7 +150,7 @@ Est-ce une tâche simple ?
 
 ### Qu'est-ce que GitHub Copilot ?
 
-GitHub Copilot est un assistant de programmation IA développé par GitHub (Microsoft) en partenariat avec OpenAI. Il s'intègre directement dans l'éditeur de code et suggère du code en temps réel. Lancé en 2021, il est devenu en quelques années l'outil d'IA le plus utilisé par les développeurs professionnels.
+GitHub Copilot est un assistant de programmation IA développé par GitHub (Microsoft) en partenariat avec OpenAI. Il s'intègre directement dans l'éditeur de code et suggère du code en temps réel. Lancé en 2021, il est devenu en quelques années l'outil d'IA le plus utilisé par les développeurs professionnels. Depuis 2026, il utilise **GPT-5.4 par défaut** pour toutes les suggestions et le chat.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -170,8 +170,8 @@ GitHub Copilot est un assistant de programmation IA développé par GitHub (Micr
 │                          │                               │
 │                          ▼                               │
 │              ┌───────────────────────┐                   │
-│              │  Modèles OpenAI       │                   │
-│              │  (GPT-4o, Codex-based)│                   │
+│              │  Modèles OpenAI        │                   │
+│              │  (GPT-5.4 par défaut)  │                   │
 │              └───────────────────────┘                   │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -358,7 +358,7 @@ Installation : `Settings → Plugins → Marketplace → "GitHub Copilot"` → I
 
 Les fonctionnalités sont similaires à VS Code, avec les raccourcis adaptés à chaque IDE JetBrains.
 
-### Copilot Workspace (beta)
+### Copilot Workspace
 
 Copilot Workspace est une interface web (github.com/features/copilot/workspace) permettant de travailler sur des issues GitHub directement avec un agent IA. L'agent peut :
 - Analyser une issue GitHub
@@ -366,8 +366,8 @@ Copilot Workspace est une interface web (github.com/features/copilot/workspace) 
 - Générer les changements sur plusieurs fichiers
 - Créer une pull request
 
-> [!warning] En beta
-> Copilot Workspace est encore en accès limité et les fonctionnalités évoluent rapidement. C'est la direction vers laquelle GitHub oriente ses efforts pour les agents de codage autonomes.
+> [!info] Disponibilité générale
+> Copilot Workspace est désormais en disponibilité générale (GA) depuis 2026. C'est la solution officielle GitHub pour les agents de codage autonomes sur les dépôts.
 
 ### Tarifs GitHub Copilot
 
@@ -430,7 +430,7 @@ import os
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 response = client.chat.completions.create(
-    model="gpt-4o",
+    model="gpt-5.4",
     messages=[
         {"role": "system", "content": "Tu es un expert Python."},
         {"role": "user", "content": "Explique les décorateurs Python avec un exemple simple."}
@@ -451,11 +451,11 @@ Un pattern très efficace pour le debugging ou la revue de code :
 
 ```python
 def analyze_code_with_gpt(code: str, question: str) -> str:
-    """Envoie du code à GPT-4o avec une question spécifique."""
+    """Envoie du code à GPT-5.4 avec une question spécifique."""
     client = OpenAI()
 
     response = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-5.4",
         messages=[
             {
                 "role": "system",
@@ -493,7 +493,7 @@ client = OpenAI()
 
 # Streaming : affiche les tokens au fur et à mesure
 stream = client.chat.completions.create(
-    model="gpt-4o",
+    model="gpt-5.4",
     messages=[
         {"role": "user", "content": "Écris une fonction Python complète pour parser un fichier JSON imbriqué."}
     ],
@@ -514,12 +514,12 @@ Avant d'envoyer une requête, il est utile de calculer le nombre de tokens pour 
 ```python
 import tiktoken
 
-def count_tokens(text: str, model: str = "gpt-4o") -> int:
+def count_tokens(text: str, model: str = "gpt-5.4") -> int:
     """Compte le nombre de tokens dans un texte."""
     encoding = tiktoken.encoding_for_model(model)
     return len(encoding.encode(text))
 
-def truncate_to_token_limit(text: str, max_tokens: int = 100000, model: str = "gpt-4o") -> str:
+def truncate_to_token_limit(text: str, max_tokens: int = 100000, model: str = "gpt-5.4") -> str:
     """Tronque un texte pour respecter une limite de tokens."""
     encoding = tiktoken.encoding_for_model(model)
     tokens = encoding.encode(text)
@@ -633,18 +633,18 @@ La plateforme GPTs permet de créer des assistants spécialisés :
 > - **Pas d'exécution de commandes** : ne peut pas lancer des builds, des tests
 > - **Pas d'agent autonome** : ne peut pas agir de façon enchaînée sur ton projet
 > - **Contexte perdu** : chaque conversation repart de zéro (hors Projects)
-> - **Contexte limité à 128k** : pas adapté à très grands codebases
+> - **Contexte limité** : GPT-5.4 Mini à 128k, GPT-5.4 Standard à 272k — pas toujours adapté aux très grands codebases
 
 ---
 
-## 6. Les modèles o1/o3 : raisonnement étendu
+## 6. Les modèles o3/o4 : raisonnement étendu
 
-### La différence fondamentale avec GPT-4o
+### La différence fondamentale avec GPT-5.4
 
-Les modèles GPT-4o génèrent des tokens immédiatement, mot par mot. Les modèles o1/o3 ont un mécanisme de **chain-of-thought interne** : avant de répondre, ils "réfléchissent" en générant des tokens de raisonnement internes (non visibles dans l'interface, mais facturés).
+Les modèles GPT-5.4 génèrent des tokens immédiatement, mot par mot. Les modèles o3/o4 ont un mécanisme de **chain-of-thought interne** : avant de répondre, ils "réfléchissent" en générant des tokens de raisonnement internes (non visibles dans l'interface, mais facturés).
 
 ```
-GPT-4o :
+GPT-5.4 :
 Question ──────────────────────────────→ Réponse
          (génération directe, rapide)
 
@@ -654,9 +654,9 @@ Question → [Réflexion interne...] → [Vérification...] → Réponse
 ```
 
 > [!tip] Analogie
-> GPT-4o est un développeur qui répond immédiatement à ta question d'une façon impressionnante. o3 est un développeur qui dit "donne-moi 5 minutes" et revient avec une solution profondément réfléchie et vérifiée. Pour une question simple, tu préfères le premier. Pour un problème d'architecture complexe, tu veux le second.
+> GPT-5.4 est un développeur qui répond immédiatement à ta question d'une façon impressionnante. o3 est un développeur qui dit "donne-moi 5 minutes" et revient avec une solution profondément réfléchie et vérifiée. Pour une question simple, tu préfères le premier. Pour un problème d'architecture complexe, tu veux le second.
 
-### Quand utiliser les modèles o1/o3
+### Quand utiliser les modèles o3/o4
 
 **Cas où o3 excelle :**
 
@@ -692,20 +692,20 @@ explique chaque étape mathématiquement.
 **Cas à éviter avec o3 (trop cher/lent) :**
 
 ```python
-# ❌ Trop simple pour o3, utilise GPT-4o-mini
+# ❌ Trop simple pour o3, utilise GPT-5.4 Nano
 "Comment convertir une liste en ensemble en Python ?"
 "Quelle est la syntaxe d'une boucle for en JavaScript ?"
 "Corrige la faute de frappe dans cette variable"
 ```
 
-### Comparaison o3 vs GPT-4o sur un problème algo
+### Comparaison o3 vs GPT-5.4 sur un problème algo
 
 ```
 PROBLÈME : Trouver toutes les permutations d'une chaîne
            en évitant les doublons, en O(n!) mais sans
            générer les doublons puis les filtrer.
 
-GPT-4o (réponse rapide, ~3s) :
+GPT-5.4 (réponse rapide, ~3s) :
 → Donne une solution correcte avec backtracking + set de vus
 → Complexité O(n! * n) — génère des doublons et les évite
 
@@ -724,21 +724,21 @@ o3 (réponse lente, ~45s) :
 
 ```
 ✓ GitHub Copilot : l'intégration IDE la plus mature et la plus utilisée
+✓ GPT-5.4 : modèle flagship polyvalent avec 272k de contexte et computer use natif
 ✓ o3 : meilleur modèle de raisonnement mathématique/algorithmique disponible
 ✓ Écosystème le plus mature : énorme communauté, docs, tutoriels, Stack Overflow
 ✓ API la plus stable et documentée : SDK dans 7+ langages
 ✓ Code Interpreter : exécution réelle de Python dans ChatGPT
 ✓ ChatGPT : interface la plus connue (facilite l'onboarding d'équipes)
 ✓ OpenAI Playground : outil de test d'API très pratique
+✓ GPT-5.4 Nano : option ultra-économique à $0.20/1M tokens avec 400k de contexte
 ```
 
 ### Points faibles d'OpenAI
 
 ```
-✗ Plus cher que Claude Sonnet 3.7 pour des performances similaires
-✗ Contexte : 128k tokens vs 200k (Claude) ou 2M (Gemini 1.5 Pro)
-✗ Long code complexe : Claude 3.7 Sonnet surpasse GPT-4o sur les tâches
-  de coding étendu (SWE-bench)
+✗ GPT-5.4 output reste à $15/1M — comparable à Claude Sonnet mais plus cher en output
+✗ Contexte GPT-5.4 Mini : 128k tokens vs 200k (Claude) — inférieur sur certains tiers
 ✗ Politique de données : OpenAI a eu des controverses sur l'utilisation
   des données d'entraînement (moins transparent qu'Anthropic)
 ✗ Pas d'agent de codage aussi intégré que Claude Code dans le terminal
@@ -753,9 +753,9 @@ o3 (réponse lente, ~45s) :
 ├────────────────────┼────────────────┼────────────────┼────────────────┤
 │ Meilleur IDE tool  │ GitHub Copilot │ Claude Code    │ Gemini in IDE  │
 │ Raisonnement math  │ ★★★★★ (o3)    │ ★★★★☆          │ ★★★★☆          │
-│ Long contexte      │ ★★★☆☆ (128k)  │ ★★★★☆ (200k)  │ ★★★★★ (2M)    │
-│ Code complexe      │ ★★★★☆          │ ★★★★★          │ ★★★★☆          │
-│ Prix               │ ★★★☆☆          │ ★★★★☆          │ ★★★★☆          │
+│ Long contexte      │ ★★★★☆ (272k)  │ ★★★★☆ (200k)  │ ★★★★★ (2M)    │
+│ Code complexe      │ ★★★★★ (57.7%) │ ★★★★★          │ ★★★★☆          │
+│ Prix               │ ★★★★☆          │ ★★★★☆          │ ★★★★☆          │
 │ Maturité API       │ ★★★★★          │ ★★★★☆          │ ★★★★☆          │
 │ Code Interpreter   │ ★★★★★ (natif) │ ☆ (externe)   │ ★★★☆☆          │
 └────────────────────┴────────────────┴────────────────┴────────────────┘
@@ -778,13 +778,18 @@ o3 (réponse lente, ~45s) :
 │  ├── Génération de boilerplate et patterns répétitifs           │
 │  └── Tests unitaires automatiques                               │
 │                                                                  │
-│  GPT-4o (API ou ChatGPT)                                        │
-│  ├── Questions techniques rapides                               │
-│  ├── Génération de code standard (CRUD, scripts)                │
+│  GPT-5.4 (API ou ChatGPT)                                       │
+│  ├── Questions techniques rapides et dev quotidien              │
+│  ├── Génération de code standard (CRUD, scripts, refactoring)   │
 │  ├── Revue de code et refactoring modéré                        │
 │  └── Documentation et commentaires                              │
 │                                                                  │
-│  o3 / o3-mini (API ou ChatGPT Plus)                             │
+│  GPT-5.4 Nano (API ou ChatGPT)                                  │
+│  ├── Questions simples et complétion rapide                     │
+│  ├── Budget serré — coût minimal à $0.20/1M tokens              │
+│  └── Traitement en masse de petites tâches                      │
+│                                                                  │
+│  o3 / o4-mini (API ou ChatGPT Plus)                             │
 │  ├── Algorithmes complexes (graphes, DP, cryptographie)         │
 │  ├── Debugging de race conditions ou bugs subtils               │
 │  ├── Architecture de systèmes distribués                        │
@@ -804,7 +809,7 @@ o3 (réponse lente, ~45s) :
 > 1. **o3** : "Conçois l'architecture d'un cache distribué avec invalidation par tag"
 >    → Obtient une architecture solide et réfléchie
 >
-> 2. **ChatGPT Canvas** : Itère sur l'implémentation Python avec GPT-4o
+> 2. **ChatGPT Canvas** : Itère sur l'implémentation Python avec GPT-5.4
 >    → Écrit le code de façon interactive
 >
 > 3. **GitHub Copilot** : Dans VS Code, complète les détails, génère les tests
@@ -828,12 +833,12 @@ o3 (réponse lente, ~45s) :
    └──────┬──────┘      └────────┬───────┘    └────────┬───────┘
           │                      │                      │
     ┌─────┴─────┐          ┌─────┴─────┐         ┌─────┴─────┐
-    │ GPT-4o    │          │ VS Code   │         │ SDK Python │
-    │ GPT-4o-   │          │ JetBrains │         │ Streaming  │
-    │  mini     │          │ Terminal  │         │ tiktoken   │
-    │ o1 / o3   │          │ Workspace │         │ API key    │
-    │ o3-mini   │          └─────┬─────┘         └─────┬─────┘
-    │ o4-mini   │                │                      │
+    │ GPT-5.4   │          │ VS Code   │         │ SDK Python │
+    │ GPT-5.4   │          │ JetBrains │         │ Streaming  │
+    │  Mini/Nano│          │ Terminal  │         │ tiktoken   │
+    │ o3 / o4   │          │ Workspace │         │ API key    │
+    │  -mini    │          └─────┬─────┘         └─────┬─────┘
+    │           │                │                      │
     └─────┬─────┘         ┌──────┴──────┐        ┌─────┴──────┐
           │               │ Raccourcis  │        │  Patterns  │
     ┌─────┴──────┐        │ Tab Accept  │        │ Code ctx   │
@@ -849,14 +854,14 @@ o3 (réponse lente, ~45s) :
    │  persistant│  collab.)   │ (exec Python)│  spécialisés) │
    └───────────┴──────────────┴──────────────┴───────────────┘
 
-   MODÈLES DE RAISONNEMENT (o1 / o3)
+   MODÈLES DE RAISONNEMENT (o3 / o4-mini)
    ┌────────────────────────────────────────────────────────┐
    │                                                        │
-   │  GPT-4o  : Question → Réponse (rapide)                │
+   │  GPT-5.4 : Question → Réponse (rapide)                │
    │  o3      : Question → [Réflexion...] → Réponse (lent) │
    │                                                        │
    │  Utiliser o3 pour : Algo complexe, Math, Architecture  │
-   │  Éviter o3 pour   : Tâches simples (coût élevé)       │
+   │  Éviter o3 pour   : Tâches simples → GPT-5.4 Nano     │
    │                                                        │
    └────────────────────────────────────────────────────────┘
 ```
@@ -874,7 +879,7 @@ o3 (réponse lente, ~45s) :
 2. Créer un fichier `.env` avec `OPENAI_API_KEY=sk-...`
 3. Écrire une fonction `analyze_code_quality(filepath: str) -> dict` qui :
    - Lit le fichier Python passé en argument
-   - Envoie son contenu à GPT-4o avec un prompt demandant : bugs potentiels, code smells, suggestions d'amélioration
+   - Envoie son contenu à GPT-5.4 avec un prompt demandant : bugs potentiels, code smells, suggestions d'amélioration
    - Retourne un dictionnaire avec les clés `bugs`, `smells`, `suggestions`
 4. Tester sur un de tes fichiers Python existants
 5. **Bonus** : Ajouter du streaming pour voir la réponse s'afficher progressivement
@@ -912,13 +917,13 @@ o3 (réponse lente, ~45s) :
    ```
 4. Observe les suggestions de Copilot et accepte/modifie selon ta logique
 5. Génère les tests avec `/tests` dans Copilot Chat
-6. **Bonus** : Compare avec ce que GPT-4o génère pour la même spécification
+6. **Bonus** : Compare avec ce que GPT-5.4 génère pour la même spécification
 
 ---
 
-### Exercice 3 — Benchmark o3-mini vs GPT-4o sur un problème algorithmique
+### Exercice 3 — Benchmark o3 vs GPT-5.4 sur un problème algorithmique
 
-**Objectif** : Comprendre empiriquement la différence entre les modèles de raisonnement et GPT-4o.
+**Objectif** : Comprendre empiriquement la différence entre les modèles de raisonnement et GPT-5.4.
 
 **Étapes** :
 1. Choisir un problème algorithmique non trivial, par exemple :
@@ -927,8 +932,8 @@ o3 (réponse lente, ~45s) :
    - "Implémenter un LRU cache thread-safe en Python"
 
 2. Poser la même question à :
-   - GPT-4o (via API ou ChatGPT)
-   - o3-mini (via ChatGPT Plus ou API)
+   - GPT-5.4 (via API ou ChatGPT)
+   - o3 (via ChatGPT Plus ou API)
 
 3. Évaluer les réponses sur :
    - Correction de l'implémentation (tester le code)
@@ -937,7 +942,7 @@ o3 (réponse lente, ~45s) :
    - Temps de réponse
    - (Si via API) Nombre de tokens utilisés
 
-4. Documenter tes conclusions : pour quel type de problème le surcoût d'o3-mini est-il justifié ?
+4. Documenter tes conclusions : pour quel type de problème le surcoût d'o3 est-il justifié ?
 
 ---
 

@@ -1,5 +1,11 @@
 # 10 - LM Studio et Hardware Local
 
+> [!info] Mis à jour avril 2026
+> Ce document reflète l'état de l'IA locale en avril 2026, avec les nouvelles architectures MoE et les modèles de référence actuels.
+
+> [!tip] Révolution MoE
+> Les architectures Mixture of Experts (MoE) ont révolutionné les modèles locaux en 2026. Un modèle "80B" n'utilise que 3B paramètres par token — il est rapide et léger tout en ayant la richesse d'un grand modèle. Vérifiez toujours "B actifs" et pas "B total".
+
 LM Studio est une application desktop qui démocratise l'IA locale en offrant une interface graphique complète pour télécharger, gérer et utiliser des modèles de langage directement sur sa machine. Dans cette note, on explore LM Studio, la quantisation, le hardware nécessaire, et comment choisir les bons outils pour ses besoins.
 
 ---
@@ -9,7 +15,7 @@ LM Studio est une application desktop qui démocratise l'IA locale en offrant un
 LM Studio est une application desktop (Windows, macOS, Linux) qui permet d'exécuter des modèles de langage localement, sans aucune ligne de commande. Elle propose une interface graphique intuitive pour télécharger des modèles depuis Hugging Face, les tester en chat, et exposer un serveur API compatible avec l'API OpenAI.
 
 > [!info] Position dans l'écosystème IA local
-> LM Studio et Ollama sont les deux outils dominants pour l'IA locale en 2025. Ils répondent à des besoins différents : LM Studio est orienté interface graphique et découverte, Ollama est orienté CLI, automatisation et intégration.
+> LM Studio et Ollama sont les deux outils dominants pour l'IA locale en 2026. Ils répondent à des besoins différents : LM Studio est orienté interface graphique et découverte, Ollama est orienté CLI, automatisation et intégration.
 
 ---
 
@@ -123,7 +129,7 @@ Fonctionnalités :
 - **Informations** : description, contexte max, spécifications recommandées
 
 > [!example] Exemple de recherche dans Discover
-> Rechercher "qwen2.5-coder" → filtrer par "14B" → choisir "Q4_K_M" → cliquer "Download". Le modèle se télécharge dans le dossier local de LM Studio (~/.cache/lm-studio/ sur Linux/macOS).
+> Rechercher "gemma4" ou "qwen3-coder" → choisir la variante adaptée à son GPU → choisir "Q4_K_M" → cliquer "Download". Le modèle se télécharge dans le dossier local de LM Studio (~/.cache/lm-studio/ sur Linux/macOS). Pour les modèles MoE, noter que la taille affichée est la taille "totale" — la RAM réellement utilisée est bien inférieure.
 
 #### Onglet Chat
 
@@ -374,29 +380,44 @@ L'inférence LLM est fondamentalement une opération de multiplication matriciel
 ### Tableau de référence hardware vs modèles
 
 ```
-Modèle      VRAM GPU (Q4)    RAM CPU (Q4)    Vitesse CPU     Vitesse GPU
-─────────────────────────────────────────────────────────────────────────
-1-3B        2-3 GB           2-3 GB          5-15 tok/s      50-150 tok/s
-7B          5-6 GB           5-6 GB          2-8 tok/s       30-80 tok/s
-14B         9-10 GB          9-10 GB         1-4 tok/s       15-50 tok/s
-32B         20-22 GB         20-22 GB        < 2 tok/s       8-25 tok/s
-70B         40-45 GB         40-45 GB        < 1 tok/s       4-12 tok/s (multi-GPU)
-─────────────────────────────────────────────────────────────────────────
+Modèle              VRAM GPU (Q4)    RAM CPU (Q4)    Vitesse CPU     Vitesse GPU
+──────────────────────────────────────────────────────────────────────────────────
+1-3B                2-3 GB           2-3 GB          5-15 tok/s      50-150 tok/s
+7B                  5-6 GB           5-6 GB          2-8 tok/s       30-80 tok/s
+14B                 9-10 GB          9-10 GB         1-4 tok/s       15-50 tok/s
+32B                 20-22 GB         20-22 GB        < 2 tok/s       8-25 tok/s
+70B                 40-45 GB         40-45 GB        < 1 tok/s       4-12 tok/s (multi-GPU)
+──────────────────────────────────────────────────────────────────────────────────
+[Modèles MoE (Mixture of Experts) — les règles changent !]
+Gemma 4 E4B (MoE)   ~4 GB            ~4 GB           rapide          très rapide
+  → 4B actifs seulement (MoE), qualité bien supérieure à sa taille apparente
+Gemma 4 26B-A4B     ~10 GB           ~10 GB          modéré          rapide
+  → 26B total, 4B actifs (MoE) — RAM d'un 7B, qualité d'un 26B
+Gemma 4 31B (dense) ~20 GB           ~20 GB          lent            15-40 tok/s
+  → Dense classique, très haute qualité
+Llama 4 Scout       ~20 GB           ~20 GB          lent            15-30 tok/s
+  → 109B total, 17B actifs (MoE), 10M tokens de contexte !
+Qwen3-Coder-Next    ~8 GB            ~8 GB           modéré          rapide
+  → 80B total, 3B actifs (MoE) — seulement 8GB RAM malgré les 80B !
+──────────────────────────────────────────────────────────────────────────────────
 Note : vitesses approximatives, varient selon le matériel exact
 ```
+
+> [!warning] MoE change les règles de la VRAM
+> Les modèles MoE (Mixture of Experts) changent les règles — Qwen3-Coder-Next a 80B paramètres mais seulement 3B actifs, ce qui le rend utilisable sur 8GB RAM. Toujours vérifier "B actifs" et pas "B total" pour estimer les besoins en mémoire.
 
 > [!info] CPU : pas inutile
 > Même si le GPU est beaucoup plus rapide, exécuter en CPU reste utile pour des tâches en arrière-plan, des petits modèles (3-7B), ou quand on n'a pas de GPU compatible. 3 tokens/seconde est lent mais fonctionnel pour de la génération de code où on lit le résultat plutôt qu'on le regarde défiler.
 
-### Recommandations GPU grand public (2025)
+### Recommandations GPU grand public (avril 2026)
 
-| GPU | VRAM | Modèles confortables | Prix indicatif |
-|-----|------|----------------------|----------------|
-| RTX 3060 | 12 GB | jusqu'à 14B | ~300 € |
-| RTX 4070 | 12 GB | jusqu'à 14B (rapide) | ~600 € |
-| RTX 4070 Ti | 16 GB | jusqu'à 32B (serré) | ~800 € |
-| RTX 4080 | 16 GB | jusqu'à 32B | ~1000 € |
-| RTX 4090 | 24 GB | jusqu'à 32B (confortable) | ~2000 € |
+| GPU | VRAM | Modèles confortables (avril 2026) | Prix indicatif |
+|-----|------|-----------------------------------|----------------|
+| RTX 3060 | 12 GB | Gemma 4 26B-A4B (MoE), Qwen3-Coder-Next | ~300 € |
+| RTX 4070 | 12 GB | Gemma 4 26B-A4B (MoE), Qwen3-Coder-Next | ~600 € |
+| RTX 4070 Ti | 16 GB | Gemma 4 31B (dense), Llama 4 Scout (MoE) | ~800 € |
+| RTX 4080 | 16 GB | Gemma 4 31B, Llama 4 Scout | ~1000 € |
+| RTX 4090 | 24 GB | Tout (confortable) | ~2000 € |
 | RTX 5090 | 32 GB | jusqu'à 32B (très confortable) | ~2500 €+ |
 | M1 Mac 16 GB | 16 GB (unifiée) | jusqu'à 14B | — |
 | M2 Pro 32 GB | 32 GB (unifiée) | jusqu'à 70B (possible) | — |
@@ -652,10 +673,15 @@ Un workflow pratique pour intégrer l'IA locale dans sa pratique de développeme
 
 ```
 □ Installer LM Studio (https://lmstudio.ai)
-□ Télécharger un modèle adapté à son GPU :
-    - GPU 8 GB  → Qwen2.5-Coder 7B Q4_K_M
-    - GPU 12 GB → Qwen2.5-Coder 14B Q4_K_M
-    - GPU 24 GB → Qwen2.5-Coder 32B Q4_K_M
+□ Télécharger un modèle adapté à son GPU (modèles recommandés avril 2026) :
+    - GPU 8 GB   → Qwen3-Coder-Next Q4_K_M (80B total, 3B actifs — MoE !)
+                   ou Gemma 4 E4B Q4_K_M (4B actifs, MoE)
+    - GPU 12 GB  → Gemma 4 26B-A4B Q4_K_M (4B actifs, MoE)
+    - GPU 16-24B → Gemma 4 31B Q4_K_M (dense, très haute qualité)
+                   ou Llama 4 Scout Q4_K_M (17B actifs, MoE, 10M contexte)
+    [Modèles ancienne génération encore fonctionnels]
+    - GPU 8 GB   → Qwen2.5-Coder 7B Q4_K_M
+    - GPU 12 GB  → Qwen2.5-Coder 14B Q4_K_M
 □ Tester dans l'onglet Chat
 □ Activer le Local Server (port 1234)
 □ Faire un premier appel Python avec la lib openai

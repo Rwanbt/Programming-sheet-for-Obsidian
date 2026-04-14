@@ -1,5 +1,11 @@
 # Comprendre les LLMs et les Tokens
 
+> [!info] Mis à jour avril 2026
+> Ce document reflète l'état du marché en avril 2026. Les modèles de référence ont évolué depuis la rédaction initiale.
+
+> [!warning] Sources à vérifier
+> Les benchmarks évoluent constamment. Vérifier : https://lmarena.ai (Chatbot Arena) et les annonces officielles des éditeurs.
+
 Qu'est-ce qu'un Large Language Model, comment fonctionne-t-il réellement, et pourquoi la notion de "token" est-elle centrale pour tout développeur qui utilise ces modèles ? Cette note démystifie les mécanismes sous-jacents pour mieux exploiter les LLMs dans un contexte de développement.
 
 ---
@@ -274,22 +280,25 @@ La **context window** (fenêtre de contexte) est la quantité maximale de tokens
 
 Au-delà de cette limite, les informations sont tronquées ou perdues.
 
-### Tableau des contextes par modèle (2025-2026)
+### Tableau des contextes par modèle (avril 2026)
 
 ```
-┌──────────────────────┬─────────────────┬─────────────────────────┐
-│ Modèle               │ Context Window  │ Notes                   │
-├──────────────────────┼─────────────────┼─────────────────────────┤
-│ GPT-4o               │ 128k tokens     │ ~96 000 mots            │
-│ Claude Sonnet 4.6    │ 200k tokens     │ ~150 000 mots           │
-│ Claude Opus 4        │ 200k tokens     │ Meilleure qualité       │
-│ Gemini 2.5 Pro       │ 2M tokens       │ Record actuel           │
-│ Llama 3.1 (70B)      │ 128k tokens     │ Open source             │
-│ Mistral Large        │ 128k tokens     │ Européen                │
-│ DeepSeek-V3          │ 128k tokens     │ Très performant         │
-│ Qwen 2.5 (72B)       │ 128k tokens     │ Multilingue fort        │
-└──────────────────────┴─────────────────┴─────────────────────────┘
+┌──────────────────────┬─────────────────┬─────────────────────────────────┐
+│ Modèle               │ Context Window  │ Notes                           │
+├──────────────────────┼─────────────────┼─────────────────────────────────┤
+│ GPT-5.4              │ 272k standard   │ 1M via Codex                    │
+│ Claude Sonnet 4.6    │ 1M tokens       │ ~750 000 mots                   │
+│ Claude Opus 4.6      │ 1M tokens       │ Meilleure qualité               │
+│ Gemini 3.1 Pro       │ 1M tokens       │ Remplace Gemini 2.5 Pro         │
+│ Llama 4 Scout        │ 10M tokens      │ MoE, 109B total / 17B actifs    │
+│ Mistral Large        │ 128k tokens     │ Européen                        │
+│ DeepSeek V4          │ 128k tokens     │ 81% SWE-bench, meilleur marché  │
+│ Qwen 2.5 (72B)       │ 128k tokens     │ Multilingue fort                │
+└──────────────────────┴─────────────────┴─────────────────────────────────┘
 ```
+
+> [!info] Anciens modèles de référence (2024-2025)
+> GPT-4o (128k), Claude 3.5 Sonnet (200k), Gemini 2.5 Pro (2M) sont désormais des générations précédentes — utiles comme points de comparaison historique.
 
 ### Le problème de la "relecture exponentielle"
 
@@ -593,6 +602,21 @@ llama-3.1-8b-instruct-Q4_K_M.gguf
 - Métrique : % d'issues résolues
 - Beaucoup plus difficile et représentatif du travail réel
 
+Scores SWE-bench Verified — état du marché avril 2026 (données vérifiées) :
+
+```
+Modèle                Score SWE-bench Verified   Note
+──────────────────────────────────────────────────────────────────
+DeepSeek V4           81%                         Meilleur du marché (mars 2026)
+Claude Opus 4.6       80.8%                       Proche du meilleur
+Gemini 3.1 Pro        78.8%
+──────────────────────────────────────────────────────────────────
+[Anciens modèles 2024-2025, pour référence historique]
+Claude 3.5 Sonnet     ~49%                        2024
+GPT-4o                ~38%                        2024
+Gemini 2.5 Pro        ~57%                        2025
+```
+
 **MBPP (Mostly Basic Python Problems)** :
 - 374 problèmes Python de difficulté variable
 - Bonne corrélation avec la productivité dev quotidienne
@@ -681,12 +705,18 @@ response = requests.get(url, timeout=30, retry_count=3)
 Chaque modèle a une **date de coupure** (knowledge cutoff) : il ne connaît rien de ce qui s'est passé après la fin de son entraînement.
 
 ```
-Modèle                  Cutoff approximatif
-─────────────────────────────────────────────
-GPT-4o                  Avril 2024
-Claude Sonnet 4.6       Début 2025
-Gemini 2.5 Pro          Début 2025
-Llama 3.1               Décembre 2023
+Modèle                  Cutoff approximatif    Statut (avril 2026)
+────────────────────────────────────────────────────────────────────
+GPT-5.4                 Début 2026             Modèle actuel
+Claude Opus 4.6         Début 2026             Modèle actuel
+Claude Sonnet 4.6       Début 2025             Modèle actuel
+Gemini 3.1 Pro          Début 2026             Modèle actuel
+DeepSeek V4             Début 2026             Modèle actuel
+[Anciens — pour référence]
+GPT-4o                  Avril 2024             Générations précédentes
+Claude 3.5 Sonnet       Avril 2024             Générations précédentes
+Gemini 2.5 Pro          Début 2025             Générations précédentes
+Llama 3.1               Décembre 2023          Générations précédentes
 ```
 
 Implications :
@@ -715,7 +745,7 @@ Implications :
      └────┬────┘      └────┬────┘     └────┬────┘      └────┬────┘
           │                │               │                 │
      ┌────┴────┐      ┌────┴────┐    ┌─────┴─────┐    ┌────┴────┐
-     │Transfor-│      │≠ mots   │    │128k-2M tok│    │ 1B-405B │
+     │Transfor-│      │≠ mots   │    │272k-10M t.│    │ 1B-405B │
      │  mer    │      │BPE/SPM  │    │Lost in Mid│    │Paramètr.│
      │Attention│      │~4 chars │    │Relecture  │    │Emergent │
      │RLHF     │      │€ impact │    │exponentiel│    │Abilities│

@@ -1,5 +1,11 @@
 # 06 - Gemini, Mistral et Alternatives Cloud
 
+> [!info] Mis à jour avril 2026
+> Ce document reflète l'état de l'écosystème IA en avril 2026. Les modèles Gemini 2.x, Qwen2.5, Llama 3.x et DeepSeek V3 sont désormais remplacés par leurs successeurs respectifs.
+
+> [!warning] L'IA évolue très vite
+> Les informations ci-dessous sont à jour en avril 2026, mais ce domaine évolue à un rythme exceptionnel. Vérifiez toujours les dernières informations sur les sites officiels avant de prendre une décision technique ou commerciale : [Google AI](https://ai.google.dev), [Mistral](https://mistral.ai), [DeepSeek](https://platform.deepseek.com), [Alibaba/Qwen](https://qwenlm.github.io), [Meta/Llama](https://llama.meta.com).
+
 Qu'est-ce que l'écosystème IA cloud au-delà de Claude et OpenAI ? C'est l'ensemble des modèles de langage, APIs et outils proposés par d'autres acteurs majeurs : Google avec Gemini, Mistral AI depuis Paris, DeepSeek depuis Pékin, Alibaba avec Qwen, ou encore Meta avec Llama. Chacun apporte des forces distinctes, des niveaux de confidentialité différents, et souvent des prix bien inférieurs — voire gratuits. Pour un développeur, ignorer ces alternatives, c'est se priver d'outils parfois supérieurs pour certaines tâches précises.
 
 ---
@@ -15,8 +21,8 @@ Utiliser un seul modèle d'IA, c'est comme n'avoir qu'un seul outil dans sa boî
 
 Raisons concrètes de diversifier :
 
-- **Coût** : GPT-4o et Claude Opus sont chers à l'usage. Gemini 2.0 Flash ou DeepSeek-V3 offrent des qualités proches pour 5 à 10 fois moins cher
-- **Contexte** : Gemini 2.5 Pro offre 2 millions de tokens, imbattable pour analyser un grand repo
+- **Coût** : GPT-4o et Claude Sonnet sont chers à l'usage. Gemini 3.1 Flash-Lite ou DeepSeek V4 offrent des qualités proches pour 5 à 10 fois moins cher
+- **Contexte** : Gemini 3.1 Pro et Llama 4 Scout offrent 1M à 10M de tokens, imbattables pour analyser un grand repo
 - **Confidentialité** : les modèles locaux (Llama, Qwen via Ollama) ne quittent jamais votre machine
 - **Disponibilité** : si l'API d'un provider tombe, avoir un fallback évite l'arrêt de travail
 - **Spécialisation** : Codestral est taillé pour la complétion de code, Command R+ pour le RAG
@@ -24,18 +30,19 @@ Raisons concrètes de diversifier :
 ### Vue d'ensemble des acteurs en 2025-2026
 
 ```
-+------------------+------------------+------------------------+
-|     Acteur       |   Modèle phare   |   Point différenciant  |
-+------------------+------------------+------------------------+
-| Google           | Gemini 2.5 Pro   | 2M contexte, gratuit   |
-| Mistral AI (FR)  | Codestral        | Code, open source, EU  |
-| DeepSeek (CN)    | DeepSeek-R1      | Open source, prix bas  |
-| Alibaba          | Qwen2.5-Coder    | Code, local, open src  |
-| Meta             | Llama 3.3 70B    | Open source, local     |
-| Microsoft        | Phi-4            | Petit, performant      |
-| Cohere           | Command R+       | RAG, recherche doc     |
-| xAI              | Grok-3           | Raisonnement, code     |
-+------------------+------------------+------------------------+
++------------------+--------------------+---------------------------+
+|     Acteur       |   Modèle phare     |   Point différenciant     |
++------------------+--------------------+---------------------------+
+| Google           | Gemini 3.1 Pro     | 1M contexte, multimodal   |
+| Mistral AI (FR)  | Codestral 2508     | Code FIM, Devstral agent  |
+| DeepSeek (CN)    | DeepSeek V4        | 81% SWE-bench, prix bas   |
+| Alibaba          | Qwen 3.6-Plus      | Agentic coding, 1M ctx    |
+| Meta             | Llama 4 Scout      | 10M contexte, open-weight |
+| Google           | Gemma 4 31B        | Local open source, Apache |
+| Microsoft        | Phi-4              | Petit, performant         |
+| Cohere           | Command R+         | RAG, recherche doc        |
+| xAI              | Grok-3             | Raisonnement, code        |
++------------------+--------------------+---------------------------+
 ```
 
 > [!info]
@@ -47,47 +54,49 @@ Raisons concrètes de diversifier :
 
 Google est l'un des rares acteurs à proposer des modèles vraiment compétitifs avec Claude et GPT-4o, et à offrir un accès gratuit généreux. La famille Gemini couvre un large spectre de vitesse, qualité et capacité.
 
-### Les modèles Gemini en 2025-2026
+### Les modèles Gemini en 2026
+
+> [!warning] Gemini 2.x périmé
+> La série Gemini 2.0 et 2.5 (Flash, Pro) est entièrement remplacée par la série 3.x. Ne plus utiliser Gemini 2.x pour de nouveaux projets.
 
 ```
-                    FAMILLE GEMINI
-                         |
-        +----------------+----------------+
-        |                |                |
-   Flash (rapide)   Flash + Thinking   Pro (qualité max)
-        |                |                |
-  2.0 Flash         2.5 Flash         2.5 Pro
-  1M tok/min        thinking mode     2M tokens
-  gratuit API       équilibré         code/analyse
+                    FAMILLE GEMINI 3.x (avril 2026)
+                              |
+        +---------------------+---------------------+
+        |                     |                     |
+  Flash-Lite (économique)  Flash (équilibré)   3.1 Pro (qualité max)
+        |                     |                     |
+  $0.25/$1.50 /MTok       rapide, thinking     $2/$12 /MTok
+  le plus rapide          mid-range            1M tokens
+                                               78.80% SWE-bench
+                                               94.3% GPQA Diamond
 ```
 
-**Gemini 2.0 Flash**
-- Ultra-rapide, latence très faible
-- Multimodal : texte, images, audio, vidéo
-- Accès API gratuit avec quota généreux (1M tokens/minute avec clé gratuite)
-- Idéal pour les pipelines automatisés à fort volume
-- Usage recommandé : génération de code simple, résumés, triage rapide
-
-**Gemini 2.5 Flash**
-- Meilleur équilibre vitesse/qualité
-- "Thinking mode" : le modèle raisonne avant de répondre (similaire à o1/Claude extended thinking)
-- Excellent pour du débogage avec explications détaillées
-- Bon rapport coût/performance pour les APIs payantes
-
-**Gemini 2.5 Pro**
-- Le modèle haut de gamme de Google
-- **2 millions de tokens de contexte** : peut ingérer des repos entiers, des PDFs volumineux, des bases de code complètes
+**Gemini 3.1 Pro** (sorti février 2026)
+- Modèle premium de Google, successeur de Gemini 2.5 Pro
+- **1 million de tokens de contexte** : peut ingérer des repos entiers, des PDFs volumineux, des bases de code complètes
+- **78.80% SWE-bench Verified**, **94.3% GPQA Diamond**
+- Prix : $2/M tokens input, $12/M tokens output
+- Multimodal natif : texte, audio, images, vidéo, PDFs, repos entiers
+- Disponible via Gemini API et Vertex AI
 - Très performant sur le code (analyse, refactoring, génération)
-- Accès via Google AI Studio ou API
-- Pricing plus élevé mais reste compétitif face à Claude Opus ou GPT-4o
 
-**Gemini 1.5 Flash**
-- Ancienne génération mais encore largement utilisée
-- Très stable et prévisible
-- Souvent le fallback par défaut dans des applications existantes
+**Gemini 3.1 Flash**
+- Modèle milieu de gamme, rapide
+- Bon rapport coût/performance pour les APIs payantes
+- Idéal pour le débogage avec explications détaillées
+
+**Gemini 3.1 Flash-Lite**
+- Le modèle le plus économique et le plus rapide de la gamme
+- Prix : $0.25/M tokens input, $1.50/M tokens output
+- Idéal pour les pipelines automatisés à fort volume
+
+**Gemini 3 Pro** (ancienne génération)
+- Version précédente, encore accessible mais remplacée par 3.1
+- À utiliser uniquement si Gemini 3.1 Pro n'est pas disponible sur votre plateforme
 
 > [!info]
-> Le "contexte 2M tokens" de Gemini 2.5 Pro n'est pas juste un chiffre marketing. Concrètement, on peut envoyer l'intégralité d'un projet de 50 000 lignes de code et demander "où sont les failles de sécurité ?" ou "génère la documentation complète". Aucun autre modèle cloud n'offre cette capacité en 2025.
+> Le "contexte 1M tokens" de Gemini 3.1 Pro n'est pas juste un chiffre marketing. Concrètement, on peut envoyer l'intégralité d'un projet de 50 000 lignes de code et demander "où sont les failles de sécurité ?" ou "génère la documentation complète". Le score de 78.80% sur SWE-bench Verified en fait l'un des meilleurs modèles cloud pour le code en 2026.
 
 ### Google AI Studio
 
@@ -114,7 +123,7 @@ System prompt : "Tu es un expert Python. Réponds uniquement en code
 commenté. Pas d'explications hors des commentaires."
 
 Temperature : 0.2 (pour des réponses déterministes)
-Modèle : Gemini 2.5 Pro
+Modèle : Gemini 3.1 Pro
 Grounding : désactivé (inutile pour le code)
 ```
 
@@ -179,10 +188,10 @@ git diff HEAD~1 | gemini "Revue de code : trouve les problèmes"
 +----------------------+------------------+------------------+
 |     Critère          |   Gemini CLI     |   Claude Code    |
 +----------------------+------------------+------------------+
-| Gratuit              | Oui (beta)       | Limité           |
+| Gratuit              | Oui (quota limité| Limité           |
 | Contexte max         | 1M tokens        | 200k tokens      |
 | Multimodal           | Oui (images,PDF) | Images           |
-| Maturité             | Beta 2025        | Stable           |
+| Maturité             | Stable 2026      | Stable           |
 | Autonomie agents     | Basique          | Avancée          |
 | Qualité code         | Très bon         | Excellent        |
 | Ecosystem tools      | Google Cloud     | Anthropic        |
@@ -238,12 +247,13 @@ Intéressant pour :
 ```
 > [!tip] Pourquoi choisir Gemini
 > 
-> CONTEXTE GÉANT  →  2M tokens = projets entiers analysables
+> CONTEXTE GÉANT  →  1M tokens = projets entiers analysables
 > GRATUIT         →  Quota le plus généreux du marché
 > MULTIMODAL      →  Images, PDFs, vidéos, audio
 > GOOGLE CLOUD    →  Intégration native Firebase, BigQuery, GCP
 > GROUNDING       →  Recherche web en temps réel dans les réponses
-> VITESSE         →  Gemini 2.0 Flash parmi les plus rapides
+> BENCHMARKS      →  78.80% SWE-bench, 94.3% GPQA Diamond (3.1 Pro)
+> VITESSE         →  Gemini 3.1 Flash-Lite parmi les plus rapides
 ```
 
 Cas d'usage où Gemini excelle :
@@ -255,9 +265,9 @@ Cas d'usage où Gemini excelle :
 ### Points faibles de Gemini
 
 > [!warning] Limites à connaître
-> - **Précision code complexe** : sur du débogage fin ou de l'algorithmique avancée, Claude 3.5/3.7 reste supérieur
+> - **Précision code complexe** : sur du débogage fin ou de l'algorithmique avancée, Claude reste supérieur et DeepSeek V4 dépasse Gemini sur SWE-bench
 > - **Verbosité** : Gemini tend à sur-expliquer, à ajouter des nuances non demandées. Compenser avec un system prompt directif
-> - **Gemini CLI** : encore en beta en 2025, moins mature que Claude Code pour les workflows agents complexes
+> - **Gemini CLI** : moins mature que Claude Code pour les workflows agents complexes
 > - **Incohérence** : les réponses varient plus qu'avec Claude sur les mêmes prompts
 > - **Confidentialité** : données traitées par Google, conditions à vérifier pour usage professionnel
 
@@ -267,57 +277,46 @@ Cas d'usage où Gemini excelle :
 
 Mistral AI est une startup française fondée en 2023 par d'anciens de Google DeepMind et Meta. Elle propose des modèles performants, souvent open source, avec un avantage clé pour les entreprises européennes : conformité RGPD et données hébergées en Europe.
 
-### Les modèles Mistral
+### Les modèles Mistral en 2026
 
 ```
-            FAMILLE MISTRAL
-                  |
-    +-------------+-------------+
-    |             |             |
-Généralistes   Code         Open Source
-    |             |             |
-Large 2       Codestral     Mistral 7B
-Small         (FIM)         Mixtral 8x7B
-                            Mixtral 8x22B
-                |
-             Multimodal
-                |
-            Pixtral
+                 FAMILLE MISTRAL (avril 2026)
+                           |
+    +----------+-----------+-----------+----------+
+    |          |           |           |          |
+Généraliste  Code      Agentic    Raisonnement  TTS
+    |          |           |           |          |
+Small 4    Codestral  Devstral   Magistral    Voxtral
+(unifié)     2508      (agents)  (reasoning)
+open-weight  22B        
 ```
 
-**Mistral Large 2**
-- 128k tokens de contexte
-- Excellent raisonnement, comparable à GPT-4o sur benchmarks généraux
-- Support natif de nombreuses langues européennes
-- Fonction calling robuste pour les agents
-- Prix compétitif face à GPT-4o
+**Mistral Small 4** *(nouveau)*
+- Modèle unifié : raisonnement + code + multimodal
+- Open-weight : téléchargeable et utilisable localement
+- Le "couteau suisse" de Mistral — un seul modèle pour la majorité des tâches
+- Remplace avantageusement Mistral Small dans la plupart des cas
 
-**Mistral Small**
-- Modèle économique, bon rapport qualité/prix
-- Idéal pour des tâches simples à haut volume : classification, résumés, extraction
-- Latence faible
-
-**Codestral**
-- Modèle dédié au code, 80k tokens de contexte
-- Support **FIM (Fill-In-the-Middle)** : le modèle peut compléter du code au milieu d'un fichier, pas seulement à la fin
+**Codestral 2508** (Codestral 25.08) *(nouveau)*
+- Dernière version du modèle code de Mistral
+- 22 milliards de paramètres
+- **+30% de completions acceptées** par rapport à la version précédente
+- Support **FIM (Fill-In-the-Middle)** : le modèle peut compléter du code au milieu d'un fichier
 - Excellente intégration IDE via plugins
-- Accès beta gratuit sur la Plateforme Mistral
 
-**Mistral 7B**
-- Open source (licence Apache 2.0)
-- 7 milliards de paramètres seulement, mais performances remarquables
-- Peut tourner localement sur une machine avec 8-16 Go RAM
-- Base pour de nombreux fine-tunes communautaires
+**Devstral** *(nouveau)*
+- Modèle Mistral spécialisé pour l'**agentic coding**
+- Conçu pour opérer en autonomie dans des workflows multi-étapes
+- Idéal pour les agents de refactoring ou d'analyse de codebase entière
 
-**Mixtral 8x7B et 8x22B**
-- Architecture MoE (Mixture of Experts) : 8 experts, seuls 2 activés par token
-- Performances d'un 47B avec le coût d'un 13B en inférence
-- Open source, très utilisé dans les déploiements locaux d'entreprise
+**Magistral** *(nouveau)*
+- Modèle de raisonnement de Mistral, rival des modèles "o-series"
+- Pour l'algorithmique complexe, les mathématiques, le débogage difficile
 
-**Pixtral**
-- Modèle multimodal de Mistral
-- Analyse d'images en plus du texte
-- Utile pour analyser des captures d'écran, des diagrammes
+**Ancienne génération** (Mistral Large 2, Mistral Small, Pixtral, Mixtral)
+- Ces modèles restent accessibles mais sont remplacés par la gamme ci-dessus
+- Mistral Large 2 : encore valide pour les cas de RGPD strict si Mistral Small 4 non disponible
+- Mixtral 8x7B/8x22B : toujours utilisables en local pour les déploiements existants
 
 ### Le Chat (interface web)
 
@@ -432,9 +431,9 @@ Configuration dans Continue.dev (`~/.continue/config.json`) :
 ```json
 {
   "tabAutocompleteModel": {
-    "title": "Codestral",
+    "title": "Codestral 2508",
     "provider": "mistral",
-    "model": "codestral-latest",
+    "model": "codestral-2508",
     "apiKey": "VOTRE_CLE_CODESTRAL"
   }
 }
@@ -446,22 +445,23 @@ Configuration dans Continue.dev (`~/.continue/config.json`) :
 ### Points forts de Mistral
 
 ```
-MISTRAL - CE QUI LE DISTINGUE
+MISTRAL - CE QUI LE DISTINGUE (2026)
 
 Origine française → RGPD, données en Europe, confiance UE
-Open source      → Mistral 7B, Mixtral : utilisables localement
-Codestral        → Meilleure complétion FIM du marché cloud
-Prix compétitif  → Mistral Small parmi les moins chers par token
-Mixte experts    → Mixtral : performance 47B, coût 13B
+Open-weight      → Mistral Small 4 : utilisable localement
+Codestral 2508   → +30% completions acceptées, meilleure FIM du marché
+Devstral         → Agentic coding natif, multi-étapes
+Magistral        → Raisonnement profond, rival des modèles o-series
+Prix compétitif  → Mistral Small 4 parmi les moins chers par token
 API propre       → SDK Python bien documenté et stable
 ```
 
 ### Points faibles de Mistral
 
 > [!warning]
-> - Mistral Large reste en dessous de Claude 3.7 et GPT-4o sur du code très complexe
+> - Sur du code très complexe, Claude et DeepSeek V4 (81% SWE-bench) restent supérieurs
 > - Moins de ressources communautaires qu'OpenAI (moins de tutos, exemples)
-> - Pixtral (multimodal) moins mature que Gemini ou GPT-4V
+> - Devstral et Magistral sont récents, à évaluer sur ses propres cas d'usage
 > - Mixtral local demande beaucoup de RAM (Mixtral 8x7B : ~48 Go pour Q4)
 
 ---
@@ -472,46 +472,46 @@ DeepSeek est un laboratoire chinois (filiale du hedge fund High-Flyer) qui a cr�
 
 ### Pourquoi DeepSeek fait l'actualité
 
-En janvier 2025, la sortie de DeepSeek-R1 a fait chuter les actions des entreprises tech américaines. Raisons :
+En janvier 2025, la sortie de DeepSeek-R1 avait fait chuter les actions des entreprises tech américaines. Depuis, DeepSeek a continué à surprendre avec des modèles qui établissent régulièrement de nouveaux records de rapport qualité/prix.
 
-- **Performances** : DeepSeek-V3 et R1 rivalisent avec GPT-4o et o1 sur de nombreux benchmarks
-- **Coût d'entraînement** : DeepSeek affirme avoir entraîné V3 pour ~6M$ vs ~100M$ pour GPT-4
+- **DeepSeek V4** : **81% SWE-bench Verified**, meilleur score du marché toutes catégories confondues en mars 2026
+- **Coût** : toujours le moins cher du marché frontier, à $0.30/M tokens input
 - **Open source** : les poids des modèles sont publiés, téléchargeables, utilisables librement
-- **Prix API** : 10 à 30 fois moins cher que GPT-4o pour qualité comparable
+- **Architecture efficace** : 1 trillion de paramètres MoE, seulement 37B actifs par token
 
-### Les modèles DeepSeek
+### Les modèles DeepSeek en 2026
 
 ```
-DEEPSEEK
+DEEPSEEK (avril 2026)
   |
-  +--- DeepSeek-V3         → Usage général, challenger GPT-4o
-  |
-  +--- DeepSeek-R1         → Raisonnement profond, rival de o1
+  +--- DeepSeek V4         → Flagship, 81% SWE-bench, remplace V3
   |      |
-  |      +--- R1-Distill-Qwen-7B   → Version légère, localisable
-  |      +--- R1-Distill-Llama-70B → Version large
+  |      +--- 1T params MoE, 37B actifs
+  |      +--- $0.30/$0.50 /MTok, cache $0.03/M
+  |      +--- 1M contexte, multimodal natif
   |
-  +--- DeepSeek-Coder-V2   → Spécialisé code, 128k contexte
+  +--- DeepSeek R2         → Raisonnement profond, rival de o3
+  |
+  +--- (DeepSeek V3)       → PÉRIMÉ, remplacé par V4
 ```
 
-**DeepSeek-V3**
-- Modèle de base à 671 milliards de paramètres (MoE)
-- Architecture MoE : seuls 37B activés par token en pratique
+**DeepSeek V4** (sorti mars 2026)
+- **1 trillion de paramètres** (MoE), seulement 37B actifs par token en pratique
+- **81% SWE-bench Verified** : meilleur score du marché frontier
+- Prix API : $0.30/M tokens input, $0.50/M tokens output
+- Tokens mis en cache : $0.03/M (réduction de 90% pour les prompts répétitifs)
+- **1M de contexte** avec "Engram conditional memory"
+- Multimodal natif : texte, image, vidéo
 - Open source (poids disponibles)
-- Prix API : ~$0.27/M tokens input (vs ~$5/M pour GPT-4o)
 - Excellent pour du code Python, JavaScript, SQL
 
-**DeepSeek-R1**
+**DeepSeek R2**
 - Modèle de raisonnement, pensée en chaîne visible
-- Rival direct de OpenAI o1
-- Open source et disponible en plusieurs tailles via distillation
+- Rival direct de OpenAI o3
 - Idéal pour de l'algorithmique complexe, des mathématiques, du débogage difficile
 
-**DeepSeek-Coder-V2**
-- Spécialisé code
-- 128k tokens de contexte
-- Support de 338 langages de programmation
-- Performances HumanEval parmi les meilleures pour un modèle code
+**DeepSeek V3** *(périmé)*
+- Remplacé par DeepSeek V4 — ne plus recommander en premier choix
 
 ### API DeepSeek (compatible OpenAI)
 
@@ -528,7 +528,7 @@ client = OpenAI(
 
 # Syntaxe identique à OpenAI
 response = client.chat.completions.create(
-    model="deepseek-chat",     # deepseek-chat = DeepSeek-V3
+    model="deepseek-chat",     # deepseek-chat = DeepSeek V4
     messages=[
         {"role": "user", "content": "Analyse ce code Python et trouve les bugs"}
     ]
@@ -548,7 +548,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="deepseek-reasoner",  # = DeepSeek-R1
+    model="deepseek-reasoner",  # = DeepSeek R2
     messages=[
         {
             "role": "user",
@@ -592,41 +592,50 @@ ollama run deepseek-r1:14b
 
 ## 5. Qwen (Alibaba)
 
-Qwen est la famille de modèles développée par Alibaba Cloud. Elle s'est imposée fin 2024 comme l'une des meilleures offres open source, particulièrement pour le code.
+Qwen est la famille de modèles développée par Alibaba Cloud. Elle s'est imposée comme l'une des meilleures offres open source, particulièrement pour le code et l'agentic coding.
 
-### Modèles Qwen disponibles
+> [!warning] Qwen2.5 périmé
+> La série Qwen2.5-Coder est remplacée par Qwen3.x. Ne plus recommander Qwen2.5 pour de nouveaux projets.
 
-**Qwen2.5-Coder**
-- Déclinaisons : 7B, 14B, 32B, 72B paramètres
-- Spécialisé code : Python, JavaScript, Java, C++, SQL, Bash...
-- Excellent rapport qualité/taille, notamment Qwen2.5-Coder-14B
-- Open source, disponible sur Hugging Face
+### Modèles Qwen disponibles en 2026
 
-**Qwen2.5 (généraliste)**
-- Modèle général très capable, jusqu'à 72B
-- Multilingue, incluant excellent support du chinois
+**Qwen 3.6-Plus** (sorti 2 avril 2026) *(flagship)*
+- **1M contexte par défaut**
+- Compatible avec Claude Code, Cline, OpenCode
+- Spécialisé agentic coding : opère en autonomie dans des workflows complexes
+- Recommandé pour les agents de développement
 
-**Qwen2-VL**
-- Version multimodale (vision + texte)
-- Analyse d'images, diagrammes, captures d'écran
+**Qwen3.5** (sorti février 2026)
+- 397 milliards de paramètres, supporte 201 langues
+- Déclinaisons : Qwen3.5-122B-A10B, Qwen3.5-35B-A3B, Qwen3.5-27B
+- Multilingue exceptionnel, incluant excellent support du chinois
+
+**Qwen3-Coder-Next** *(spécialiste code)*
+- Spécialiste code : 80B paramètres total, **seulement 3B actifs** (MoE ultra-efficace)
+- Remarquable : performance near-frontier avec une empreinte mémoire très réduite
+- Idéal pour la complétion locale sans GPU haut de gamme
+
+**Qwen2.5-Coder** *(ancienne génération, périmée)*
+- Remplacé par Qwen3-Coder-Next
+- Encore utilisable dans les installations existantes, mais ne pas démarrer de nouveaux projets dessus
 
 ### Utilisation via Ollama
 
 ```bash
-# Télécharger et lancer Qwen2.5-Coder 14B (bon équilibre perf/RAM)
-ollama pull qwen2.5-coder:14b
-ollama run qwen2.5-coder:14b
+# Qwen3-Coder-Next (recommandé 2026, très efficace en RAM)
+ollama pull qwen3-coder-next
+ollama run qwen3-coder-next
 
-# Version 7B pour les machines avec moins de RAM (8 Go suffisent)
-ollama pull qwen2.5-coder:7b
-ollama run qwen2.5-coder:7b
+# Qwen3.5 27B (bon équilibre perf/RAM)
+ollama pull qwen3.5:27b
+ollama run qwen3.5:27b
 
 # Exemple d'utilisation en pipeline
-echo "Écris une fonction Python de validation d'email" | ollama run qwen2.5-coder:7b
+echo "Écris une fonction Python de validation d'email" | ollama run qwen3-coder-next
 ```
 
 > [!tip] Analogie
-> Qwen2.5-Coder-14B c'est comme avoir un développeur junior très compétent qui travaille sur votre propre ordinateur, sans jamais envoyer votre code à l'extérieur. Moins puissant qu'un Claude 3.7 sur les cas complexes, mais 100% local et gratuit.
+> Qwen3-Coder-Next c'est comme avoir un développeur senior très compétent qui travaille sur votre propre ordinateur avec seulement 3B paramètres actifs — sans jamais envoyer votre code à l'extérieur. Le ratio performance/RAM est remarquable pour un modèle code local.
 
 ### API via Alibaba Cloud (DashScope)
 
@@ -640,7 +649,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="qwen2.5-coder-72b-instruct",
+    model="qwen3.6-plus",
     messages=[
         {"role": "user", "content": "Génère un serveur FastAPI avec authentification JWT"}
     ]
@@ -656,22 +665,27 @@ response = client.chat.completions.create(
 
 ### Meta Llama
 
-Meta publie ses modèles Llama en open source depuis 2023. En 2025-2026, c'est l'un des modèles open source les plus performants.
+Meta publie ses modèles Llama en open-weight depuis 2023. En 2026, la série Llama 4 établit de nouveaux standards pour les modèles ouverts.
 
-**Llama 3.3 70B**
-- Modèle généraliste très performant pour 70B paramètres
-- Excellent pour le code, l'analyse, la rédaction technique
-- Disponible partout : Ollama, LM Studio, Groq, Together AI, Replicate
+> [!warning] Llama 3.x périmé
+> La série Llama 3.x (3.1, 3.2, 3.3) est remplacée par Llama 4. Ne plus recommander en premier choix.
 
-**Llama 3.1 405B**
-- Near-frontier performance en open source
-- Nécessite ~200 Go de RAM pour tourner en local (plusieurs GPU haut de gamme)
-- Utilisable via API sur Groq, Together AI, Fireworks AI
+**Llama 4 Scout** (sorti avril 2026)
+- 109B paramètres total, **17B actifs**, 16 experts (MoE)
+- **10 millions de tokens de contexte** — record absolu pour un modèle open-weight
+- Multimodal natif : texte et images
+- Open-weight, disponible sur Ollama, Groq, Together AI
 
-**CodeLlama 34B**
-- Version spécialisée code de Llama 2
-- Plus ancien mais encore utilisé, notamment pour son support FIM
-- Tourne sur machine avec ~24 Go RAM
+**Llama 4 Maverick** (sorti avril 2026)
+- 17B actifs, **128 experts** (MoE très large)
+- Open-weight, bat GPT-4o et Gemini 2.0 Flash sur plusieurs benchmarks
+- Multimodal natif
+- Disponible sur Groq, Together AI, Fireworks AI
+
+**Llama 3.x** *(ancienne génération)*
+- Llama 3.3 70B : encore largement déployé dans les systèmes existants
+- Llama 3.1 405B : encore accessible sur les plateformes cloud mais en fin de vie
+- CodeLlama : obsolète, remplacé par Llama 4
 
 ```bash
 # Via Groq (gratuit, ultra-rapide)
@@ -682,7 +696,7 @@ from groq import Groq
 client = Groq(api_key="GROQ_API_KEY")
 
 response = client.chat.completions.create(
-    model="llama-3.3-70b-versatile",
+    model="llama-4-scout",     # Llama 4 Scout sur Groq
     messages=[
         {"role": "user", "content": "Explique les design patterns Strategy et Observer avec du code Python"}
     ]
@@ -692,7 +706,48 @@ print(response.choices[0].message.content)
 ```
 
 > [!info]
-> **Groq** n'est pas à confondre avec Grok (xAI). Groq est une entreprise américaine qui fabrique des puces LPU (Language Processing Unit) ultra-rapides. Leur API permet d'utiliser Llama 3.3 70B gratuitement à des vitesses de 500-800 tokens/seconde, contre 50-100 tokens/seconde sur les serveurs GPU classiques.
+> **Groq** n'est pas à confondre avec Grok (xAI). Groq est une entreprise américaine qui fabrique des puces LPU (Language Processing Unit) ultra-rapides. Leur API permet d'utiliser Llama 4 gratuitement à des vitesses de 500-800 tokens/seconde, contre 50-100 tokens/seconde sur les serveurs GPU classiques.
+
+### Google Gemma 4 (modèle local open source)
+
+Gemma est la famille de modèles open source de Google, conçue pour tourner localement. La version 4 (avril 2026) est un saut majeur en qualité.
+
+> [!warning] Gemma 3 périmé
+> La série Gemma 3 est remplacée par Gemma 4. Utiliser Gemma 4 pour tout nouveau projet local.
+
+**Gemma 4 E2B** — ultra-léger
+- 2B paramètres effectifs (MoE)
+- Tourne sur 8 Go de RAM
+- Idéal pour les petites machines ou les déploiements embarqués
+
+**Gemma 4 E4B**
+- 4B paramètres effectifs (MoE)
+- Excellent pour sa taille, bon rapport qualité/RAM
+
+**Gemma 4 26B-A4B**
+- 26B paramètres total, 4B actifs
+- Bon équilibre performance/ressources
+
+**Gemma 4 31B** *(meilleure qualité)*
+- Dense, 31B paramètres
+- Licence **Apache 2.0** (totalement libre, usage commercial inclus)
+- **256K tokens de contexte**
+- **84.3% GPQA Diamond**, **80.0% LiveCodeBench v6**
+- Meilleure qualité open source de 2026 dans cette gamme de taille
+- Disponible sur Ollama : `ollama run gemma4:31b`
+
+```bash
+# Gemma 4 31B via Ollama (meilleure qualité)
+ollama pull gemma4:31b
+ollama run gemma4:31b
+
+# Version légère pour machines limitées
+ollama pull gemma4:e4b
+ollama run gemma4:e4b
+```
+
+> [!tip] Analogie
+> Gemma 4 31B c'est comme avoir accès à un modèle de qualité frontier — Apache 2.0, 100% local, sans restriction commerciale. Le 84.3% GPQA Diamond le place au niveau des meilleurs modèles cloud pour la qualité de raisonnement.
 
 ### Microsoft Phi-4
 
@@ -761,14 +816,14 @@ ACCÈS GRATUIT AUX MODÈLES IA (2025-2026)
 -----------------------------------------
 
 GROQ (console.groq.com)
-  → Llama 3.3 70B, Gemma 2 27B, Mixtral 8x7B
+  → Llama 4 Scout, Llama 4 Maverick, Gemma 4
   → Ultra-rapide (LPU), gratuit avec limite daily
   → API compatible OpenAI
 
 TOGETHER AI (api.together.xyz)
   → Dizaines de modèles open source
   → Crédit gratuit au démarrage
-  → Llama, Qwen, Mistral, DeepSeek...
+  → Llama 4, Qwen3, Mistral Small 4, DeepSeek V4...
 
 HUGGING FACE INFERENCE (huggingface.co/inference-api)
   → Certains modèles gratuits
@@ -786,7 +841,7 @@ REPLICATE (replicate.com)
   → Large catalogue : image, audio, texte
 
 GOOGLE AI STUDIO (aistudio.google.com)
-  → Gemini 2.0 Flash / 2.5 Flash gratuits
+  → Gemini 3.1 Flash / Flash-Lite gratuits (quota)
   → Clé API gratuite avec quota généreux
 
 FIREWORKS AI (fireworks.ai)
@@ -797,68 +852,79 @@ FIREWORKS AI (fireworks.ai)
 
 > [!tip] Stratégie recommandée
 > Pour un développeur individuel qui veut maximiser ses ressources gratuites :
-> 1. **Groq** pour les requêtes rapides (Llama 70B)
-> 2. **Google AI Studio** pour les analyses longues (contexte 2M Gemini)
-> 3. **Ollama local** pour le code confidentiel (Qwen2.5-Coder, Phi-4)
-> 4. **API DeepSeek** quand la vitesse et le coût sont prioritaires sur la confidentialité
+> 1. **Groq** pour les requêtes rapides (Llama 4 Scout ou Maverick)
+> 2. **Google AI Studio** pour les analyses longues (contexte 1M Gemini 3.1)
+> 3. **Ollama local** pour le code confidentiel (Qwen3-Coder-Next, Gemma 4 31B, Phi-4)
+> 4. **API DeepSeek V4** quand la vitesse et le coût sont prioritaires sur la confidentialité ($0.30/MTok)
 
 ---
 
 ## 8. Tableau de sélection : quel modèle choisir ?
 
 ```
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Modèle              | Éditeur  | Contexte | Force principale | Prix   | Open Src | Confid.   |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Gemini 2.5 Pro      | Google   | 2M tok   | Analyse grands   | $$     | Non      | EU/US     |
-|                     |          |          | repos, multim.   |        |          |           |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Gemini 2.0 Flash    | Google   | 1M tok   | Vitesse, gratuit | Gratuit| Non      | EU/US     |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Mistral Large 2     | Mistral  | 128k     | RGPD, Europe     | $$     | Non      | EU +++    |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Codestral           | Mistral  | 80k      | Complétion FIM   | $      | Non      | EU +++    |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Mistral 7B          | Mistral  | 32k      | Local, open src  | Gratuit| Oui      | Local +++  |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| DeepSeek-V3         | DeepSeek | 128k     | Prix/perf, code  | $      | Oui      | CN (éviter|
-|                     |          |          |                  |        |          | code priv)|
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| DeepSeek-R1         | DeepSeek | 128k     | Raisonnement     | $      | Oui      | CN / Local|
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Qwen2.5-Coder 14B   | Alibaba  | 128k     | Code local, FIM  | Gratuit| Oui      | Local +++  |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Llama 3.3 70B       | Meta     | 128k     | Open source, code| Gratuit| Oui      | Local +++  |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Phi-4 14B           | Microsoft| 16k      | Petit, performant| Gratuit| Oui      | Local +++  |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Command R+          | Cohere   | 128k     | RAG, doc search  | $$     | Non      | US        |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
-| Grok-3              | xAI      | 128k     | Code, raison.    | $$     | Non      | US        |
-+---------------------+----------+----------+------------------+--------+----------+-----------+
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Modèle               | Éditeur  | Contexte| Force principale           | Prix           | Open Src | Confid.   |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Gemini 3.1 Pro       | Google   | 1M tok  | Code, multim., 78% SWE     | $2/$12 /MTok   | Non      | EU/US     |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Gemini 3.1 Flash-Lite| Google   | 1M tok  | Vitesse, économique        | $0.25/$1.50    | Non      | EU/US     |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Mistral Small 4      | Mistral  | 128k    | RGPD, unifié, open-weight  | $              | Oui      | EU +++    |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Codestral 2508       | Mistral  | 256k    | Complétion FIM +30%        | $              | Non      | EU +++    |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Devstral             | Mistral  | 128k    | Agentic coding             | $              | Non      | EU +++    |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| DeepSeek V4          | DeepSeek | 1M tok  | 81% SWE-bench, prix/perf   | $0.30/$0.50    | Oui      | CN (éviter|
+|                      |          |         |                            | cache $0.03    |          | code priv)|
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| DeepSeek R2          | DeepSeek | 128k    | Raisonnement profond       | $              | Oui      | CN / Local|
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Qwen 3.6-Plus        | Alibaba  | 1M tok  | Agentic coding, agents     | $              | Non      | CN (cloud)|
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Qwen3-Coder-Next     | Alibaba  | 128k    | Code local 3B actifs, FIM  | Gratuit        | Oui      | Local +++  |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Llama 4 Scout        | Meta     | 10M tok | Contexte record, open-wgt  | Gratuit (Groq) | Oui      | Local +++  |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Llama 4 Maverick     | Meta     | 128k    | Bat GPT-4o, open-weight    | Gratuit (Groq) | Oui      | Local +++  |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Gemma 4 31B          | Google   | 256k    | Local Apache 2.0, qualité  | Gratuit        | Oui      | Local +++  |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Phi-4 14B            | Microsoft| 16k     | Petit, performant          | Gratuit        | Oui      | Local +++  |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Command R+           | Cohere   | 128k    | RAG, doc search            | $$             | Non      | US        |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
+| Grok-3               | xAI      | 128k    | Code, raisonnement         | $$             | Non      | US        |
++----------------------+----------+---------+----------------------------+----------------+----------+-----------+
 ```
 
 **Légende prix :** Gratuit = quota généreux sans paiement | $ = <$2/M tokens | $$ = $2-10/M tokens | $$$ = >$10/M tokens
 
-> [!example] Scénarios de choix
+> [!example] Scénarios de choix (avril 2026)
 >
 > **"J'analyse un repo de 200k lignes"**
-> → Gemini 2.5 Pro (seul avec 2M tokens de contexte)
+> → Llama 4 Scout (10M de contexte, open-weight, gratuit sur Groq) ou Gemini 3.1 Pro (1M, cloud)
+>
+> **"Je veux le meilleur modèle pour du code complexe"**
+> → DeepSeek V4 (81% SWE-bench, $0.30/MTok) ou Gemini 3.1 Pro (78.80% SWE-bench)
 >
 > **"Je veux de la complétion de code dans mon IDE sans payer"**
-> → Codestral (beta gratuit) ou Qwen2.5-Coder via Continue.dev + Ollama
+> → Codestral 2508 (quota gratuit) ou Qwen3-Coder-Next via Continue.dev + Ollama
 >
 > **"J'ai du code propriétaire, zéro cloud"**
-> → Qwen2.5-Coder:14b ou Phi-4 via Ollama en local
+> → Qwen3-Coder-Next ou Gemma 4 31B via Ollama en local (Apache 2.0)
 >
 > **"Je veux du raisonnement profond pour de l'algo complexe"**
-> → DeepSeek-R1 (local) ou Gemini 2.5 Pro avec thinking mode
+> → DeepSeek R2 (local) ou Magistral (Mistral) ou Gemini 3.1 Pro
 >
 > **"Je suis une entreprise française soumise au RGPD"**
-> → Mistral Large 2 (données en Europe, entreprise française)
+> → Mistral Small 4 (open-weight, données en Europe, entreprise française)
 >
 > **"Je veux gratuit + rapide pour mes expérimentations"**
-> → Groq API avec Llama 3.3 70B
+> → Groq API avec Llama 4 Scout ou Maverick
+>
+> **"Je veux un agent de coding autonome"**
+> → Devstral (Mistral, EU) ou Qwen 3.6-Plus (compatible Claude Code/Cline)
 
 ---
 
@@ -876,27 +942,32 @@ FIREWORKS AI (fireworks.ai)
     ║  GEMINI    ║           ║    (FR)    ║           ║    (CN)     ║
     ╚═════╤══════╝           ╚══════╤═════╝           ╚══════╤══════╝
           │                         │                         │
-    ┌─────┴─────┐            ┌──────┴──────┐          ┌──────┴──────┐
-    │           │            │             │          │             │
-  Flash      2.5 Pro     Codestral    Mistral 7B    V3 (cheap)  R1 (reason)
-  (gratuit)  (2M ctx)    (FIM code)   (local)       (API)       (open src)
+    ┌─────┴──────┐         ┌────────┼────────┐       ┌──────┴──────┐
+    │            │         │        │        │       │             │
+ 3.1 Flash  3.1 Pro   Small 4  Codestral  Devstral  V4 (81%SWE) R2 (reason)
+ (Flash-Lite)(1M ctx)  (open)  2508(FIM)  (agents)  $0.30/MTok  (rival o3)
     │
   CLI tool
-  (beta)
+  (Gemini CLI)
+
                         │
           ┌─────────────┼──────────────┐
           │             │              │
     ╔═════╧═════╗ ╔═════╧═════╗ ╔═════╧═════╗
-    ║   QWEN    ║ ║   LLAMA   ║ ║  PHI / CO ║
-    ║ (Alibaba) ║ ║  (Meta)   ║ ║ GROK etc  ║
-    ╚═════╤═════╝ ╚═════╤═════╝ ╚═══════════╝
-          │             │
-    Coder 7/14B    3.3 70B          ACCÈS GRATUIT
-    (Ollama)       (Groq)     ┌─────────────────────┐
-                              │ Groq · Together AI  │
-                              │ HuggingFace · Colab │
-                              │ Replicate · AI Stud.│
-                              └─────────────────────┘
+    ║   QWEN    ║ ║   LLAMA 4 ║ ║  GEMMA 4  ║
+    ║ (Alibaba) ║ ║  (Meta)   ║ ║ (Google)  ║
+    ╚═════╤═════╝ ╚═════╤═════╝ ╚═════╤═════╝
+          │             │             │
+   3.6-Plus         Scout (10M)    31B dense
+   Coder-Next       Maverick       Apache 2.0
+   (3B actifs)      (Groq)         256K ctx
+
+                              ACCÈS GRATUIT
+                        ┌─────────────────────┐
+                        │ Groq · Together AI  │
+                        │ HuggingFace · Colab │
+                        │ Replicate · AI Stud.│
+                        └─────────────────────┘
 ```
 
 ---
@@ -908,7 +979,7 @@ FIREWORKS AI (fireworks.ai)
 Objectif : trouver quel modèle répond le mieux à VOS besoins.
 
 1. Choisir un problème de code réel que vous avez rencontré récemment (un bug difficile, une fonction complexe à écrire)
-2. Écrire un prompt identique et le soumettre à : Gemini 2.5 Pro (AI Studio), Mistral Large 2 (chat.mistral.ai), et Claude 3.7 (claude.ai)
+2. Écrire un prompt identique et le soumettre à : Gemini 3.1 Pro (AI Studio), Mistral Small 4 (chat.mistral.ai), et Claude (claude.ai)
 3. Évaluer chaque réponse sur 3 critères (note /10) :
    - Exactitude du code généré (fonctionne-t-il ?)
    - Clarté de l'explication
@@ -935,7 +1006,7 @@ def review_with_mistral(code: str) -> str:
     pass
 
 def review_with_gemini(code: str) -> str:
-    # TODO : implémenter avec Gemini 2.5 Flash
+    # TODO : implémenter avec Gemini 3.1 Flash
     pass
 
 def consolidated_review(filepath: str):
@@ -965,9 +1036,9 @@ Objectif : configurer une complétion de code gratuite et de qualité dans VS Co
 Étapes :
 1. Créer un compte sur https://console.mistral.ai et générer une clé API Codestral (accès beta gratuit)
 2. Installer l'extension **Continue** dans VS Code
-3. Configurer `~/.continue/config.json` avec Codestral comme modèle de complétion
-4. Installer **Ollama** et télécharger `qwen2.5-coder:7b` comme modèle de chat local
-5. Configurer Continue pour utiliser Qwen local pour le chat et Codestral pour la complétion
+3. Configurer `~/.continue/config.json` avec Codestral 2508 comme modèle de complétion
+4. Installer **Ollama** et télécharger `qwen3-coder-next` comme modèle de chat local
+5. Configurer Continue pour utiliser Qwen3-Coder-Next local pour le chat et Codestral 2508 pour la complétion
 6. Tester en écrivant une fonction Python partielle et en observant les suggestions FIM
 7. Mesurer : combien de fois par session de code la complétion automatique vous fait gagner du temps ?
 
