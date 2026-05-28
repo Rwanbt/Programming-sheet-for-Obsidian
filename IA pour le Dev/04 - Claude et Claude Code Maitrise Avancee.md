@@ -1639,8 +1639,8 @@ Fin de journée :
 
 ## Liens
 
-- [[01 - IA Assistants de Code]] — Panorama des assistants IA (Copilot, ChatGPT, Claude)
-- [[02 - IA et Productivite Dev]] — Intégration CI/CD, génération de tests, agents
+- [[07 - Integrations IDE et Extensions]] — Panorama des assistants IA (Copilot, ChatGPT, Claude)
+- [[03 - Prompt Engineering pour le Code]] — Intégration CI/CD, génération de tests, agents
 - [[04 - CI-CD avec GitHub Actions]] — Automatiser son pipeline avec Claude
 - [[01 - Git et GitHub]] — Workflows Git assistés par IA (`/commit`, revues)
 - [[07 - Python Async et Concurrence]] — Comprendre asyncio (utile pour l'API Claude)

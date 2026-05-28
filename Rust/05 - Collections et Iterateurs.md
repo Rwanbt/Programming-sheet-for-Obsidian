@@ -1149,3 +1149,5 @@ fn main() {
 
 - [[02 - Ownership et Borrowing]] --- Les regles d'ownership s'appliquent aux collections et aux closures
 - [[06 - Traits et Generiques]] --- Les traits Iterator, Fn, et les generiques qui rendent les collections possibles
+- [[18 - Closures FnOnce FnMut Fn en Profondeur]] --- Approfondissement des closures et des traits Fn*
+- [[21 - Strings et Texte en Profondeur]] --- String, &str, Cow, et toutes les operations sur le texte

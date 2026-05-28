@@ -931,7 +931,7 @@ Pour un guide complet sur la confidentialité des outils IA, voir [[11 - IA Conf
 
 ## Liens connexes
 
-- [[01 - Panorama des IA pour Développeurs]]
+- [[01 - Panorama des IA pour Developpeurs]]
 - [[03 - Prompt Engineering pour le Code]]
 - [[08 - OpenCode et CLI Alternatifs]]
 - [[09 - IA Locale avec Ollama]]

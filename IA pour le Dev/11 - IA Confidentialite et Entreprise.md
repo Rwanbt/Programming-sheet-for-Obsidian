@@ -860,4 +860,4 @@ En t'inspirant du template du chapitre, rédige une politique IA pour ton équip
 - [[10 - LM Studio et Hardware Local]]
 - [[06 - Gemini Mistral et Alternatives Cloud]]
 - [[12 - Strategies Multi-Modeles et Workflows]]
-- [[08 - Prompting Avance pour Developpeurs]]
+- [[03 - Prompt Engineering pour le Code]]

@@ -1622,3 +1622,7 @@ fn mode_interactif(filename: &Path) -> Result<(), Box<dyn std::error::Error>> {
 - [[06 - Traits et Generiques]] --- Les traits utilises dans ce projet (Display, Error, From)
 - [[05 - Collections et Iterateurs]] --- Les iterateurs sont au coeur de la logique de recherche
 - [[04 - Gestion des Erreurs en Rust]] --- Result, ?, Box<dyn Error> utilises partout dans minigrep
+- [[19 - Cargo Avance Workspaces et Publication]] --- Publier ce projet sur crates.io, workspaces
+- [[20 - Testing Avance Criterion et Proptest]] --- Tests avances, benchmarks Criterion, proptest
+- [[21 - Strings et Texte en Profondeur]] --- &str, String, parsing de texte en profondeur
+- [[16 - Serde Serialisation et Deserialisation]] --- Ajouter la serialisation JSON/TOML au projet

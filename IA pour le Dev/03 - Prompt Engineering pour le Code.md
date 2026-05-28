@@ -1193,7 +1193,7 @@ pouvez copier-coller et remplir en 30 secondes.
 
 ## Liens
 
-[[01 - Panorama des IA pour Développeurs]]
+[[01 - Panorama des IA pour Developpeurs]]
 [[02 - Comprendre les LLMs et les Tokens]]
 [[04 - Claude et Claude Code Maitrise Avancee]]
 [[07 - Integrations IDE et Extensions]]

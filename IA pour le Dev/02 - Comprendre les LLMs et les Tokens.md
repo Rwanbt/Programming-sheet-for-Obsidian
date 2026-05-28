@@ -847,7 +847,7 @@ Objectif : constater empiriquement le phénomène d'attention non-uniforme.
 
 ## Liens et Ressources
 
-- [[01 - Panorama des IA pour Développeurs]] — Vue d'ensemble des outils disponibles et cas d'usage
+- [[01 - Panorama des IA pour Developpeurs]] — Vue d'ensemble des outils disponibles et cas d'usage
 - [[03 - Prompt Engineering pour le Code]] — Techniques pour exploiter les LLMs efficacement
 - [[09 - IA Locale avec Ollama]] — Exécuter des modèles quantisés en local
 - [[10 - LM Studio et Hardware Local]] — Interface graphique et configuration hardware pour LLMs locaux

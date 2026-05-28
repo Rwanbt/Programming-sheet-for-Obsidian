@@ -1063,4 +1063,4 @@ Pour une application de gestion de tâches (type Trello) :
 - [[03 - POO en Python]] — Classes et héritage Python en pratique
 - [[01 - Introduction a Java]] — Classes et interfaces Java
 - [[01 - Methodes Agiles Scrum et Kanban]] — Contexte d'utilisation d'UML en équipe Agile
-- [[Architecture Logicielle/01 - Principes SOLID]] — Design patterns liés aux diagrammes de classes
+- [[01 - Microservices et Patterns]] — Design patterns liés aux diagrammes de classes

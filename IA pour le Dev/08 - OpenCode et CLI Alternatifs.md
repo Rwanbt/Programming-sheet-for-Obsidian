@@ -866,4 +866,4 @@ class DataProcessor:
 - [[07 - Integrations IDE et Extensions]]
 - [[09 - IA Locale avec Ollama]]
 - [[12 - Strategies Multi-Modeles et Workflows]]
-- [[06 - MCP Model Context Protocol]]
+- [[13 - IA Agentic et Developpement MCP]]

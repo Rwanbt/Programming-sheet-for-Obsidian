@@ -945,8 +945,8 @@ problems = [
 
 ## Wikilinks
 
-[[01 - Panorama des IA pour Développeurs]]
+[[01 - Panorama des IA pour Developpeurs]]
 [[04 - Claude et Claude Code Maitrise Avancee]]
 [[09 - IA Locale avec Ollama]]
 [[11 - IA Confidentialite et Entreprise]]
-[[10 - Agents IA et Automatisation]]
+[[13 - IA Agentic et Developpement MCP]]

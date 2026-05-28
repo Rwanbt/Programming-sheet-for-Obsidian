@@ -1050,7 +1050,7 @@ Objectif : configurer une complétion de code gratuite et de qualité dans VS Co
 
 - Wikilinks internes :
 
-[[01 - Panorama des IA pour Développeurs]]
+[[01 - Panorama des IA pour Developpeurs]]
 [[05 - ChatGPT Codex et GitHub Copilot]]
 [[09 - IA Locale avec Ollama]]
 [[11 - IA Confidentialite et Entreprise]]

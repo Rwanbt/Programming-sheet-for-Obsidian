@@ -950,7 +950,7 @@ o3 (réponse lente, ~45s) :
 
 ### Wikilinks
 
-- [[01 - Panorama des IA pour Développeurs]] — Vue d'ensemble de tous les outils IA disponibles pour les développeurs
+- [[01 - Panorama des IA pour Developpeurs]] — Vue d'ensemble de tous les outils IA disponibles pour les développeurs
 - [[06 - Gemini Mistral et Alternatives Cloud]] — Les alternatives à OpenAI : Google Gemini, Mistral, et les modèles open-source
 - [[07 - Integrations IDE et Extensions]] — Comparatif complet des intégrations IDE : Copilot, Cursor, Codeium, etc.
 - [[12 - Strategies Multi-Modeles et Workflows]] — Comment combiner plusieurs modèles IA dans un workflow de développement optimal
