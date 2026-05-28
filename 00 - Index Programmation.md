@@ -3,11 +3,18 @@
 > [!info] Guide complet
 > Ce coffre contient des cours complets pour apprendre la programmation depuis zéro. Chaque note est conçue pour qu'un novice puisse, après lecture, écrire et mettre en pratique toutes les connaissances abordées.
 > 
-> **85 notes** | **~87 000 lignes** | Tout en français
+> **156 notes** | **~165 000 lignes** | Tout en français
 
 ---
 
 ## Trimestre 1 — Fondations (C, Système, Outils)
+
+### Fondamentaux Informatique
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Computational Thinking et Architecture]] | CPU, OS, Scratch, pseudo-code, pensée algorithmique |
+| 2 | [[02 - Green IT et Optimisation]] | Impact CO2, Green C, Green Web, éco-conception |
 
 ### Langage C
 
@@ -38,6 +45,13 @@
 | 3 | [[03 - Tables de Hachage]] | Hash tables, djb2, collisions, O(1) |
 | 4 | [[04 - Arbres Binaires]] | Binary trees, BST, parcours, hauteur |
 | 5 | [[05 - Tri et Complexite Algorithmique]] | Big O, Bubble/Insertion/Selection/Quick/Merge Sort |
+| 6 | [[06 - Graphes et Algorithmes de Parcours]] | DFS, BFS, Dijkstra, Bellman-Ford, A*, Kruskal, Prim, Union-Find |
+| 7 | [[07 - Programmation Dynamique]] | Memoization, tabulation, Knapsack, LCS, Edit Distance, LIS, 10+ classiques |
+| 8a | [[08 - Algorithmes Gloutons]] | Activity Selection, Huffman, Prim, échange argument, contre-exemples |
+| 8b | [[08 - Heaps et Priority Queues]] | Heap binaire, heapq Python, K éléments, médiane streaming, Huffman |
+| 9 | [[09 - Recherche Binaire et Deux Pointeurs]] | Binary search variantes, bisect, two pointers, sliding window |
+| 10 | [[10 - Algorithmes de Chaines]] | Rabin-Karp, KMP, Trie, Suffix Array, Manacher, regex DP |
+| 11 | [[11 - Complexite Avancee et NP]] | P/NP/NP-Hard/NP-Complete, réductions, algorithmes randomisés |
 
 ### Outils de Débogage
 
@@ -82,6 +96,7 @@
 | 9 | [[09 - APIs REST avec FastAPI]] | Pydantic, Swagger, async, comparaison Flask |
 | 10 | [[10 - Python et Bases de Donnees]] | SQLAlchemy ORM, models, Alembic migrations |
 | 11 | [[11 - Projet HBnB]] | **Projet T2** : clone AirBnB, architecture, API, auth, frontend |
+| 12 | [[12 - Django Framework Complet]] | Models/Views/URLs/Templates/Forms/Admin/DRF, ORM avancé, déploiement |
 
 ### SQL
 
@@ -91,6 +106,15 @@
 | 2 | [[02 - Requetes Avancees SQL]] | JOIN, sous-requêtes, GROUP BY, window functions |
 | 3 | [[03 - Conception de Bases de Donnees]] | Normalisation, ER diagrams, clés, indexes |
 | 4 | [[04 - SQL Avance et Administration]] | Transactions ACID, vues, procédures, injections SQL |
+| 5 | [[05 - Oracle et PL-SQL]] | PL/SQL, procédures, fonctions, triggers, packages, EXPLAIN PLAN, partitionnement |
+
+### Bases de Données NoSQL
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Introduction au NoSQL]] | Pourquoi NoSQL, 4 types, CAP theorem, MongoDB CRUD |
+| 2 | [[02 - MongoDB Avance]] | Aggregation pipeline, indexation, transactions, GridFS |
+| 3 | [[03 - Redis et Caches]] | Structures Redis, patterns de cache, pub/sub, rate limiting |
 
 ### Web Frontend
 
@@ -100,6 +124,8 @@
 | 2 | [[02 - CSS Fondamentaux]] | Box model, flexbox, grid, responsive design |
 | 3 | [[03 - CSS Avance]] | Animations, BEM, Tailwind, dark mode |
 | 4 | [[04 - Projet Web Statique]] | Portfolio HTML/CSS complet, GitHub Pages |
+| 5 | [[05 - WebSockets]] | WS vs HTTP, API native, Flask-SocketIO, scaling Redis |
+| 6 | [[06 - Tailwind CSS Complet]] | Utility-first, responsive, dark mode, variants, plugins, v4, shadcn/ui |
 
 ### JavaScript
 
@@ -111,6 +137,59 @@
 | 4 | [[04 - JavaScript Moderne ES6+]] | Destructuring, modules, classes, Map/Set |
 | 5 | [[05 - SPA et Frameworks Introduction]] | SPA vs MPA, React/Vue/Svelte, state management |
 | 6 | [[06 - Projet JavaScript Interactif]] | TODO app complète, MVC, drag & drop |
+
+### Frameworks Frontend
+
+#### React
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Introduction a React]] | JSX, composants, props, Virtual DOM, setup Vite |
+| 2 | [[02 - Hooks et Gestion d'Etat]] | useState, useEffect, custom hooks, Context API, Redux Toolkit |
+| 3 | [[03 - React Router et Formulaires]] | Router v6, protected routes, React Hook Form, Zod |
+| 4 | [[04 - React Avance et Tests]] | Performance, TanStack Query, Vitest + RTL, déploiement |
+
+#### VueJS
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Introduction a VueJS]] | Options API, Composition API, template syntax, composants |
+| 2 | [[02 - VueJS Avance Pinia et Vue Router]] | Composables, Pinia, Vue Router 4, tests, Nuxt |
+
+#### Svelte
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Svelte du Debutant a l'Expert]] | Compilateur, réactivité native, SvelteKit, SSR |
+
+### Frameworks Backend
+
+#### Node / Express / NestJS
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Express.js et NestJS]] | Express middleware, JWT, NestJS decorators, Swagger |
+
+#### PHP / Symfony
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - PHP et Symfony]] | PHP 8.x, Composer, Symfony MVC, Doctrine, API Platform |
+
+#### Java / Spring
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Introduction a Java]] | JVM, types, String, exceptions, Maven |
+| 2 | [[02 - Java POO et Collections]] | Héritage, interfaces, generics, Streams API, lambdas |
+| 3 | [[03 - Spring Boot et API REST]] | MVC, JPA, Spring Security, JWT, tests JUnit 5 |
+| 4 | [[04 - Microservices avec Spring]] | Spring Cloud, Eureka, Feign, Kafka, Resilience4j |
+
+### APIs & Web
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - GraphQL Complet]] | SDL, queries/mutations/subscriptions, Strawberry, Apollo, DataLoader, Federation |
 
 ### Tests & Qualité de Code
 
@@ -150,6 +229,7 @@
 | 10 | [[10 - LM Studio et Hardware Local]] | Interface GUI, quantisation Q4/Q8, GPU vs CPU, requirements hardware, Jan/LocalAI |
 | 11 | [[11 - IA Confidentialite et Entreprise]] | RGPD, politiques providers, Azure/Vertex/Bedrock, auto-hébergement, vLLM, Tabby |
 | 12 | [[12 - Strategies Multi-Modeles et Workflows]] | Matrice coût/qualité, routing des tâches, stacks par profil, plan d'action 4 semaines |
+| 13 | [[13 - IA Agentic et Developpement MCP]] | MCP servers, multi-agents, LangGraph, CrewAI, pipelines autonomes |
 
 ---
 
@@ -166,10 +246,12 @@
 
 | # | Cours | Description |
 |---|-------|-------------|
-| 1 | [[01 - Introduction au Cloud]] | IaaS/PaaS/SaaS, AWS/GCP/Azure, CLI |
+| 1 | [[01 - Introduction au Cloud]] | IaaX/PaaS/SaaS, AWS/GCP/Azure, CLI |
 | 2 | [[02 - Services Cloud Essentiels]] | Compute, Storage, IAM, VPC |
 | 3 | [[03 - Deploiement Cloud et Conteneurs]] | ECS/GKE, registres, load balancers |
 | 4 | [[04 - Kubernetes Introduction]] | Pods, services, deployments, kubectl |
+| 5 | [[05 - Kubernetes Avance Helm et Operators]] | Helm, StatefulSets, RBAC, HPA/KEDA, CRDs, Operators, Istio, GitOps/ArgoCD |
+| 6 | [[06 - Cloud Security AWS]] | IAM, Security Groups, VPC, KMS, CloudTrail, GuardDuty, WAF/Shield |
 
 ### Réseaux
 
@@ -187,12 +269,78 @@
 | 2 | [[02 - Metriques et Monitoring]] | Prometheus, Grafana, SLI/SLO/SLA |
 | 3 | [[03 - Tracing et Debugging Distribue]] | OpenTelemetry, correlation IDs |
 
-### DevSecOps
+### DevSecOps & SRE
 
 | # | Cours | Description |
 |---|-------|-------------|
 | 1 | [[07 - DevSecOps]] | Shift-left, SAST/DAST, secrets management |
 | 2 | [[08 - Projet Capstone DevOps]] | **Projet T3** : app complète, CI/CD, cloud, monitoring |
+| 3 | [[09 - Incident Response et Postmortems]] | SRE, cycles incident, SBOM, Threat Modeling |
+| 4 | [[10 - Jenkins et CI-CD Alternatifs]] | Declarative Pipeline, Shared Libraries, GitLab CI, CircleCI, Blue/Green, Canary |
+
+---
+
+## Bachelor Agentic IA Fullstack — Spécialisations
+
+### Mobile
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Introduction au Dev Mobile]] | iOS vs Android, natif/hybride/cross-platform, écosystèmes |
+| 2 | [[02 - Flutter Complet]] | Dart, widgets, Provider, Riverpod, go_router, déploiement |
+
+### Architecture Logicielle
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Microservices et Patterns]] | DDD, Saga, CQRS, Event Sourcing, service mesh, Istio |
+
+### UML & Modélisation
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - UML Fondamentaux et Diagrammes]] | 8 types de diagrammes, PlantUML, Mermaid, exemples Python/Java |
+
+### Gestion de Projet & Mastère
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Methodes Agiles Scrum et Kanban]] | Scrum, Kanban, XP, métriques, ceremonies, backlog |
+| 2 | [[02 - Gestion de Projet Classique et ITIL]] | WBS, PERT, ITIL v4, RGPD, Green IT, gouvernance |
+
+---
+
+## Bachelor Machine Learning
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Mathematiques pour le ML]] | Algèbre linéaire, calcul différentiel, probabilités, statistiques |
+| 2 | [[02 - NumPy Pandas et Visualisation]] | NumPy, Pandas, Matplotlib, Seaborn, EDA complète |
+| 3 | [[03 - ML Supervise avec Scikit-Learn]] | Régression, classification, pipeline, validation croisée, tuning |
+| 4 | [[04 - Reseaux de Neurones et Deep Learning]] | Perceptron, backpropagation, Keras, PyTorch, GPU training |
+| 5 | [[05 - CNN Transformer et Computer Vision]] | CNN, ResNet, Transfer Learning, BERT, ViT, attention |
+| 6 | [[06 - ML Non Supervise et Reinforcement Learning]] | Clustering, PCA, t-SNE, GANs, Q-Learning, PPO |
+| 7 | [[07 - MLOps et Deploiement de Modeles]] | MLflow, DVC, FastAPI serving, monitoring drift, CI/CD ML |
+
+### Big Data
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Hadoop et Ecosysteme MapReduce]] | HDFS, MapReduce, YARN, Hive, Pig, HBase, Sqoop, Flume |
+| 2 | [[02 - Apache Spark et PySpark]] | RDD, DataFrame, Streaming, MLlib, Delta Lake, optimisation |
+
+---
+
+## Bachelor Cybersécurité
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Fondamentaux Hacking Ethique]] | PTES, MITRE ATT&CK, phases pentest, environnements lab, CTF |
+| 2 | [[02 - Reconnaissance et OSINT]] | Google Dorks, Shodan, nmap, amass, theHarvester, Maltego |
+| 3 | [[03 - Exploitation Web et Systeme]] | SQLi, XSS, SSRF, Metasploit, Buffer Overflow, shellcode |
+| 4 | [[04 - Active Directory et Post-Exploitation]] | Kerberoasting, BloodHound, LPE, pivoting, C2 |
+| 5 | [[05 - CTF Methodologie et Red Team]] | Catégories CTF, pwntools, crypto, forensics, Red Team ops |
+| 6 | [[06 - Digital Forensics et Analyse Malware]] | Volatility, Autopsy, Wireshark forensics, Ghidra, YARA, IOCs |
 
 ---
 
@@ -207,41 +355,69 @@
 | 5 | [[05 - Collections et Iterateurs]] | Vec, HashMap, closures, map/filter/fold |
 | 6 | [[06 - Traits et Generiques]] | Traits, impl, generics, dyn Trait |
 | 7 | [[07 - Projet Rust CLI]] | minigrep complet, clap, tests, publication |
+| 8 | [[08 - Concurrence et Smart Pointers]] | Arc, Mutex, channels mpsc, Rayon, atomics, Send/Sync |
+| 9 | [[09 - Async Await et Tokio]] | Future trait, runtime Tokio, I/O async, channels async, select!, Streams |
+| 10 | [[10 - Macros et Metaprogrammation]] | macro_rules!, derive macros, attribute macros, proc-macro, build.rs |
+| 11 | [[11 - Unsafe Rust et FFI]] | Raw pointers, extern "C", bindgen, cbindgen, MaybeUninit, repr(C) |
+| 12 | [[12 - GUI avec egui et eframe]] | **Immediate mode GUI**, widgets, layouts, panels, custom painting, Tokio async, WASM |
+| 13 | [[13 - Tauri Desktop Applications]] | Backend Rust + frontend web, IPC, plugins, system tray, mobile |
+| 14 | [[14 - WebAssembly avec Rust]] | wasm-bindgen, web-sys, wasm-pack, trunk, Leptos, Yew, Dioxus |
+| 15 | [[15 - Web Frameworks Axum et Actix]] | Axum extractors, Tower middleware, SQLx, JWT, WebSockets, Actix-web |
 
 ---
 
 ## Parcours recommandé
 
 > [!tip] Planning semaine par semaine
-> **T1 — Semaines 1-9** : C → Pointeurs → Structures → Mémoire → Data Structures → Debugging
-> **T2 — Semaines 10-18** : Python → SQL → HTML/CSS → JavaScript → APIs → Tests → CI/CD
-> **T3 — Semaines 19-27** : Docker avancé → Cloud → Réseaux → Kubernetes → Observabilité → DevSecOps
-> **En continu** : Git, Sécurité, Shell, Rust, IA
+> **T1 — Semaines 1-9** : Fondamentaux → C → Pointeurs → Structures → Mémoire → Data Structures (+ algo avancé) → Debugging
+> **T2 — Semaines 10-23** : Python → SQL → NoSQL → HTML/CSS → JavaScript → React/Vue/Svelte → APIs (GraphQL) → Tests → CI/CD → IA
+> **T3 — Semaines 24-32** : Docker avancé → Cloud → Kubernetes (+ Helm/Operators) → Réseaux → Observabilité → DevSecOps → Jenkins
+> **Bachelor ML** : Mathématiques → NumPy/Pandas → Scikit-Learn → Deep Learning → MLOps → Big Data (Hadoop/Spark)
+> **Bachelor Cybersec** : Fondamentaux → OSINT → Exploitation → AD → CTF/Red Team → Digital Forensics
+> **En continu** : Git, Sécurité, Shell, Rust (1-15), IA Agentic, UML/Modélisation
 
 ```mermaid
 graph LR
     subgraph T1[Trimestre 1 - C & Système]
-        C[Langage C] --> DS[Data Structures]
+        FOND[Fondamentaux Info] --> C[Langage C]
+        C --> DS[Data Structures]
+        DS --> ALGO[Algo Avancé<br/>DP/Graphes/NP]
         C --> DBG[Debugging]
         C --> MK[Makefiles]
     end
     subgraph T2[Trimestre 2 - Fullstack]
-        PY[Python] --> SQL[SQL]
-        PY --> API[APIs Flask/FastAPI]
-        HTML[HTML/CSS] --> JS[JavaScript]
-        JS --> SPA[SPA/Frameworks]
+        PY[Python] --> SQL[SQL + PL/SQL]
+        SQL --> NOSQL[NoSQL/Redis]
+        PY --> API[APIs Flask/FastAPI/Django]
+        HTML[HTML/CSS/Tailwind/WS] --> JS[JavaScript]
+        JS --> FW[React/Vue/Svelte]
+        JS --> BE[Node/PHP/Java]
+        API --> GQL[GraphQL]
         API --> TEST[Tests]
         TEST --> CICD[CI/CD]
+        IA[IA pour le Dev]
     end
     subgraph T3[Trimestre 3 - DevOps]
         DOCK[Docker Avancé] --> CLOUD[Cloud]
-        CLOUD --> K8S[Kubernetes]
+        CLOUD --> K8S[Kubernetes + Helm]
         IAC[Terraform/Ansible] --> CLOUD
-        OBS[Observabilité] --> DEVSEC[DevSecOps]
+        OBS[Observabilité] --> DEVSEC[DevSecOps/SRE]
+        DEVSEC --> JENKINS[Jenkins/CI Alternatifs]
     end
     T1 --> T2 --> T3
+    subgraph BAC[Bachelors Spécialisés]
+        ML[Machine Learning x7]
+        BIG[Big Data<br/>Hadoop/Spark]
+        CYBER[Cybersécurité x6]
+        MOB[Mobile/Flutter]
+        ARCHI[Architecture/Microservices]
+        UML[UML & Modélisation]
+        PM[Gestion de Projet]
+        CLOUDSEC[Cloud Security AWS]
+    end
+    T2 --> BAC
     subgraph EXTRA[Supplémentaire]
-        RUST[Rust 1-7]
+        RUST[Rust 1-15<br/>concurrence/async/FFI/GUI/WASM]
     end
     C --> RUST
 ```
