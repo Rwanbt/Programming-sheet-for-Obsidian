@@ -906,3 +906,8 @@ Implementez un pattern producteur-consommateur avec `asyncio.Queue` :
 
 - [[06 - Modules Packages et Venv]] - Modules, packages et environnements virtuels
 - [[08 - APIs REST avec Flask]] - Creation d'APIs REST avec Flask
+
+## Pour aller plus loin
+
+- [[05 - WebSockets]] — WebSockets en Python async : `websockets`, `aiohttp` ws, temps réel
+- [[13 - IA Agentic et Developpement MCP]] — agents IA asynchrones avec les LLMs : boucles async, MCP, orchestration

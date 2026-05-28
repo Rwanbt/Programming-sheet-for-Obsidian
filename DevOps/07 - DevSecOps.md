@@ -1182,3 +1182,8 @@ Votre equipe utilise actuellement un fichier `config.py` avec tous les secrets e
 - [[02 - Securite Web OWASP]] : les vulnerabilites web les plus courantes (OWASP Top 10)
 - [[04 - CI-CD avec GitHub Actions]] : les bases du CI/CD pour integrer la securite
 - [[05 - Infrastructure as Code Terraform]] : securiser l'infrastructure deployee
+
+## Pour aller plus loin
+
+- [[09 - Incident Response et Postmortems]] — gestion des incidents, SBOM, blameless post-mortems et SLO
+- [[01 - Fondamentaux Hacking Ethique]] — perspective offensive (pentest, OSINT) pour mieux concevoir la défense

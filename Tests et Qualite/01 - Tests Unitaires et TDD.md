@@ -1250,3 +1250,9 @@ Ecrivez une fonction `validate_password(password)` qui verifie qu'un mot de pass
 
 - [[02 - Tests Integration et E2E]] - Tests d'integration et end-to-end
 - [[08 - APIs REST avec Flask]] - Tester des APIs Flask
+
+## Pour aller plus loin
+
+- [[03 - Spring Boot et API REST]] — JUnit 5 et Spring Boot Test côté Java : @SpringBootTest, MockMvc, testcontainers
+- [[04 - React Avance et Tests]] — tests React avec Vitest et React Testing Library : composants, hooks, mocks
+- [[03 - ML Supervise avec Scikit-Learn]] — tests de modèles ML : validation croisée, métriques, détection de regressions

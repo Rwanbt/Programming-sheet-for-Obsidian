@@ -1331,3 +1331,9 @@ Partez des modeles de l'exercice 1. Appliquez les modifications suivantes avec A
 - [[09 - APIs REST avec FastAPI]] - Integration avec FastAPI et Depends()
 - [[01 - Introduction au SQL]] - Les bases du SQL
 - [[03 - Conception de Bases de Donnees]] - Modelisation et normalisation
+
+## Pour aller plus loin
+
+- [[03 - Spring Boot et API REST]] — JPA/Hibernate côté Java : même paradigme ORM, approche fortement typée
+- [[01 - Introduction au NoSQL]] — bases de données non relationnelles : MongoDB, DynamoDB, quand ne pas utiliser SQL
+- [[03 - Redis et Caches]] — caching avec Redis : éviter les requêtes répétitives, sessions, pub/sub

@@ -952,3 +952,9 @@ En vous inspirant de l'exemple complet de cette note :
 - [[02 - Docker Avance]] - Construction d'images, multi-stage builds, Docker Compose
 - [[04 - CI-CD avec GitHub Actions]] - Pipelines d'integration et deploiement continus
 - [[01 - Introduction au Cloud]] - Concepts fondamentaux du cloud computing
+
+## Pour aller plus loin
+
+- [[04 - Microservices avec Spring]] — déployer des microservices Spring sur K8s : discovery, config maps, probes
+- [[07 - MLOps et Deploiement de Modeles]] — déployer des modèles ML avec K8s : serving, autoscaling GPU, KServe
+- [[09 - Incident Response et Postmortems]] — SRE et gestion des incidents dans un cluster K8s : on-call, runbooks

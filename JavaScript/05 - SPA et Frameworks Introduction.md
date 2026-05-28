@@ -1166,3 +1166,12 @@ Installez les 3 frameworks et creez la meme mini-application (liste de contacts)
 - [[06 - Projet JavaScript Interactif]]
 - [[02 - JavaScript DOM et Evenements]]
 - [[03 - JavaScript Asynchrone]]
+
+## Pour aller plus loin
+
+- [[01 - Introduction a React]] — React en profondeur : JSX, composants, écosystème complet
+- [[02 - Hooks et Gestion d'Etat]] — Hooks React : useState, useEffect, hooks personnalisés
+- [[01 - Introduction a VueJS]] — Vue 3 : Composition API, Pinia, Vue Router
+- [[02 - VueJS Avance Pinia et Vue Router]] — Vue avancé : stores Pinia, navigation
+- [[01 - Svelte du Debutant a l'Expert]] — SvelteKit : compilation, stores intégrés, SSR
+- [[01 - Express.js et NestJS]] — backend Node.js pour alimenter les SPA en données
