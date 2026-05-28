@@ -1175,3 +1175,5 @@ fn main() {
 - [[03b - Les Pointeurs]] --- Les pointeurs en C en detail
 - [[01 - Introduction a Rust]] --- Les bases du langage Rust
 - [[03 - Structs Enums et Pattern Matching]] --- Types personnalises et pattern matching
+- [[17 - Lifetimes Avances Pin et Unpin]] --- Approfondissement : HRTB, variance, Pin pour l'async
+- [[21 - Strings et Texte en Profondeur]] --- &str vs String, Cow, OsString en detail

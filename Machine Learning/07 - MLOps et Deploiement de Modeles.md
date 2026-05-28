@@ -946,7 +946,7 @@ def test_fairness_par_pays(model):
 > - **Modèles scikit-learn** : [[03 - ML Supervise avec Scikit-Learn]]
 > - **Infrastructure Kubernetes** : [[04 - Kubernetes Introduction]]
 > - **CI/CD pour le pipeline ML** : [[04 - CI-CD avec GitHub Actions]]
-> - **Monitoring et observabilité** : [[02 - Métriques et Monitoring]]
+> - **Monitoring et observabilité** : [[02 - Metriques et Monitoring]]
 
 ---
 

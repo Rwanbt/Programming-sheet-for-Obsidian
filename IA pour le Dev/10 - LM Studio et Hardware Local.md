@@ -944,4 +944,4 @@ async def generate_tests(req: CodeRequest):
 - [[09 - IA Locale avec Ollama]]
 - [[11 - IA Confidentialite et Entreprise]]
 - [[12 - Strategies Multi-Modeles et Workflows]]
-- [[08 - Continue Dev et Integration IDE]]
+- [[07 - Integrations IDE et Extensions]]
