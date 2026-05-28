@@ -1,8 +1,8 @@
 # Programming Sheet for Obsidian
 
-**95 cours de programmation complets, en francais, au format Obsidian.**
+**165 cours de programmation complets, en francais, au format Obsidian.**
 
-> Un coffre Obsidian couvrant 4 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, SQL, Rust, DevOps, et un trimestre complet dedie a l'IA pour les developpeurs (Claude, GPT-5.4, Gemini 3.1, modeles locaux, integrations IDE, confidentialite entreprise).
+> Un coffre Obsidian couvrant 4 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, Java, SQL, Rust, DevOps, Machine Learning, Cybersecurite, et un trimestre complet dedie a l'IA pour les developpeurs (Claude, GPT-5.4, Gemini 3.1, modeles locaux, integrations IDE, confidentialite entreprise).
 
 ---
 
@@ -10,9 +10,9 @@
 
 | | |
 |---|---|
-| **Notes** | 95 fichiers Markdown |
-| **Lignes** | ~102 000 lignes de contenu |
-| **Langages** | C, Python, JavaScript, SQL, Rust, HTML/CSS, Bash, HCL, YAML |
+| **Notes** | 165 fichiers Markdown |
+| **Lignes** | ~134 000 lignes de contenu |
+| **Langages** | C, Python, JavaScript, Java, PHP, SQL, Rust, HTML/CSS, Bash, HCL, YAML, Dart |
 | **Langue** | Francais (termes techniques en anglais) |
 | **Format** | Obsidian Markdown avec `[[wikilinks]]`, callouts, diagrammes ASCII |
 
@@ -56,7 +56,7 @@ Programming-sheet-for-Obsidian/
 |
 |-- 00 - Index Programmation.md        <- Point d'entree, navigation globale
 |
-|-- C language/                         (16 notes)
+|-- C language/                         (15 notes)
 |   |-- 00b - Le Preprocesseur C
 |   |-- 01 - Introduction au C et Compilation
 |   |-- 02 - Bases Numeriques (Binaire, Hex, Decimal)
@@ -73,14 +73,21 @@ Programming-sheet-for-Obsidian/
 |   |-- 11 - Makefiles
 |   +-- 12 - Projet Simple Shell          <- Projet capstone T1
 |
-|-- Structures de Donnees/              (5 notes)
+|-- Structures de Donnees/              (12 notes)
 |   |-- 01 - Listes Chainees
 |   |-- 02 - Listes Doublement Chainees
 |   |-- 03 - Tables de Hachage
 |   |-- 04 - Arbres Binaires
-|   +-- 05 - Tri et Complexite Algorithmique (Big O)
+|   |-- 05 - Tri et Complexite Algorithmique (Big O)
+|   |-- 06 - Graphes et Algorithmes de Parcours
+|   |-- 07 - Programmation Dynamique
+|   |-- 08 - Algorithmes Gloutons
+|   |-- 08 - Heaps et Priority Queues
+|   |-- 09 - Recherche Binaire et Deux Pointeurs
+|   |-- 10 - Algorithmes de Chaines
+|   +-- 11 - Complexite Avancee et NP
 |
-|-- Python/                             (11 notes)
+|-- Python/                             (12 notes)
 |   |-- 01 - Introduction a Python
 |   |-- 02 - Structures de Donnees Python
 |   |-- 03 - POO en Python
@@ -91,13 +98,15 @@ Programming-sheet-for-Obsidian/
 |   |-- 08 - APIs REST avec Flask
 |   |-- 09 - APIs REST avec FastAPI
 |   |-- 10 - Python et Bases de Donnees (SQLAlchemy)
-|   +-- 11 - Projet HBnB                  <- Projet capstone T2 (clone AirBnB)
+|   |-- 11 - Projet HBnB                  <- Projet capstone T2 (clone AirBnB)
+|   +-- 12 - Django Framework Complet
 |
-|-- SQL/                                (4 notes)
+|-- SQL/                                (5 notes)
 |   |-- 01 - Introduction au SQL
 |   |-- 02 - Requetes Avancees (JOIN, Window Functions)
 |   |-- 03 - Conception de Bases de Donnees
-|   +-- 04 - SQL Avance et Administration
+|   |-- 04 - SQL Avance et Administration
+|   +-- 05 - Oracle et PL-SQL
 |
 |-- JavaScript/                         (6 notes)
 |   |-- 01 - Introduction a JavaScript
@@ -107,22 +116,44 @@ Programming-sheet-for-Obsidian/
 |   |-- 05 - SPA et Frameworks Introduction
 |   +-- 06 - Projet JavaScript Interactif (TODO app)
 |
-|-- Web Frontend/                       (4 notes)
+|-- Web Frontend/                       (6 notes)
 |   |-- 01 - HTML Fondamentaux
 |   |-- 02 - CSS Fondamentaux (Flexbox, Grid)
-|   |-- 03 - CSS Avance (Animations, Tailwind, BEM)
-|   +-- 04 - Projet Web Statique (Portfolio)
+|   |-- 03 - CSS Avance (Animations, BEM)
+|   |-- 04 - Projet Web Statique (Portfolio)
+|   |-- 05 - WebSockets
+|   +-- 06 - Tailwind CSS Complet
 |
-|-- Rust/                               (7 notes)
+|-- Java/                               (4 notes)
+|   |-- 01 - Introduction a Java
+|   |-- 02 - Java POO et Collections
+|   |-- 03 - Spring Boot et API REST
+|   +-- 04 - Microservices avec Spring
+|
+|-- Rust/                               (21 notes)
 |   |-- 01 - Introduction a Rust
 |   |-- 02 - Ownership et Borrowing
 |   |-- 03 - Structs Enums et Pattern Matching
 |   |-- 04 - Gestion des Erreurs en Rust
 |   |-- 05 - Collections et Iterateurs
 |   |-- 06 - Traits et Generiques
-|   +-- 07 - Projet Rust CLI (minigrep)
+|   |-- 07 - Projet Rust CLI (minigrep)
+|   |-- 08 - Concurrence et Smart Pointers
+|   |-- 09 - Async Await et Tokio
+|   |-- 10 - Macros et Metaprogrammation
+|   |-- 11 - Unsafe Rust et FFI
+|   |-- 12 - GUI avec egui et eframe
+|   |-- 13 - Tauri Desktop Applications
+|   |-- 14 - WebAssembly avec Rust
+|   |-- 15 - Web Frameworks Axum et Actix
+|   |-- 16 - Serde Serialisation et Deserialisation
+|   |-- 17 - Lifetimes Avances Pin et Unpin
+|   |-- 18 - Closures FnOnce FnMut Fn en Profondeur
+|   |-- 19 - Cargo Avance Workspaces et Publication
+|   |-- 20 - Testing Avance Criterion et Proptest
+|   +-- 21 - Strings et Texte en Profondeur
 |
-|-- DevOps/                             (8 notes)
+|-- DevOps/                             (10 notes)
 |   |-- 01 - Docker
 |   |-- 02 - Docker Avance (multi-stage, networks)
 |   |-- 03 - Docker Compose en Pratique
@@ -130,13 +161,45 @@ Programming-sheet-for-Obsidian/
 |   |-- 05 - Infrastructure as Code (Terraform)
 |   |-- 06 - Automatisation avec Ansible
 |   |-- 07 - DevSecOps
-|   +-- 08 - Projet Capstone DevOps        <- Projet capstone T3
+|   |-- 08 - Projet Capstone DevOps        <- Projet capstone T3
+|   |-- 09 - Incident Response et Postmortems
+|   +-- 10 - Jenkins et CI-CD Alternatifs
 |
-|-- Cloud/                              (4 notes)
+|-- Cloud/                              (6 notes)
 |   |-- 01 - Introduction au Cloud
 |   |-- 02 - Services Cloud Essentiels
 |   |-- 03 - Deploiement Cloud et Conteneurs
-|   +-- 04 - Kubernetes Introduction
+|   |-- 04 - Kubernetes Introduction
+|   |-- 05 - Kubernetes Avance Helm et Operators
+|   +-- 06 - Cloud Security AWS
+|
+|-- Machine Learning/                   (7 notes)
+|   |-- 01 - Mathematiques pour le ML
+|   |-- 02 - NumPy Pandas et Visualisation
+|   |-- 03 - ML Supervise avec Scikit-Learn
+|   |-- 04 - Reseaux de Neurones et Deep Learning
+|   |-- 05 - CNN Transformer et Computer Vision
+|   |-- 06 - ML Non Supervise et Reinforcement Learning
+|   +-- 07 - MLOps et Deploiement de Modeles
+|
+|-- Cybersecurite/                      (6 notes)
+|   |-- 01 - Fondamentaux Hacking Ethique
+|   |-- 02 - Reconnaissance et OSINT
+|   |-- 03 - Exploitation Web et Systeme
+|   |-- 04 - Active Directory et Post-Exploitation
+|   |-- 05 - CTF Methodologie et Red Team
+|   +-- 06 - Digital Forensics et Analyse Malware
+|
+|-- React/                              (4 notes)
+|   |-- 01 - Introduction a React
+|   |-- 02 - Hooks et Gestion d'Etat
+|   |-- 03 - React Router et Formulaires
+|   +-- 04 - React Avance et Tests
+|
+|-- NoSQL/                              (3 notes)
+|   |-- 01 - Introduction au NoSQL
+|   |-- 02 - MongoDB Avance
+|   +-- 03 - Redis et Caches
 |
 |-- Reseaux/                            (3 notes)
 |   |-- 01 - Fondamentaux Reseaux (OSI, TCP/IP)
@@ -148,18 +211,34 @@ Programming-sheet-for-Obsidian/
 |   |-- 02 - Metriques et Monitoring (Prometheus, Grafana)
 |   +-- 03 - Tracing et Debugging Distribue
 |
-|-- Debugging/                          (2 notes)
-|   |-- 01 - GDB
-|   +-- 02 - Valgrind
-|
 |-- Tests et Qualite/                   (3 notes)
 |   |-- 01 - Tests Unitaires et TDD (pytest)
 |   |-- 02 - Tests Integration et E2E
 |   +-- 03 - Linting Formatting et Code Quality
 |
-|-- Secutrity/                          (2 notes)
-|   |-- 01 - Securite Memoire en C
-|   +-- 02 - Securite Web OWASP (Top 10)
+|-- VueJS/                              (2 notes)
+|   |-- 01 - Introduction a VueJS
+|   +-- 02 - VueJS Avance Pinia et Vue Router
+|
+|-- Mobile/                             (2 notes)
+|   |-- 01 - Introduction au Dev Mobile
+|   +-- 02 - Flutter Complet
+|
+|-- Gestion de Projet/                  (2 notes)
+|   |-- 01 - Methodes Agiles Scrum et Kanban
+|   +-- 02 - Gestion de Projet Classique et ITIL
+|
+|-- Big Data/                           (2 notes)
+|   |-- 01 - Hadoop et Ecosysteme MapReduce
+|   +-- 02 - Apache Spark et PySpark
+|
+|-- Fondamentaux Informatique/          (2 notes)
+|   |-- 01 - Computational Thinking et Architecture
+|   +-- 02 - Green IT et Optimisation
+|
+|-- Debugging/                          (2 notes)
+|   |-- 01 - GDB
+|   +-- 02 - Valgrind
 |
 |-- Shell/                              (2 notes)
 |   |-- 01 - Shell et Commandes Linux
@@ -169,10 +248,32 @@ Programming-sheet-for-Obsidian/
 |   |-- 01 - Archives et Compression
 |   +-- 02 - Les Terminaux Guide Complet (Bash, Zsh, CMD, PowerShell, WSL)
 |
+|-- Secutrity/                          (2 notes)
+|   |-- 01 - Securite Memoire en C
+|   +-- 02 - Securite Web OWASP (Top 10)
+|
+|-- APIs et Web/                        (1 note)
+|   +-- 01 - GraphQL Complet
+|
+|-- Architecture Logicielle/            (1 note)
+|   +-- 01 - Microservices et Patterns
+|
 |-- Git/                                (1 note)
 |   +-- 01 - Git et GitHub
 |
-+-- IA pour le Dev/                     (12 notes)
+|-- Node Express/                       (1 note)
+|   +-- 01 - Express.js et NestJS
+|
+|-- PHP/                                (1 note)
+|   +-- 01 - PHP et Symfony
+|
+|-- Svelte/                             (1 note)
+|   +-- 01 - Svelte du Debutant a l'Expert
+|
+|-- UML et Modelisation/                (1 note)
+|   +-- 01 - UML Fondamentaux et Diagrammes
+|
++-- IA pour le Dev/                     (13 notes)
     |-- 01 - Panorama des IA pour Developpeurs
     |-- 02 - Comprendre les LLMs et les Tokens
     |-- 03 - Prompt Engineering pour le Code
@@ -184,7 +285,8 @@ Programming-sheet-for-Obsidian/
     |-- 09 - IA Locale avec Ollama
     |-- 10 - LM Studio et Hardware Local
     |-- 11 - IA Confidentialite et Entreprise
-    +-- 12 - Strategies Multi-Modeles et Workflows
+    |-- 12 - Strategies Multi-Modeles et Workflows
+    +-- 13 - IA Agentic et Developpement MCP
 ```
 
 ---
@@ -197,8 +299,8 @@ Les bases de la programmation avec le langage C, les structures de donnees, les 
 
 | Domaine | Notes | Sujets cles |
 |---------|-------|-------------|
-| Langage C | 16 | Compilation, types, pointeurs, memoire, structs, recursion, file I/O, Makefiles |
-| Structures de Donnees | 5 | Listes chainees, hash tables, arbres binaires, algorithmes de tri, Big O |
+| Langage C | 15 | Compilation, types, pointeurs, memoire, structs, recursion, file I/O, Makefiles |
+| Structures de Donnees | 12 | Listes chainees, hash tables, arbres, graphes, programmation dynamique, Big O, NP |
 | Debugging | 2 | GDB (breakpoints, backtrace, TUI), Valgrind (fuites memoire, acces invalides) |
 | Shell & Terminal | 4 | Commandes Linux, scripting bash, guide des terminaux, archives |
 | Git | 1 | Workflow complet, branches, merge, conflits, GitHub Flow |
@@ -212,10 +314,10 @@ Backend Python, frontend HTML/CSS/JS, bases de donnees SQL, tests, CI/CD et secu
 
 | Domaine | Notes | Sujets cles |
 |---------|-------|-------------|
-| Python | 11 | POO, async, Flask, FastAPI, SQLAlchemy, decorateurs, design patterns |
-| SQL | 4 | SELECT/JOIN/GROUP BY, normalisation, transactions ACID, injections SQL |
+| Python | 12 | POO, async, Flask, FastAPI, Django, SQLAlchemy, decorateurs, design patterns |
+| SQL | 5 | SELECT/JOIN/GROUP BY, normalisation, transactions ACID, injections SQL, PL-SQL |
 | JavaScript | 6 | DOM, events, async/await, ES6+, SPA, frameworks (React/Vue/Svelte) |
-| Web Frontend | 4 | HTML semantique, CSS Flexbox/Grid, responsive, animations, projet portfolio |
+| Web Frontend | 6 | HTML semantique, CSS Flexbox/Grid, Tailwind, responsive, WebSockets, portfolio |
 | Tests | 3 | pytest, TDD, integration, E2E (Selenium/Playwright), linting |
 | DevOps | 3 | Docker avance, Docker Compose, CI/CD GitHub Actions |
 | Securite Web | 1 | OWASP Top 10, XSS, CSRF, CORS, HTTPS, JWT |
@@ -227,19 +329,69 @@ Infrastructure as Code, cloud, reseaux, Kubernetes, monitoring et DevSecOps.
 
 | Domaine | Notes | Sujets cles |
 |---------|-------|-------------|
-| DevOps | 3 | Terraform (IaC), Ansible, DevSecOps (SAST/DAST, secrets) |
-| Cloud | 4 | AWS/GCP/Azure, compute/storage/IAM, deploiement conteneurs, Kubernetes |
+| DevOps | 7 | Terraform (IaC), Ansible, DevSecOps, Incident Response, Jenkins |
+| Cloud | 6 | AWS/GCP/Azure, compute/storage/IAM, deploiement conteneurs, Kubernetes (+ Helm + Operators), Cloud Security |
 | Reseaux | 3 | OSI/TCP-IP, HTTP/TLS, securite reseau, SSH, VPN |
 | Observabilite | 3 | Logs structures, Prometheus/Grafana, tracing distribue (OpenTelemetry) |
 | **Projet** | **Capstone DevOps** | **Application web complete avec pipeline CI/CD et deploiement cloud** |
 
-### Supplementaire — Rust
+### Supplementaire — Rust (A-Z)
 
-Un parcours complet pour apprendre Rust en parallele, avec des comparaisons constantes avec le C.
+Un parcours complet de A a Z pour maitriser Rust, avec des comparaisons constantes avec le C.
 
 | Notes | Sujets cles |
 |-------|-------------|
-| 7 | Ownership, borrowing, lifetimes, structs/enums, pattern matching, traits, generiques, iterateurs, projet CLI complet |
+| 21 | Ownership, borrowing, lifetimes (avances), structs/enums, pattern matching, traits, generiques, iterateurs, async/Tokio, macros, unsafe/FFI, egui, Tauri, WASM, Axum, Serde, Cargo avance, testing Criterion/proptest, strings |
+
+### Supplementaire — Java & Ecosysteme JVM
+
+| Notes | Sujets cles |
+|-------|-------------|
+| 4 | POO Java, collections, Spring Boot, APIs REST, microservices Spring |
+
+### Supplementaire — Frameworks Frontend
+
+React, VueJS, Svelte et les outils modernes du frontend.
+
+| Domaine | Notes | Sujets cles |
+|---------|-------|-------------|
+| React | 4 | Hooks, gestion d'etat, routing, formulaires, tests |
+| VueJS | 2 | Composition API, Pinia, Vue Router |
+| Svelte | 1 | Reactivity, stores, compilation, Svelte du zero a l'expert |
+| Node/Express | 1 | Express.js, NestJS, REST et GraphQL |
+| APIs et Web | 1 | GraphQL — schemas, resolvers, subscriptions |
+| Architecture | 1 | Microservices, patterns (Saga, CQRS, Event Sourcing) |
+
+### Supplementaire — Machine Learning & Data
+
+| Notes | Sujets cles |
+|-------|-------------|
+| 7 | Maths ML, NumPy/Pandas, Scikit-Learn, reseaux de neurones, CNN/Transformer, ML non supervise, MLOps |
+| 2 (Big Data) | Hadoop/MapReduce, Apache Spark/PySpark |
+| 3 (NoSQL) | MongoDB, Redis, introduction NoSQL |
+
+### Supplementaire — Mobile
+
+| Notes | Sujets cles |
+|-------|-------------|
+| 2 | Introduction dev mobile (iOS/Android), Flutter complet (Dart, widgets, navigation, state management) |
+
+### Supplementaire — Cybersecurite
+
+Parcours hacking ethique et securite offensive/defensive.
+
+| Notes | Sujets cles |
+|-------|-------------|
+| 6 | Hacking ethique, reconnaissance/OSINT, exploitation web et systeme, Active Directory, CTF/Red Team, Digital Forensics |
+
+### Supplementaire — Outils & Methodes
+
+| Domaine | Notes | Sujets cles |
+|---------|-------|-------------|
+| PHP | 1 | PHP moderne, Symfony, MVC, Doctrine ORM |
+| UML & Modelisation | 1 | Diagrammes UML (classes, sequence, use case, deployment) |
+| Gestion de Projet | 2 | Agile/Scrum/Kanban, gestion classique, ITIL |
+| Fondamentaux | 2 | Computational thinking, architecture CPU, Green IT |
 
 ### Trimestre Bonus — IA pour le Developpeur
 
@@ -259,6 +411,7 @@ Un trimestre complet dedie a l'utilisation intelligente de l'IA dans le developp
 | 10 | LM Studio et Hardware Local | Interface GUI, quantisation Q4/Q8, MoE vs dense, requirements GPU/CPU |
 | 11 | IA Confidentialite et Entreprise | RGPD, politiques providers, Azure/Bedrock/Vertex, vLLM, Tabby, classification |
 | 12 | Strategies Multi-Modeles et Workflows | Matrice cout/qualite 2026, routing des taches, stacks par profil |
+| 13 | IA Agentic et Developpement MCP | Agents autonomes, MCP protocol, outils, multi-agent pipelines |
 
 ---
 
@@ -292,7 +445,7 @@ Semaine 9      : PROJET SIMPLE SHELL
 --- TRIMESTRE 2 : Fullstack & Web ---
 Semaine 10-11  : Python (bases, POO, fichiers, modules)
 Semaine 12-13  : SQL + HTML/CSS + JavaScript (bases, DOM, async)
-Semaine 14-15  : APIs (Flask/FastAPI) + SQLAlchemy + Tests
+Semaine 14-15  : APIs (Flask/FastAPI/Django) + SQLAlchemy + Tests
 Semaine 16-17  : Docker avance + CI/CD + Securite OWASP
 Semaine 18     : PROJET HBnB (clone AirBnB)
 
@@ -302,12 +455,30 @@ Semaine 21-22  : Reseaux + Kubernetes + Monitoring
 Semaine 23-24  : DevSecOps + Observabilite avancee
 Semaine 25-27  : PROJET CAPSTONE DEVOPS
 
+--- SUPPLEMENTAIRE : Rust A-Z (en parallele de T1-T3) ---
+Phase 1        : Ownership + Borrowing + Structs/Enums + Erreurs + Collections + Traits
+Phase 2        : Concurrence + Async/Tokio + Macros + Unsafe/FFI + Projet CLI
+Phase 3        : GUI (egui) + Tauri + WASM + Axum + Serde + Cargo avance
+Phase 4        : Lifetimes avances + Closures + Testing Criterion/proptest + Strings
+
+--- SUPPLEMENTAIRE : Java & Backend JVM ---
+Semaine libre  : Java bases + POO/Collections + Spring Boot + Microservices
+
+--- SUPPLEMENTAIRE : Frontend Moderne ---
+Semaine libre  : React (Hooks, routing, state) + VueJS + Svelte + GraphQL
+
+--- SUPPLEMENTAIRE : Machine Learning ---
+Semaine libre  : Maths ML + NumPy/Pandas + Scikit-Learn + Deep Learning + MLOps
+
+--- SUPPLEMENTAIRE : Cybersecurite ---
+Semaine libre  : Hacking ethique + OSINT + Exploitation + AD + CTF + Forensics
+
 --- TRIMESTRE BONUS : IA pour le Developpeur ---
 Semaine 28-29  : Panorama IA + LLMs/Tokens + Prompt Engineering
 Semaine 30-31  : Claude Code + ChatGPT/Copilot + Gemini/Mistral/Alternatives
 Semaine 32-33  : Integrations IDE (Cursor, Continue.dev) + CLI agents (OpenCode, Aider)
 Semaine 34-35  : IA Locale (Ollama + LM Studio) + Confidentialite & Entreprise
-Semaine 36     : Strategies Multi-Modeles + Construction de ton stack IA personnel
+Semaine 36     : Strategies Multi-Modeles + IA Agentic/MCP + Construction de ton stack IA
 
 --- EN CONTINU ---
 Tout au long   : Rust (en parallele des T1-T3), IA comme outil quotidien
