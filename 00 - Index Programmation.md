@@ -3,7 +3,7 @@
 > [!info] Guide complet
 > Ce coffre contient des cours complets pour apprendre la programmation depuis zéro. Chaque note est conçue pour qu'un novice puisse, après lecture, écrire et mettre en pratique toutes les connaissances abordées.
 > 
-> **156 notes** | **~165 000 lignes** | Tout en français
+> **174 notes** | **~146 000 lignes** | Tout en français
 
 ---
 
@@ -138,6 +138,15 @@
 | 5 | [[05 - SPA et Frameworks Introduction]] | SPA vs MPA, React/Vue/Svelte, state management |
 | 6 | [[06 - Projet JavaScript Interactif]] | TODO app complète, MVC, drag & drop |
 
+### TypeScript
+
+| # | Cours | Description |
+|---|-------|-------------|
+| 1 | [[01 - Introduction a TypeScript]] | Types primitifs, interfaces, enums, union/intersection, tsconfig |
+| 2 | [[02 - Types Avances]] | Génériques, utility types, conditional/mapped types, infer, type guards |
+| 3 | [[03 - TypeScript avec React]] | Composants typés, hooks, events, generiques, forwardRef, custom hooks |
+| 4 | [[04 - TypeScript Node.js et Backend]] | Express typé, Prisma, gestion d'erreurs, JWT, Jest, build prod |
+
 ### Frameworks Frontend
 
 #### React
@@ -160,7 +169,8 @@
 
 | # | Cours | Description |
 |---|-------|-------------|
-| 1 | [[01 - Svelte du Debutant a l'Expert]] | Compilateur, réactivité native, SvelteKit, SSR |
+| 1 | [[01 - Svelte du Debutant a l'Expert]] | Compilateur, réactivité native, stores, transitions, animations |
+| 2 | [[02 - SvelteKit]] | File-based routing, load functions, form actions, SSR/SSG, adapters |
 
 ### Frameworks Backend
 
@@ -169,12 +179,16 @@
 | # | Cours | Description |
 |---|-------|-------------|
 | 1 | [[01 - Express.js et NestJS]] | Express middleware, JWT, NestJS decorators, Swagger |
+| 2 | [[02 - Nodejs Fondamentaux]] | Event loop, modules CJS/ESM, fs, streams, EventEmitter, http, process |
+| 3 | [[03 - Nodejs Avance]] | Worker threads, clustering, JWT, WebSockets, Jest+Supertest, PM2, profiling |
 
-#### PHP / Symfony
+#### PHP / Symfony / Laravel
 
 | # | Cours | Description |
 |---|-------|-------------|
 | 1 | [[01 - PHP et Symfony]] | PHP 8.x, Composer, Symfony MVC, Doctrine, API Platform |
+| 2 | [[02 - PHP POO et Base de Donnees]] | Traits, namespaces, PDO, design patterns, PHP 8.x, PSR standards |
+| 3 | [[03 - Laravel Framework]] | Eloquent ORM, Blade, artisan, routing, queues, auth, tests PHPUnit |
 
 #### Java / Spring
 
@@ -363,6 +377,12 @@
 | 13 | [[13 - Tauri Desktop Applications]] | Backend Rust + frontend web, IPC, plugins, system tray, mobile |
 | 14 | [[14 - WebAssembly avec Rust]] | wasm-bindgen, web-sys, wasm-pack, trunk, Leptos, Yew, Dioxus |
 | 15 | [[15 - Web Frameworks Axum et Actix]] | Axum extractors, Tower middleware, SQLx, JWT, WebSockets, Actix-web |
+| 16 | [[16 - Serde Serialisation et Deserialisation]] | JSON, TOML, bincode, attributs serde, formats custom |
+| 17 | [[17 - Lifetimes Avances Pin et Unpin]] | Variance, HRTB, Pin/Unpin, self-referential structs |
+| 18 | [[18 - Closures FnOnce FnMut Fn en Profondeur]] | Captures, move, trait objects, higher-order functions |
+| 19 | [[19 - Cargo Avance Workspaces et Publication]] | Workspaces, features, build scripts, crates.io, release |
+| 20 | [[20 - Testing Avance Criterion et Proptest]] | Benchmarks Criterion, property-based testing proptest, fuzzing |
+| 21 | [[21 - Strings et Texte en Profondeur]] | str vs String, encodage UTF-8, regex, parsing, unicode |
 
 ---
 

@@ -10,8 +10,8 @@
 
 | | |
 |---|---|
-| **Notes** | 165 fichiers Markdown |
-| **Lignes** | ~134 000 lignes de contenu |
+| **Notes** | 174 fichiers Markdown |
+| **Lignes** | ~146 000 lignes de contenu |
 | **Langages** | C, Python, JavaScript, Java, PHP, SQL, Rust, HTML/CSS, Bash, HCL, YAML, Dart |
 | **Langue** | Francais (termes techniques en anglais) |
 | **Format** | Obsidian Markdown avec `[[wikilinks]]`, callouts, diagrammes ASCII |
@@ -107,6 +107,12 @@ Programming-sheet-for-Obsidian/
 |   |-- 03 - Conception de Bases de Donnees
 |   |-- 04 - SQL Avance et Administration
 |   +-- 05 - Oracle et PL-SQL
+|
+|-- TypeScript/                          (4 notes)
+|   |-- 01 - Introduction a TypeScript
+|   |-- 02 - Types Avances
+|   |-- 03 - TypeScript avec React
+|   +-- 04 - TypeScript Node.js et Backend
 |
 |-- JavaScript/                         (6 notes)
 |   |-- 01 - Introduction a JavaScript
@@ -261,14 +267,19 @@ Programming-sheet-for-Obsidian/
 |-- Git/                                (1 note)
 |   +-- 01 - Git et GitHub
 |
-|-- Node Express/                       (1 note)
-|   +-- 01 - Express.js et NestJS
+|-- Node Express/                       (3 notes)
+|   |-- 01 - Express.js et NestJS
+|   |-- 02 - Nodejs Fondamentaux
+|   +-- 03 - Nodejs Avance
 |
-|-- PHP/                                (1 note)
-|   +-- 01 - PHP et Symfony
+|-- PHP/                                (3 notes)
+|   |-- 01 - PHP et Symfony
+|   |-- 02 - PHP POO et Base de Donnees
+|   +-- 03 - Laravel Framework
 |
-|-- Svelte/                             (1 note)
-|   +-- 01 - Svelte du Debutant a l'Expert
+|-- Svelte/                             (2 notes)
+|   |-- 01 - Svelte du Debutant a l'Expert
+|   +-- 02 - SvelteKit
 |
 |-- UML et Modelisation/                (1 note)
 |   +-- 01 - UML Fondamentaux et Diagrammes
@@ -342,6 +353,12 @@ Un parcours complet de A a Z pour maitriser Rust, avec des comparaisons constant
 | Notes | Sujets cles |
 |-------|-------------|
 | 21 | Ownership, borrowing, lifetimes (avances), structs/enums, pattern matching, traits, generiques, iterateurs, async/Tokio, macros, unsafe/FFI, egui, Tauri, WASM, Axum, Serde, Cargo avance, testing Criterion/proptest, strings |
+
+### Supplementaire — TypeScript
+
+| Notes | Sujets cles |
+|-------|-------------|
+| 4 | Types primitifs, interfaces, enums, generiques, utility types, conditional/mapped types, TypeScript + React (hooks, events, forwardRef), TypeScript + Node (Express, Prisma, JWT, tests) |
 
 ### Supplementaire — Java & Ecosysteme JVM
 
