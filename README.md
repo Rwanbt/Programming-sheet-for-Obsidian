@@ -12,7 +12,7 @@
 |---|---|
 | **Notes** | 174 fichiers Markdown |
 | **Lignes** | ~146 000 lignes de contenu |
-| **Langages** | C, Python, JavaScript, Java, PHP, SQL, Rust, HTML/CSS, Bash, HCL, YAML, Dart |
+| **Langages** | C, Python, JavaScript, TypeScript, Java, PHP, SQL, Rust, HTML/CSS, Bash, HCL, YAML, Dart |
 | **Langue** | Francais (termes techniques en anglais) |
 | **Format** | Obsidian Markdown avec `[[wikilinks]]`, callouts, diagrammes ASCII |
 
@@ -374,8 +374,8 @@ React, VueJS, Svelte et les outils modernes du frontend.
 |---------|-------|-------------|
 | React | 4 | Hooks, gestion d'etat, routing, formulaires, tests |
 | VueJS | 2 | Composition API, Pinia, Vue Router |
-| Svelte | 1 | Reactivity, stores, compilation, Svelte du zero a l'expert |
-| Node/Express | 1 | Express.js, NestJS, REST et GraphQL |
+| Svelte | 2 | Reactivity, stores, compilation + SvelteKit (routing, SSR/SSG, form actions) |
+| Node/Express | 3 | Express.js, NestJS + fondamentaux event loop + avance JWT/WS/PM2 |
 | APIs et Web | 1 | GraphQL — schemas, resolvers, subscriptions |
 | Architecture | 1 | Microservices, patterns (Saga, CQRS, Event Sourcing) |
 
