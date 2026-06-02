@@ -1,8 +1,8 @@
 # Programming Sheet for Obsidian
 
-**165 cours de programmation complets, en francais, au format Obsidian.**
+**196 cours de programmation complets, en francais, au format Obsidian.**
 
-> Un coffre Obsidian couvrant 4 trimestres de formation en developpement logiciel — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, Java, SQL, Rust, DevOps, Machine Learning, Cybersecurite, et un trimestre complet dedie a l'IA pour les developpeurs (Claude, GPT-5.4, Gemini 3.1, modeles locaux, integrations IDE, confidentialite entreprise).
+> Un coffre Obsidian couvrant les programmes Holberton B1/B2/B3 — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, Java, SQL, Rust, DevOps, Machine Learning, Cybersecurite (pentest, RE, mobile, gouvernance), et un trimestre complet dedie a l'IA pour les developpeurs (Claude, GPT-5.4, Gemini 3.1, modeles locaux, integrations IDE, confidentialite entreprise).
 
 ---
 
@@ -10,9 +10,9 @@
 
 | | |
 |---|---|
-| **Notes** | 174 fichiers Markdown |
-| **Lignes** | ~146 000 lignes de contenu |
-| **Langages** | C, Python, JavaScript, TypeScript, Java, PHP, SQL, Rust, HTML/CSS, Bash, HCL, YAML, Dart |
+| **Notes** | 196 fichiers Markdown |
+| **Lignes** | ~194 000 lignes de contenu |
+| **Langages** | C, Python, JavaScript, TypeScript, Java, PHP, Ruby, SQL, Rust, HTML/CSS, Bash, HCL, YAML, Dart |
 | **Langue** | Francais (termes techniques en anglais) |
 | **Format** | Obsidian Markdown avec `[[wikilinks]]`, callouts, diagrammes ASCII |
 
@@ -114,21 +114,27 @@ Programming-sheet-for-Obsidian/
 |   |-- 03 - TypeScript avec React
 |   +-- 04 - TypeScript Node.js et Backend
 |
-|-- JavaScript/                         (6 notes)
+|-- JavaScript/                         (8 notes)
 |   |-- 01 - Introduction a JavaScript
 |   |-- 02 - JavaScript DOM et Evenements
 |   |-- 03 - JavaScript Asynchrone (Promises, async/await)
 |   |-- 04 - JavaScript Moderne ES6+
 |   |-- 05 - SPA et Frameworks Introduction
-|   +-- 06 - Projet JavaScript Interactif (TODO app)
+|   |-- 06 - Projet JavaScript Interactif (TODO app)
+|   |-- 07 - jQuery Fondamentaux
+|   +-- 08 - Webpack et Bundlers Modernes
 |
-|-- Web Frontend/                       (6 notes)
+|-- Web Frontend/                       (10 notes)
 |   |-- 01 - HTML Fondamentaux
 |   |-- 02 - CSS Fondamentaux (Flexbox, Grid)
 |   |-- 03 - CSS Avance (Animations, BEM)
 |   |-- 04 - Projet Web Statique (Portfolio)
 |   |-- 05 - WebSockets
-|   +-- 06 - Tailwind CSS Complet
+|   |-- 06 - Tailwind CSS Complet
+|   |-- 07 - SASS et SCSS
+|   |-- 08 - Bootstrap 5 Complet
+|   |-- 09 - UI UX Fondamentaux
+|   +-- 10 - Cookies et Gestion de Session
 |
 |-- Java/                               (4 notes)
 |   |-- 01 - Introduction a Java
@@ -171,36 +177,51 @@ Programming-sheet-for-Obsidian/
 |   |-- 09 - Incident Response et Postmortems
 |   +-- 10 - Jenkins et CI-CD Alternatifs
 |
-|-- Cloud/                              (6 notes)
+|-- Cloud/                              (7 notes)
 |   |-- 01 - Introduction au Cloud
 |   |-- 02 - Services Cloud Essentiels
 |   |-- 03 - Deploiement Cloud et Conteneurs
 |   |-- 04 - Kubernetes Introduction
 |   |-- 05 - Kubernetes Avance Helm et Operators
-|   +-- 06 - Cloud Security AWS
+|   |-- 06 - Cloud Security AWS
+|   +-- 07 - Google Cloud Platform pour le ML
 |
-|-- Machine Learning/                   (7 notes)
+|-- Machine Learning/                   (10 notes)
 |   |-- 01 - Mathematiques pour le ML
 |   |-- 02 - NumPy Pandas et Visualisation
 |   |-- 03 - ML Supervise avec Scikit-Learn
 |   |-- 04 - Reseaux de Neurones et Deep Learning
 |   |-- 05 - CNN Transformer et Computer Vision
 |   |-- 06 - ML Non Supervise et Reinforcement Learning
-|   +-- 07 - MLOps et Deploiement de Modeles
+|   |-- 07 - MLOps et Deploiement de Modeles
+|   |-- 08 - RNN LSTM et Series Temporelles
+|   |-- 09 - Modeles Probabilistes HMM et Inference Bayesienne
+|   +-- 10 - Reinforcement Learning Avance
 |
-|-- Cybersecurite/                      (6 notes)
+|-- Cybersecurite/                      (13 notes)
 |   |-- 01 - Fondamentaux Hacking Ethique
 |   |-- 02 - Reconnaissance et OSINT
 |   |-- 03 - Exploitation Web et Systeme
 |   |-- 04 - Active Directory et Post-Exploitation
 |   |-- 05 - CTF Methodologie et Red Team
-|   +-- 06 - Digital Forensics et Analyse Malware
+|   |-- 06 - Digital Forensics et Analyse Malware
+|   |-- 07 - Linux Security et Hardening
+|   |-- 08 - Cracking Mots de Passe John et Hashcat
+|   |-- 09 - Privilege Escalation Linux et Windows
+|   |-- 10 - Reverse Engineering et Analyse Binaire
+|   |-- 11 - Mobile Security OWASP
+|   |-- 12 - Gouvernance Securite ISO27001 et NIST
+|   +-- 13 - Authentication Bypass et IDOR
 |
-|-- React/                              (4 notes)
+|-- Ruby/                               (1 note)
+|   +-- 01 - Ruby pour le Pentest
+|
+|-- React/                              (5 notes)
 |   |-- 01 - Introduction a React
 |   |-- 02 - Hooks et Gestion d'Etat
 |   |-- 03 - React Router et Formulaires
-|   +-- 04 - React Avance et Tests
+|   |-- 04 - React Avance et Tests
+|   +-- 05 - Redux Avance Middleware et Architecture
 |
 |-- NoSQL/                              (3 notes)
 |   |-- 01 - Introduction au NoSQL
@@ -267,10 +288,12 @@ Programming-sheet-for-Obsidian/
 |-- Git/                                (1 note)
 |   +-- 01 - Git et GitHub
 |
-|-- Node Express/                       (3 notes)
+|-- Node Express/                       (5 notes)
 |   |-- 01 - Express.js et NestJS
 |   |-- 02 - Nodejs Fondamentaux
-|   +-- 03 - Nodejs Avance
+|   |-- 03 - Nodejs Avance
+|   |-- 04 - Authentification Avancee OAuth et JWT
+|   +-- 05 - Message Queues et Files d'Attente
 |
 |-- PHP/                                (3 notes)
 |   |-- 01 - PHP et Symfony
@@ -284,7 +307,8 @@ Programming-sheet-for-Obsidian/
 |-- UML et Modelisation/                (1 note)
 |   +-- 01 - UML Fondamentaux et Diagrammes
 |
-+-- IA pour le Dev/                     (13 notes)
++-- IA pour le Dev/                     (14 notes)
+    |-- 00 - Introduction IA et Machine Learning Fondamentaux
     |-- 01 - Panorama des IA pour Developpeurs
     |-- 02 - Comprendre les LLMs et les Tokens
     |-- 03 - Prompt Engineering pour le Code
@@ -327,8 +351,8 @@ Backend Python, frontend HTML/CSS/JS, bases de donnees SQL, tests, CI/CD et secu
 |---------|-------|-------------|
 | Python | 12 | POO, async, Flask, FastAPI, Django, SQLAlchemy, decorateurs, design patterns |
 | SQL | 5 | SELECT/JOIN/GROUP BY, normalisation, transactions ACID, injections SQL, PL-SQL |
-| JavaScript | 6 | DOM, events, async/await, ES6+, SPA, frameworks (React/Vue/Svelte) |
-| Web Frontend | 6 | HTML semantique, CSS Flexbox/Grid, Tailwind, responsive, WebSockets, portfolio |
+| JavaScript | 8 | DOM, events, async/await, ES6+, SPA, frameworks, jQuery, Webpack |
+| Web Frontend | 10 | HTML semantique, CSS Flexbox/Grid, Tailwind, SASS/SCSS, Bootstrap 5, UI/UX, cookies, responsive |
 | Tests | 3 | pytest, TDD, integration, E2E (Selenium/Playwright), linting |
 | DevOps | 3 | Docker avance, Docker Compose, CI/CD GitHub Actions |
 | Securite Web | 1 | OWASP Top 10, XSS, CSRF, CORS, HTTPS, JWT |
@@ -372,10 +396,10 @@ React, VueJS, Svelte et les outils modernes du frontend.
 
 | Domaine | Notes | Sujets cles |
 |---------|-------|-------------|
-| React | 4 | Hooks, gestion d'etat, routing, formulaires, tests |
+| React | 5 | Hooks, gestion d'etat, routing, formulaires, tests, Redux avance |
 | VueJS | 2 | Composition API, Pinia, Vue Router |
 | Svelte | 2 | Reactivity, stores, compilation + SvelteKit (routing, SSR/SSG, form actions) |
-| Node/Express | 3 | Express.js, NestJS + fondamentaux event loop + avance JWT/WS/PM2 |
+| Node/Express | 5 | Express.js, NestJS, event loop, OAuth/JWT avance, message queues |
 | APIs et Web | 1 | GraphQL — schemas, resolvers, subscriptions |
 | Architecture | 1 | Microservices, patterns (Saga, CQRS, Event Sourcing) |
 
@@ -383,7 +407,7 @@ React, VueJS, Svelte et les outils modernes du frontend.
 
 | Notes | Sujets cles |
 |-------|-------------|
-| 7 | Maths ML, NumPy/Pandas, Scikit-Learn, reseaux de neurones, CNN/Transformer, ML non supervise, MLOps |
+| 10 | Maths ML, NumPy/Pandas, Scikit-Learn, reseaux de neurones, CNN/Transformer, ML non supervise, MLOps, RNN/LSTM/series temporelles, HMM/inference bayesienne, RL avance |
 | 2 (Big Data) | Hadoop/MapReduce, Apache Spark/PySpark |
 | 3 (NoSQL) | MongoDB, Redis, introduction NoSQL |
 
@@ -399,7 +423,8 @@ Parcours hacking ethique et securite offensive/defensive.
 
 | Notes | Sujets cles |
 |-------|-------------|
-| 6 | Hacking ethique, reconnaissance/OSINT, exploitation web et systeme, Active Directory, CTF/Red Team, Digital Forensics |
+| 13 | Hacking ethique, reconnaissance/OSINT, exploitation web et systeme, Active Directory, CTF/Red Team, Digital Forensics, Linux hardening, John/Hashcat, privilege escalation, reverse engineering, mobile security (OWASP), ISO27001/NIST, authentication bypass/IDOR |
+| 1 (Ruby) | Ruby pour le pentest, scripting Metasploit |
 
 ### Supplementaire — Outils & Methodes
 
