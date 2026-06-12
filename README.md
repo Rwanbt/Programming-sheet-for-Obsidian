@@ -1,8 +1,12 @@
+<div align="center">
+
 <img src="Programming_sheet_sheet_for_obsidian.png" alt="banner_Programming_sheet_sheet_for_obsidian" >
 
 # Programming Sheet for Obsidian
 
 **196 cours de programmation complets, en francais, au format Obsidian.**
+
+</div>
 
 > Un coffre Obsidian couvrant les programmes Holberton B1/B2/B3 — du langage C jusqu'au deploiement cloud avec Kubernetes, en passant par Python, JavaScript, Java, SQL, Rust, DevOps, Machine Learning, Cybersecurite (pentest, RE, mobile, gouvernance), et un trimestre complet dedie a l'IA pour les developpeurs (Claude, GPT-5.4, Gemini 3.1, modeles locaux, integrations IDE, confidentialite entreprise).
 
